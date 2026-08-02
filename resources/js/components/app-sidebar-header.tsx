@@ -1,5 +1,9 @@
-import { Breadcrumbs } from '@/components/breadcrumbs';
+import { useState, useRef, useEffect } from 'react';
+import { usePage } from '@inertiajs/react';
+import { Bell, ChevronDown, Moon, Search, Sun, ChevronRight } from 'lucide-react';
+import AppLogo from '@/components/app-logo';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { useAppearance } from '@/hooks/use-appearance';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
 
 export function AppSidebarHeader({
@@ -7,11 +11,191 @@ export function AppSidebarHeader({
 }: {
     breadcrumbs?: BreadcrumbItemType[];
 }) {
+    const { auth } = usePage().props;
+    const userName = auth?.user?.name || 'Demo';
+    const userInitials = userName
+        .split(' ')
+        .map((n: string) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2) || 'DT';
+
+    const { resolvedAppearance, updateAppearance } = useAppearance();
+    const [showNotifications, setShowNotifications] = useState(false);
+    const notificationRef = useRef<HTMLDivElement>(null);
+
+    // Close notification dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+                setShowNotifications(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const activities = [
+        {
+            id: 1,
+            user: 'Sarah Chen',
+            action: 'updated the',
+            target: 'Global Brand Assets',
+            time: '2 hours ago',
+            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80',
+            type: 'image',
+        },
+        {
+            id: 2,
+            user: 'AI Assistant',
+            action: 'generated a new performance report for Q4 Growth.',
+            target: '',
+            time: '5 hours ago',
+            type: 'ai',
+        },
+        {
+            id: 3,
+            user: 'Marcus Thorne',
+            action: 'joined the',
+            target: 'Enterprise Security',
+            time: 'Yesterday at 4:30 PM',
+            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
+            type: 'image',
+        },
+    ];
+
     return (
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/50 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
-            <div className="flex items-center gap-2">
-                <SidebarTrigger className="-ml-1" />
-                <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <header className="sticky top-0 z-30 px-4 sm:px-6 pt-4 pb-2 bg-[#f5f7fa] dark:bg-[#09090b] transition-colors">
+            <div className="flex h-14 items-center justify-between gap-4 rounded-2xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-4 shadow-sm transition-all">
+                {/* Left Side: Sidebar Toggle + Logo */}
+                <div className="flex items-center gap-3">
+                    <SidebarTrigger className="-ml-1 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#1c1c21] rounded-xl" />
+                    <div className="flex items-center gap-2">
+                        <AppLogo />
+                    </div>
+                </div>
+
+                {/* Right Side: Search, Language, Dark Mode, Notification, Profile */}
+                <div className="flex items-center gap-2 sm:gap-3">
+                    {/* Search Input Box */}
+                    <div className="relative hidden md:flex items-center">
+                        <Search className="absolute left-3 h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="h-8 w-44 lg:w-56 rounded-full border-0 bg-[#f1f4f9] dark:bg-[#1c1c21] py-1 pl-8 pr-14 text-xs text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:bg-white dark:focus:bg-[#121215] focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+                        />
+                        <kbd className="absolute right-2.5 inline-flex items-center rounded bg-white dark:bg-[#282830] px-1.5 py-0.5 text-[10px] font-mono text-gray-400 dark:text-gray-300 border border-gray-200/80 dark:border-[#33333d] shadow-2xs">
+                            Ctrl+K
+                        </kbd>
+                    </div>
+
+                    {/* Language Selector */}
+                    <button className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#f1f4f9] dark:bg-[#1c1c21] px-2.5 py-1 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-[#282830] transition">
+                        <span className="text-xs">🇮🇩</span>
+                        <span>ID</span>
+                        <ChevronDown className="h-3 w-3 text-gray-400" />
+                    </button>
+
+                    {/* Dark / Light Mode Toggle */}
+                    <button
+                        onClick={() => updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark')}
+                        title={resolvedAppearance === 'dark' ? 'Mode Terang' : 'Mode Gelap'}
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21] transition"
+                    >
+                        {resolvedAppearance === 'dark' ? (
+                            <Sun className="h-4 w-4 text-amber-400" />
+                        ) : (
+                            <Moon className="h-4 w-4 text-gray-600" />
+                        )}
+                    </button>
+
+                    {/* Notification Bell with Badge & Popover */}
+                    <div className="relative" ref={notificationRef}>
+                        <button
+                            onClick={() => setShowNotifications(!showNotifications)}
+                            className="relative flex h-8 w-8 items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21] transition"
+                        >
+                            <Bell className="h-4 w-4" />
+                            <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white shadow-2xs">
+                                3
+                            </span>
+                        </button>
+
+                        {/* Recent Activities Dropdown Popover */}
+                        {showNotifications && (
+                            <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl border border-gray-200 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-4 shadow-xl z-50 animate-in fade-in-50 slide-in-from-top-2">
+                                <div className="flex items-center justify-between border-b border-gray-100 dark:border-[#1f1f23] pb-3 mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="text-sm font-bold text-gray-900 dark:text-white">Recent Activities</h3>
+                                        <span className="rounded-full bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:text-blue-400">
+                                            3 New
+                                        </span>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowNotifications(false)}
+                                        className="text-xs font-medium text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                    >
+                                        Tutup
+                                    </button>
+                                </div>
+
+                                <div className="space-y-3 max-h-80 overflow-y-auto">
+                                    {activities.map((item) => (
+                                        <div
+                                            key={item.id}
+                                            className="flex items-start gap-3 rounded-xl p-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition cursor-pointer"
+                                        >
+                                            {item.type === 'image' ? (
+                                                <img
+                                                    src={item.avatar}
+                                                    alt={item.user}
+                                                    className="h-8 w-8 rounded-full object-cover shrink-0 mt-0.5"
+                                                />
+                                            ) : (
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/10 text-amber-500 shrink-0 mt-0.5">
+                                                    <Sun className="h-4 w-4" />
+                                                </div>
+                                            )}
+                                            <div className="flex-1 text-xs">
+                                                <p className="text-gray-700 dark:text-gray-300 leading-snug">
+                                                    <strong className="font-bold text-gray-900 dark:text-white">{item.user}</strong>{' '}
+                                                    {item.action}{' '}
+                                                    {item.target && (
+                                                        <span className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                                                            {item.target}
+                                                        </span>
+                                                    )}
+                                                </p>
+                                                <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 block">
+                                                    {item.time}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-800 text-center">
+                                    <a
+                                        href="#"
+                                        className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                                    >
+                                        Lihat Semua Aktivitas <ChevronRight className="h-3 w-3" />
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* User Dropdown Chip */}
+                    <div className="flex items-center gap-2 rounded-full bg-[#f1f4f9] dark:bg-gray-800 px-2 py-1 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-gray-700 cursor-pointer transition">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-extrabold text-[10px]">
+                            {userInitials}
+                        </div>
+                        <span className="hidden sm:inline">{userName}</span>
+                        <ChevronDown className="h-3 w-3 text-gray-400" />
+                    </div>
+                </div>
             </div>
         </header>
     );

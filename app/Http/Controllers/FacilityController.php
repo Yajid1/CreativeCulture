@@ -10,4 +10,19 @@ class FacilityController extends Controller
     {
         return Inertia::render('facilities/bandung-creative-hub');
     }
+
+    public function padepokanSeniMayangSunda()
+    {
+        return Inertia::render('facilities/padepokan-seni-mayang-sunda');
+    }
+
+    public function terasSundaCibiru()
+    {
+        return Inertia::render('facilities/teras-sunda-cibiru');
+    }
+
+    public function kampungWisataPasirKunci()
+    {
+        return Inertia::render('facilities/kampung-wisata-pasir-kunci');
+    }
 }
