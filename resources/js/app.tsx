@@ -18,6 +18,10 @@ createInertiaApp({
                 return null;
             case name === 'subsektor':
                 return null;
+            case name === 'berita':
+                return null;
+            case name === 'artikel':
+                return null;
             case name.startsWith('facilities/'):
                 return null;
             case name.startsWith('auth/'):

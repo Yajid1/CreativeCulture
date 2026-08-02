@@ -13,9 +13,11 @@ export default function Welcome() {
     const loaderCounter = document.getElementById('loaderCounter') as HTMLElement | null;
     const FILL_MS = 1300;
 
-    document.documentElement.style.position = 'relative';
-    document.documentElement.style.overflow = 'hidden';
-    document.documentElement.style.height = '100%';
+    if (loader) {
+      document.documentElement.style.position = 'relative';
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.height = '100%';
+    }
 
     function easeInOutCubic(t: number) {
       return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -96,8 +98,26 @@ export default function Welcome() {
         }, 700);
       }
     }
-    loaderRafId = requestAnimationFrame(loaderTick);
-    cleanupFns.push(() => cancelAnimationFrame(loaderRafId));
+    if (loader) {
+      loaderRafId = requestAnimationFrame(loaderTick);
+      cleanupFns.push(() => cancelAnimationFrame(loaderRafId));
+    } else {
+      document.documentElement.style.removeProperty('position');
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('height');
+      revealHeroGated();
+      revealHeader();
+    }
+
+    // Safety fallback timer to unlock document overflow no matter what
+    const fallbackTimer = setTimeout(() => {
+      document.documentElement.style.removeProperty('position');
+      document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('height');
+      revealHeroGated();
+      revealHeader();
+    }, 1500);
+    cleanupFns.push(() => clearTimeout(fallbackTimer));
 
     // ===== SISANYA - JALAN DI BELAKANG LAYAR, TIDAK MENGHAMBAT LOADER =====
     (async () => {
@@ -599,6 +619,43 @@ export default function Welcome() {
 
       document.getElementById('brandBtn')?.addEventListener('click', () => smoothScrollTo('home'));
       document.getElementById('viewWorkBtn')?.addEventListener('click', () => smoothScrollTo('works'));
+
+      // ===== ACCORDION DROPDOWN FASILITAS KEBUDAYAAN =====
+      const facilityItems = document.querySelectorAll('.facility-item-btn');
+      facilityItems.forEach(btn => {
+        const el = btn as HTMLElement & { _hasFacilityListener?: boolean };
+        if (el._hasFacilityListener) return;
+        el._hasFacilityListener = true;
+
+        el.addEventListener('click', (e: MouseEvent) => {
+          // Prevent closing if click is inside open text content
+          if ((e.target as HTMLElement).closest('.facility-dropdown-content')) {
+            return;
+          }
+
+          e.preventDefault();
+          const dropdown = el.querySelector('.facility-dropdown-content');
+          const badge = el.querySelector('.service-badge');
+          const descPreview = el.querySelector('.service-desc');
+          const isHidden = dropdown?.classList.contains('hidden');
+
+          // Close all dropdowns
+          facilityItems.forEach(other => {
+            other.querySelector('.facility-dropdown-content')?.classList.add('hidden');
+            other.querySelector('.service-badge')?.classList.remove('rotate-90');
+            other.querySelector('.service-desc')?.classList.remove('opacity-0', 'pointer-events-none');
+            other.classList.remove('is-active', 'bg-slate-50/80', 'shadow-sm');
+          });
+
+          // Toggle current
+          if (isHidden && dropdown) {
+            dropdown.classList.remove('hidden');
+            badge?.classList.add('rotate-90');
+            descPreview?.classList.add('opacity-0', 'pointer-events-none');
+            el.classList.add('is-active');
+          }
+        });
+      });
     })();
 
     return () => {
@@ -657,21 +714,22 @@ const BODY_HTML = `
   <!-- HEADER -->
   <header class="site-header" id="siteHeader">
     <div class="header-inner shell">
-      <button class="header-brand" id="brandBtn" aria-label="Lumora Home">
-        <svg viewBox="0 0 48 48" fill="currentColor">
-          <path
-            d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-        </svg>
-        Lumora
-      </button>
+      <div class="header-brand flex items-center gap-2 sm:gap-3">
+        <a href="/" class="flex items-center gap-2 sm:gap-3">
+          <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" class="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
+          <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" class="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
+          <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" class="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 hidden sm:block drop-shadow-sm" />
+          <img src="/images/Logo TCS.png" alt="Logo Teras Sunda Cibiru" class="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 hidden md:block drop-shadow-sm" />
+          <img src="/images/Logo Pasir Kunci.png" alt="Logo Pasir Kunci" class="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 hidden md:block drop-shadow-sm" />
+        </a>
+      </div>
 
       <nav class="header-nav" aria-label="Primary">
         <ul>
           <li><button data-scroll="home" aria-current="page">Home</button></li>
-          <li><button data-scroll="works">Work</button></li>
-          <li><button data-scroll="services">Services <span class="caret">▾</span></button></li>
-          <li><button data-scroll="about">Studio</button></li>
-          <li><button data-scroll="careers">Careers</button></li>
+          <li><button data-scroll="services">Fasilitas <span class="caret">▾</span></button></li>
+          <li><a href="/berita" class="nav-link">Berita</a></li>
+          <li><a href="/artikel" class="nav-link">Artikel</a></li>
           <li><button class="contact-trigger">Contact</button></li>
         </ul>
       </nav>
@@ -701,13 +759,7 @@ const BODY_HTML = `
 
     <!-- HERO -->
     <section class="hero" id="home">
-      <div class="liquid-reveal" id="liquidReveal">
-        <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/lumora-e8b711fc68/hero/after.jpg"
-          alt="Lumora studio hero" id="heroBeforeImg" />
-        <canvas id="heroCanvas" aria-hidden="true"></canvas>
-      </div>
       <div class="hero-vignette"></div>
-      <div class="hero-watermark" id="heroWatermark">LUMORA</div>
 
       <div class="hero-content shell">
         <div class="hero-left">
@@ -720,33 +772,8 @@ const BODY_HTML = `
             <span class="line-wrap"><span class="line-inner">Unit</span></span>
             <span class="line-wrap"><span class="line-inner">Pelaksana</span></span>
             <span class="line-wrap"><span class="line-inner">Teknis Daerah</span></span>
+            <span class="line-wrap"><span class="line-inner">Kota Bandung</span></span>
           </h1>
-
-          <div class="hero-rating reveal-item" data-reveal data-delay="650" data-hero-gate>
-            <span class="hero-stars">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
-              </svg>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
-              </svg>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
-              </svg>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
-              </svg>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
-              </svg>
-            </span>
-            <span class="hero-rating-text">200+ brands shipped</span>
-          </div>
 
           <div class="hero-ctas reveal-item" data-reveal data-delay="750" data-hero-gate>
             <button class="pill-btn pill-btn--dark pill-btn--with-arrow contact-trigger">
@@ -803,49 +830,10 @@ const BODY_HTML = `
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="hero-partners reveal-item" data-reveal data-delay="550" data-hero-gate>
-            <div class="hero-partners-label">Trusted by</div>
-            <div class="partners-grid">
-              <span class="partner-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                </svg>Kaido</span>
-              <span class="partner-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                </svg>Northpeak</span>
-              <span class="partner-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                </svg>Vellum</span>
-              <span class="partner-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                </svg>Orbit</span>
-              <span class="partner-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                </svg>Brightline</span>
-              <span class="partner-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                </svg>Cobalt</span>
-              <span class="partner-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                </svg>Mesa</span>
-            </div>
-          </div>
         </div>
       </div>
 
-      <div class="hero-status shell reveal-item" data-reveal data-delay="900" data-hero-gate>
-        <span>Working since 2014</span>
-        <span class="hero-status-center">Remote-first, worldwide</span>
-        <span class="hero-status-right">Scroll to explore ↓</span>
-      </div>
     </section>
 
     <!-- ABOUT -->
@@ -915,27 +903,6 @@ const BODY_HTML = `
       </div>
     </section>
 
-    <!-- CREATE BAND -->
-    <section class="create-band">
-      <ul class="create-band-list shell">
-        <li class="create-band-item reveal-item" data-reveal data-delay="0">
-          <div class="create-band-tile band--light">We</div>
-        </li>
-        <li class="create-band-item reveal-item" data-reveal data-delay="120">
-          <div class="create-band-tile band--accent">Build</div>
-        </li>
-        <li class="create-band-item reveal-item" data-reveal data-delay="240">
-          <div class="create-band-tile band--dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14" />
-              <path d="M13 6l6 6-6 6" />
-            </svg></div>
-        </li>
-        <li class="create-band-item reveal-item" data-reveal data-delay="360">
-          <div class="create-band-tile band--ghost">Better</div>
-        </li>
-      </ul>
-    </section>
 
     <!-- PORTFOLIO -->
     <section class="portfolio" id="works">
@@ -980,7 +947,7 @@ const BODY_HTML = `
             </a>
           </li>
           <li class="reveal-item" data-reveal data-delay="90" data-translate="48">
-            <a href="/facilities/bandung-creative-hub">
+            <a href="/fasilitas/padepokan-seni-mayang-sunda">
               <article class="portfolio-card">
                 <div class="portfolio-meta">
                   <span>Product — 2024</span>
@@ -1009,7 +976,7 @@ const BODY_HTML = `
             </a>
           </li>
           <li class="reveal-item" data-reveal data-delay="180" data-translate="48">
-            <a href="#">
+            <a href="/fasilitas/teras-sunda-cibiru">
               <article class="portfolio-card">
                 <div class="portfolio-meta">
                   <span>Identity — 2023</span>
@@ -1037,7 +1004,7 @@ const BODY_HTML = `
             </a>
           </li>
           <li class="reveal-item" data-reveal data-delay="270" data-translate="48">
-            <a href="#">
+            <a href="/fasilitas/kampung-wisata-pasir-kunci">
               <article class="portfolio-card">
                 <div class="portfolio-meta">
                   <span>Mobile — 2023</span>
@@ -1069,97 +1036,210 @@ const BODY_HTML = `
       </div>
     </section>
 
-    <!-- SERVICES -->
+    <!-- SERVICES / FASILITAS KEBUDAYAAN -->
     <section class="services" id="services">
       <div class="services-inner shell">
         <div class="eyebrow eyebrow--dark reveal-item" data-reveal>
           <span class="eyebrow-dot"></span>
-          Services
+          Fasilitas Kebudayaan
         </div>
         <h2 class="services-h2 line-reveal" data-line-reveal data-delay="120">
-          <span class="line-wrap"><span class="line-inner">What we do best</span></span>
+          <span class="line-wrap"><span class="line-inner">Fasilitas Utama Kebudayaan</span></span>
         </h2>
-        <ul>
+        <ul class="space-y-4">
+
+          <!-- ITEM 01 — BANDUNG CREATIVE HUB -->
           <li class="service-row reveal-item" data-reveal data-delay="0" data-translate="24">
-            <a href="#" class="service-link">
-              <span class="service-index">01</span>
-              <h3 class="service-title">Software Development</h3>
-              <p class="service-desc">Scalable web & mobile products built to last.</p>
-              <span class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17L17 7" />
-                  <path d="M8 7h9v9" />
-                </svg></span>
-            </a>
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="1">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">01</span>
+                  <h3 class="service-title">Bandung Creative Hub</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Pusat inkubasi kreatif, studio rekaman audio, laboratorium desain 3D, & pameran seni digital.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Bandung Creative Hub (BCH)</strong>, pusat fasilitas kebudayaan dan ekosistem inkubasi kreatif di Jalan Laswi No. 7. BCH dilengkapi dengan Studio Rekaman Audio profesional 'Summen Stag', laboratorium cetak 3D, studio podcast kedap suara, bioskop privat untuk pemutaran film independen, serta galeri pameran seni visual kontemporer yang dapat diakses secara gratis oleh warga binaan UPTD Kebudayaan dan masyarakat umum.
+                </p>
+              </div>
+            </div>
           </li>
+
+          <!-- ITEM 02 — PADEPOKAN SENI MAYANG SUNDA -->
           <li class="service-row reveal-item" data-reveal data-delay="80" data-translate="24">
-            <a href="#" class="service-link">
-              <span class="service-index">02</span>
-              <h3 class="service-title">Product Design</h3>
-              <p class="service-desc">Interfaces that feel effortless and look sharp.</p>
-              <span class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17L17 7" />
-                  <path d="M8 7h9v9" />
-                </svg></span>
-            </a>
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="2">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">02</span>
+                  <h3 class="service-title">Padepokan Seni Mayang Sunda</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Ruang ekspresi seni pertunjukan tradisional, sanggar tari Sunda, & teater terbuka.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Padepokan Seni Mayang Sunda (PSMS)</strong> di Jalan Peta No. 209. PSMS menjadi ruang ekspresi bagi puluhan sanggar seni tari, teater daerah, seni karawitan, dan pergelaran wayang golek. PSMS dilengkapi dengan panggung teater indoor berkapasitas besar, arena amphitheater terbuka untuk pentas malam, serta studio latihan karawitan & gamelan lengkap.
+                </p>
+              </div>
+            </div>
           </li>
+
+          <!-- ITEM 03 — TERAS SUNDA CIBIRU -->
           <li class="service-row reveal-item" data-reveal data-delay="160" data-translate="24">
-            <a href="#" class="service-link">
-              <span class="service-index">03</span>
-              <h3 class="service-title">Quality Assurance</h3>
-              <p class="service-desc">Rigorous testing for flawless, confident releases.</p>
-              <span class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17L17 7" />
-                  <path d="M8 7h9v9" />
-                </svg></span>
-            </a>
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="3">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">03</span>
+                  <h3 class="service-title">Teras Sunda Cibiru</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Pusat pelestarian musik tradisional, kerajinan bambu, & laboratorium seni Sunda.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Teras Sunda Cibiru (TSC)</strong> di kawasan Cipadung Cibiru. TSC berfokus pada riset, pelestarian, dan pengembangan instrumen musik tradisional Sunda berbasis bambu seperti angklung, calung, arumba, dan suling. Pengunjung dan peneliti budaya dapat mengeksplorasi studio kriya bambu lokal serta menikmati pertunjukan musik alam terbuka di bawah lanskap lereng pegunungan.
+                </p>
+              </div>
+            </div>
           </li>
+
+          <!-- ITEM 04 — KAMPUNG WISATA PASIR KUNCI -->
           <li class="service-row reveal-item" data-reveal data-delay="240" data-translate="24">
-            <a href="#" class="service-link">
-              <span class="service-index">04</span>
-              <h3 class="service-title">Consulting</h3>
-              <p class="service-desc">Strategy and direction for ambitious teams.</p>
-              <span class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17L17 7" />
-                  <path d="M8 7h9v9" />
-                </svg></span>
-            </a>
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="4">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">04</span>
+                  <h3 class="service-title">Kampung Wisata Pasir Kunci</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Kawasan seni budaya lereng Gunung Manglayang, permainan tradisional anak, & wisata edukasi.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Kampung Wisata Pasir Kunci</strong> di ketinggian lereng Gunung Manglayang, Ujungberung. Kawasan ini berdedikasi memelihara kelestarian kaulinan lembur (permainan tradisional anak Sunda seperti egrang, gasing, dan bekel), seni pencak silat, dan sanggar tari daerah. Saung edukasi Pasir Kunci menjadi tempat berkumpul anak-anak sekolah dan wisatawan di tengah pemandangan pegunungan yang asri.
+                </p>
+              </div>
+            </div>
           </li>
+
         </ul>
       </div>
     </section>
 
-    <!-- STATS -->
+    <!-- STATS / LOKASI FASILITAS -->
     <section class="stats-section">
       <div class="stats-wrapper shell">
         <div class="stats-panel reveal-item" data-reveal data-translate="40">
           <div class="eyebrow eyebrow--light">
             <span class="eyebrow-dot"></span>
-            By the numbers
+            Lokasi Fasilitas
           </div>
           <h2 class="stats-h2 line-reveal" data-line-reveal data-delay="120">
-            <span class="line-wrap"><span class="line-inner">Proof in the work,</span></span>
-            <span class="line-wrap"><span class="line-inner">not the words.</span></span>
+            <span class="line-wrap"><span class="line-inner">Peta & Alamat</span></span>
+            <span class="line-wrap"><span class="line-inner">4 Fasilitas Kebudayaan</span></span>
           </h2>
           <ul class="stats-grid">
+            <!-- 01: BCH -->
             <li class="reveal-item" data-reveal data-delay="0" data-translate="20">
-              <div class="stat-number" data-count="150" data-suffix="+"><span class="stat-value">0</span>+</div>
-              <div class="stat-label">Projects delivered</div>
+              <div class="flex flex-col gap-2">
+                <a href="https://maps.google.com/?q=Bandung+Creative+Hub" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Buka Google Maps ↗</span>
+                </a>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Bandung Creative Hub</div>
+                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Jl. Laswi No.7, Kacapiring, Batununggal, Kota Bandung</div>
+              </div>
             </li>
+            <!-- 02: PSMS -->
             <li class="reveal-item" data-reveal data-delay="90" data-translate="20">
-              <div class="stat-number" data-count="98" data-suffix="%"><span class="stat-value">0</span>%</div>
-              <div class="stat-label">Client retention</div>
+              <div class="flex flex-col gap-2">
+                <a href="https://maps.google.com/?q=Padepokan+Seni+Mayang+Sunda" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Buka Google Maps ↗</span>
+                </a>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Padepokan Seni Mayang Sunda</div>
+                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Jl. Peta No.209, Suka Asih, Bojongloa Kaler, Kota Bandung</div>
+              </div>
             </li>
+            <!-- 03: TSC -->
             <li class="reveal-item" data-reveal data-delay="180" data-translate="20">
-              <div class="stat-number" data-count="12"><span class="stat-value">0</span></div>
-              <div class="stat-label">Years of craft</div>
+              <div class="flex flex-col gap-2">
+                <a href="https://maps.google.com/?q=Teras+Sunda+Cibiru" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Buka Google Maps ↗</span>
+                </a>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Teras Sunda Cibiru</div>
+                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Jl. Raya Cipadung, Cipadung, Kec. Cibiru, Kota Bandung</div>
+              </div>
             </li>
+            <!-- 04: Pasir Kunci -->
             <li class="reveal-item" data-reveal data-delay="270" data-translate="20">
-              <div class="stat-number" data-count="40" data-suffix="+"><span class="stat-value">0</span>+</div>
-              <div class="stat-label">Team members</div>
+              <div class="flex flex-col gap-2">
+                <a href="https://maps.google.com/?q=Kampung+Wisata+Pasir+Kunci" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Buka Google Maps ↗</span>
+                </a>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Kampung Wisata Pasir Kunci</div>
+                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Pasirjati, Kec. Ujung Berung, Kota Bandung</div>
+              </div>
             </li>
           </ul>
         </div>
@@ -1264,15 +1344,13 @@ const BODY_HTML = `
       <ul class="nav-list" id="navList">
         <li><button class="nav-item" data-scroll="home"><span class="nav-item-index">01</span><span
               class="nav-item-label">Home</span></button></li>
-        <li><button class="nav-item" data-scroll="works"><span class="nav-item-index">02</span><span
-              class="nav-item-label">Work</span></button></li>
-        <li><button class="nav-item" data-scroll="services"><span class="nav-item-index">03</span><span
-              class="nav-item-label">Services</span></button></li>
-        <li><button class="nav-item" data-scroll="about"><span class="nav-item-index">04</span><span
-              class="nav-item-label">Studio</span></button></li>
-        <li><button class="nav-item" data-scroll="careers"><span class="nav-item-index">05</span><span
-              class="nav-item-label">Careers</span></button></li>
-        <li><button class="nav-item contact-trigger"><span class="nav-item-index">06</span><span
+        <li><button class="nav-item" data-scroll="services"><span class="nav-item-index">02</span><span
+              class="nav-item-label">Fasilitas</span></button></li>
+        <li><a class="nav-item" href="/berita"><span class="nav-item-index">03</span><span
+              class="nav-item-label">Berita</span></a></li>
+        <li><a class="nav-item" href="/artikel"><span class="nav-item-index">04</span><span
+              class="nav-item-label">Artikel</span></a></li>
+        <li><button class="nav-item contact-trigger"><span class="nav-item-index">05</span><span
               class="nav-item-label">Contact</span></button></li>
       </ul>
     </nav>
