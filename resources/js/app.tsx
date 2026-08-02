@@ -24,6 +24,8 @@ createInertiaApp({
                 return null;
             case name.startsWith('facilities/'):
                 return null;
+            case name.startsWith('ruangan_bch/'):
+                return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):

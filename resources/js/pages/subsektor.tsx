@@ -122,16 +122,11 @@ export default function Subsektor() {
             {/* ===== NAVBAR ===== */}
             <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur-md">
                 <div className="flex items-center justify-between gap-6 px-6 py-4 sm:px-10">
-                    {/* Brand */}
-                    <Link
-                        href="/"
-                        className="inline-flex items-center gap-2 text-base font-semibold text-gray-900"
-                        style={{ letterSpacing: '-0.01em' }}
-                    >
-                        <svg viewBox="0 0 48 48" fill="currentColor" className="h-5 w-5" style={{ color: '#b15f2c' }}>
-                            <path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                        </svg>
-                        Lumora
+                    {/* Brand Logos */}
+                    <Link href="/" className="flex items-center gap-2 sm:gap-3">
+                        <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
+                        <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
+                        <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
                     </Link>
 
                     {/* Nav links */}
