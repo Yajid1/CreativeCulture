@@ -95,11 +95,11 @@ export default function BandungCreativeHub() {
                 {/* Navbar — samakan dengan landing page */}
                 <header className="relative z-10">
                     <div className="flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
-                        {/* Brand */}
-                        <Link href="/" className="inline-flex items-center gap-2 text-base font-semibold text-white" style={{ letterSpacing: '-0.01em' }}>
-                            <svg viewBox="0 0 48 48" fill="currentColor" className="h-5 w-5" style={{ color: '#b15f2c' }}>
-                                <path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                            </svg>
+                        {/* Brand Logos */}
+                        <Link href="/" className="flex items-center gap-2 sm:gap-3">
+                            <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
+                            <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
+                            <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" className="h-8 sm:h-9 w-auto object-contain transition-all duration-300 hover:scale-105 drop-shadow-sm" />
                         </Link>
 
                         {/* Nav links */}
@@ -168,17 +168,6 @@ export default function BandungCreativeHub() {
                     </div>
                 </div>
 
-                {/* Bottom Nav Kategori */}
-                <div
-                    className="relative z-10 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/20 px-6 py-4 text-[11px] font-medium uppercase tracking-widest text-white/70 sm:px-10"
-                    style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}
-                >
-                    <span className="text-white">Ruang Kolaborasi</span>
-                    <span>Studio Kreatif</span>
-                    <span>Coworking Space</span>
-                    <span>Event Hall</span>
-                    <span>Galeri</span>
-                </div>
             </div>
 
             {/* Section detail - gaya "About" seperti referensi */}
@@ -495,23 +484,23 @@ export default function BandungCreativeHub() {
 
                     <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {[
-                            { icon: 'music', name: 'Basement dan Area Parkir', floor: 'Basement', capacity: 200 },
-                            { icon: 'music', name: 'Studio Musik', floor: 'Basement', capacity: 8 },
-                            { icon: 'gallery', name: 'Exhibition Area', floor: 'Lt.1', capacity: 100 },
-                            { icon: 'stage', name: 'Amphitheater', floor: 'Lt.1', capacity: 100 },
-                            { icon: 'book', name: 'Perpustakaan', floor: 'Lt.2', capacity: 30 },
-                            { icon: 'cowork', name: 'Coworking Space', floor: 'Lt.2', capacity: 14 },
-                            { icon: 'glass', name: 'Ruang Kaca', floor: 'Lt.2', capacity: 25 },
-                            { icon: 'mic', name: 'Recording Studio', floor: 'Lt.3', capacity: 8 },
-                            { icon: 'stage', name: 'Auditorium', floor: 'Lt.3', capacity: 150 },
-                            { icon: 'camera', name: 'Digital Content Studio', floor: 'Lt.3', capacity: 15 },
-                            { icon: 'dance', name: 'Studio Tari', floor: 'Lt.3', capacity: 30 },
-                            { icon: 'garden', name: 'Taman', floor: 'Lt.4', capacity: 25 },
-                            { icon: 'video', name: 'Teleconference Room', floor: 'Lt.4', capacity: 10 },
-                            { icon: 'sewing', name: 'Studio Jahit', floor: 'Lt.4', capacity: 8 },
-                            { icon: 'video', name: 'Studio Animasi & Editing', floor: 'Lt.4', capacity: 10 },
-                            { icon: 'music', name: 'Studio Fenyen', floor: 'Lt.5', capacity: 30 },
-                            { icon: 'stage', name: 'Aula', floor: 'Lt.5', capacity: 80 },
+                            { icon: 'music', name: 'Basement dan Area Parkir', floor: 'Basement', capacity: 200, href: '/ruangan-bch/basement-dan-area-parkir' },
+                            { icon: 'music', name: 'Studio Musik', floor: 'Basement', capacity: 8, href: '/ruangan-bch/studio-musik' },
+                            { icon: 'gallery', name: 'Exhibition Area', floor: 'Lt.1', capacity: 100, href: '/ruangan-bch/exhibition-area' },
+                            { icon: 'stage', name: 'Amphitheater', floor: 'Lt.1', capacity: 100, href: '/ruangan-bch/amphitheater' },
+                            { icon: 'book', name: 'Perpustakaan', floor: 'Lt.2', capacity: 30, href: '/ruangan-bch/perpustakaan' },
+                            { icon: 'cowork', name: 'Coworking Space', floor: 'Lt.2', capacity: 14, href: '/ruangan-bch/coworking-space' },
+                            { icon: 'glass', name: 'Ruang Kaca', floor: 'Lt.2', capacity: 25, href: '/ruangan-bch/ruang-kaca' },
+                            { icon: 'mic', name: 'Recording Studio', floor: 'Lt.3', capacity: 8, href: '/ruangan-bch/recording-studio' },
+                            { icon: 'stage', name: 'Auditorium', floor: 'Lt.3', capacity: 150, href: '/ruangan-bch/auditorium' },
+                            { icon: 'camera', name: 'Digital Content Studio', floor: 'Lt.3', capacity: 15, href: '/ruangan-bch/digital-content-studio' },
+                            { icon: 'dance', name: 'Studio Tari', floor: 'Lt.3', capacity: 30, href: '/ruangan-bch/studio-tari' },
+                            { icon: 'garden', name: 'Taman', floor: 'Lt.4', capacity: 25, href: '/ruangan-bch/taman' },
+                            { icon: 'video', name: 'Teleconference Room', floor: 'Lt.4', capacity: 10, href: '/ruangan-bch/teleconference-room' },
+                            { icon: 'sewing', name: 'Studio Jahit', floor: 'Lt.4', capacity: 8, href: '/ruangan-bch/studio-jahit' },
+                            { icon: 'video', name: 'Studio Animasi & Editing', floor: 'Lt.4', capacity: 10, href: '/ruangan-bch/studio-animasi-dan-editing' },
+                            { icon: 'music', name: 'Studio Fashion', floor: 'Lt.5', capacity: 30, href: '/ruangan-bch/studio-fashion' },
+                            { icon: 'stage', name: 'Aula', floor: 'Lt.5', capacity: 80, href: '/ruangan-bch/aula' },
                         ].map((room, i) => {
                             const roomGradients = [
                                 'from-blue-400 to-blue-600',
@@ -537,10 +526,12 @@ export default function BandungCreativeHub() {
                                 video: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" /></svg>,
                                 sewing: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" /><line x1="16" y1="8" x2="2" y2="22" /><line x1="17.5" y1="15" x2="9" y2="15" /></svg>,
                             };
+                            const CardWrapper = room.href ? Link : 'div';
                             return (
-                                <div
+                                <CardWrapper
                                     key={i}
-                                    className="group relative flex items-start gap-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                                    href={room.href || '#'}
+                                    className="group relative flex items-start gap-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md cursor-pointer"
                                 >
                                     <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white ${gradient}`}>
                                         {icons[room.icon as keyof typeof icons]}
@@ -559,7 +550,7 @@ export default function BandungCreativeHub() {
                                         </div>
                                     </div>
                                     <div className={`absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r opacity-0 transition group-hover:opacity-100 ${gradient}`} />
-                                </div>
+                                </CardWrapper>
                             );
                         })}
                     </div>
