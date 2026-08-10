@@ -542,12 +542,12 @@ export default function TerasSundaCibiru() {
 
                     <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {[
-                            { icon: 'music', name: 'Palataran', floor: '', capacity: 50 },
-                            { icon: 'music', name: 'Balé Karya', floor: '', capacity: 50 },
-                            { icon: 'music', name: 'Balé Alit', floor: '', capacity: 20 },
-                            { icon: 'music', name: 'Balé Riung', floor: '', capacity: 20 },
-                            { icon: 'music', name: 'Balé Utama', floor: '', capacity: 300 },
-                            { icon: 'music', name: 'Balé Motekar', floor: '', capacity: 10 },
+                            { icon: 'music', name: 'Palataran', href: '/ruangan-tsc/palataran', floor: '', capacity: 50 },
+                            { icon: 'music', name: 'Balé Karya', href: '/ruangan-tsc/bale-karya', floor: '', capacity: 50 },
+                            { icon: 'music', name: 'Balé Alit', href: '/ruangan-tsc/bale-alit', floor: '', capacity: 20 },
+                            { icon: 'music', name: 'Balé Riung', href: '/ruangan-tsc/bale-riung', floor: '', capacity: 20 },
+                            { icon: 'music', name: 'Balé Utama', href: '/ruangan-tsc/bale-utama', floor: '', capacity: 300 },
+                            { icon: 'music', name: 'Balé Motekar', href: '/ruangan-tsc/bale-motekar', floor: '', capacity: 10 },
                         ].map((room, i) => {
                             const roomGradients = [
                                 'from-emerald-400 to-green-600',
@@ -559,8 +559,9 @@ export default function TerasSundaCibiru() {
                                 music: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>,
                             };
                             return (
-                                <div
+                                <Link
                                     key={i}
+                                    href={room.href}
                                     className="group relative flex items-start gap-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                                 >
                                     <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white ${gradient}`}>
@@ -579,7 +580,7 @@ export default function TerasSundaCibiru() {
                                             {room.capacity} Orang
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             );
                         })}
                     </div>

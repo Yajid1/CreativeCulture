@@ -97,7 +97,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <Head title="Dashboard Overview — Ani-UI Admin" />
+            <Head title="Dashboard Overview" />
 
             <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#09090b] text-gray-800 dark:text-gray-200 font-sans p-4 sm:p-6 lg:p-8 space-y-6">
 
@@ -161,45 +161,64 @@ export default function Dashboard() {
 
                         {/* 4 STAT CARDS ROW */}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            {/* Card 1 */}
+                            {/* Card 1: Total Ruangan */}
                             <div className="rounded-2xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-3 shadow-xs hover:shadow-sm transition">
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
-                                            <FolderKanban className="h-3.5 w-3.5" />
+                                            <Building2 className="h-3.5 w-3.5" />
                                         </div>
-                                        <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Total Projects</p>
+                                        <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Total Ruangan</p>
                                     </div>
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
                                 <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">24</p>
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">27</p>
                                     <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                                         <TrendingUp className="h-3 w-3" /> +3
                                     </span>
                                 </div>
                             </div>
 
-                            {/* Card 2 */}
+                            {/* Card 2: Artikel Published */}
                             <div className="rounded-2xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-3 shadow-xs hover:shadow-sm transition">
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
-                                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:indigo-400">
-                                            <Users className="h-3.5 w-3.5" />
+                                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
+                                            <FileText className="h-3.5 w-3.5" />
                                         </div>
-                                        <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Active Users</p>
+                                        <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Artikel Published</p>
                                     </div>
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
                                 <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">1.847</p>
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">12</p>
                                     <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                                         <TrendingUp className="h-3 w-3" /> +12%
                                     </span>
                                 </div>
                             </div>
 
-                            {/* Card 3 */}
+                            {/* Card 3: Berita Published */}
+                            <div className="rounded-2xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-3 shadow-xs hover:shadow-sm transition">
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
+                                            <Newspaper className="h-3.5 w-3.5" />
+                                        </div>
+                                        <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Berita Published</p>
+                                    </div>
+                                    <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
+                                </div>
+                                <div className="flex items-end justify-between">
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">18</p>
+                                    <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                                        <TrendingUp className="h-3 w-3" /> +8
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Card 4: Task Completion */}
                             <div className="rounded-2xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-3 shadow-xs hover:shadow-sm transition">
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
@@ -214,25 +233,6 @@ export default function Dashboard() {
                                     <p className="text-xl font-extrabold text-gray-900 dark:text-white">78%</p>
                                     <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                                         <TrendingUp className="h-3 w-3" /> +5%
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Card 4 */}
-                            <div className="rounded-2xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-3 shadow-xs hover:shadow-sm transition">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 dark:bg-[#1c1c21] text-gray-600 dark:text-gray-400">
-                                            <Clock className="h-3.5 w-3.5" />
-                                        </div>
-                                        <p className="text-[11px] font-medium text-gray-500 dark:text-gray-400">Avg. Response Time</p>
-                                    </div>
-                                    <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
-                                </div>
-                                <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">32 min</p>
-                                    <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-gray-400 dark:text-gray-500">
-                                        → 0%
                                     </span>
                                 </div>
                             </div>
@@ -490,11 +490,8 @@ export default function Dashboard() {
                             <div className="flex items-center justify-between pt-2">
                                 <div>
                                     <p className="text-[11px] font-medium text-gray-400">Total Projected</p>
-                                    <p className="text-2xl font-extrabold text-gray-900 dark:text-white mt-0.5">$128,430</p>
+                                    <p className="text-2xl font-extrabold text-gray-900 dark:text-white mt-0.5">130</p>
                                 </div>
-                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-900">
-                                    +18.5%
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -550,11 +547,10 @@ export default function Dashboard() {
                                     <td className="py-4 pr-2 text-right relative">
                                         <button
                                             onClick={() => setShowRowActionMenu(showRowActionMenu === 1 ? null : 1)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${
-                                                showRowActionMenu === 1
-                                                    ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                            }`}
+                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 1
+                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
+                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                }`}
                                         >
                                             <MoreVertical className="h-4 w-4" />
                                         </button>
@@ -602,11 +598,10 @@ export default function Dashboard() {
                                     <td className="py-4 pr-2 text-right relative">
                                         <button
                                             onClick={() => setShowRowActionMenu(showRowActionMenu === 2 ? null : 2)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${
-                                                showRowActionMenu === 2
-                                                    ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                            }`}
+                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 2
+                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
+                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                }`}
                                         >
                                             <MoreVertical className="h-4 w-4" />
                                         </button>
@@ -654,11 +649,10 @@ export default function Dashboard() {
                                     <td className="py-4 pr-2 text-right relative">
                                         <button
                                             onClick={() => setShowRowActionMenu(showRowActionMenu === 3 ? null : 3)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${
-                                                showRowActionMenu === 3
-                                                    ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                            }`}
+                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 3
+                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
+                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                }`}
                                         >
                                             <MoreVertical className="h-4 w-4" />
                                         </button>
@@ -706,11 +700,10 @@ export default function Dashboard() {
                                     <td className="py-4 pr-2 text-right relative">
                                         <button
                                             onClick={() => setShowRowActionMenu(showRowActionMenu === 4 ? null : 4)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${
-                                                showRowActionMenu === 4
-                                                    ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                            }`}
+                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 4
+                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
+                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                }`}
                                         >
                                             <MoreVertical className="h-4 w-4" />
                                         </button>

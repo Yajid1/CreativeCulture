@@ -567,10 +567,10 @@ export default function KampungWisataPasirKunci() {
 
                     <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {[
-                            { icon: 'music', name: 'Saung Padepokan', floor: '', capacity: 30 },
-                            { icon: 'music', name: 'Balé Puhun', floor: '', capacity: 15 },
-                            { icon: 'music', name: 'Wahana Kaulinan Lapang', floor: '', capacity: 100 },
-                            { icon: 'music', name: 'Kalang (Ampitheater)', floor: '', capacity: 200 },
+                            { icon: 'music', name: 'Saung Padepokan', href: '/ruangan-kwpk/saung-padepokan', floor: '', capacity: 30 },
+                            { icon: 'music', name: 'Balé Puhun', href: '/ruangan-kwpk/bale-puhun', floor: '', capacity: 15 },
+                            { icon: 'music', name: 'Wahana Kaulinan Lapang', href: '/ruangan-kwpk/wahana-kaulinan-lapang', floor: '', capacity: 100 },
+                            { icon: 'music', name: 'Kalang (Ampitheater)', href: '/ruangan-kwpk/kalang-amphitheater', floor: '', capacity: 200 },
                         ].map((room, i) => {
                             const roomGradients = [
                                 'from-emerald-400 to-green-600',
@@ -582,8 +582,9 @@ export default function KampungWisataPasirKunci() {
                                 music: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>,
                             };
                             return (
-                                <div
+                                <Link
                                     key={i}
+                                    href={room.href}
                                     className="group relative flex items-start gap-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                                 >
                                     <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white ${gradient}`}>
@@ -602,7 +603,7 @@ export default function KampungWisataPasirKunci() {
                                             {room.capacity} Orang
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             );
                         })}
                     </div>
