@@ -16,13 +16,46 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
+        $users = [
             [
-                'name' => 'Admin UPTD Kebudayaan',
+                'name' => 'Super Admin',
+                'email' => 'superadmin@gmail.com',
                 'password' => Hash::make('admin123'),
                 'email_verified_at' => now(),
-            ]
-        );
+            ],
+            [
+                'name' => 'Admin BCH',
+                'email' => 'admin.bch@gmail.com',
+                'password' => Hash::make('admin123'),
+                'email_verified_at' => now(),
+            ],
+            [
+                'name' => 'Admin PSMS',
+                'email' => 'admin.psms@gmail.com',
+                'password' => Hash::make('admin123'),
+                'email_verified_at' => now(),
+            ],
+            [
+                'name' => 'Admin TSC',
+                'email' => 'admin.tsc@gmail.com',
+                'password' => Hash::make('admin123'),
+                'email_verified_at' => now(),
+            ],
+            [
+                'name' => 'Admin KWPK',
+                'email' => 'admin.kwpk@gmail.com',
+                'password' => Hash::make('admin123'),
+                'email_verified_at' => now(),
+            ],
+        ];
+
+        foreach ($users as $userData) {
+            User::updateOrCreate(
+                ['email' => $userData['email']],
+                $userData
+            );
+        }
+
+        $this->call(RoleSeeder::class);
     }
 }

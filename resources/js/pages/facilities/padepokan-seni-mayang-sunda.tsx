@@ -542,9 +542,9 @@ export default function PadepokanSeniMayangSunda() {
 
                     <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {[
-                            { icon: 'music', name: 'Indoor Stage', floor: '', capacity: 150 },
-                            { icon: 'gallery', name: 'Gedung Outdoor', floor: '', capacity: 500 },
-                            { icon: 'music', name: 'Studio Musik Mayang Sunda', floor: '', capacity: 10 },
+                            { icon: 'music', name: 'Indoor Stage', href: '/ruangan-psms/indoor-stage', floor: '', capacity: 150 },
+                            { icon: 'gallery', name: 'Gedung Outdoor', href: '/ruangan-psms/gedung-outdoor', floor: '', capacity: 500 },
+                            { icon: 'music', name: 'Studio Musik Mayang Sunda', href: '/ruangan-psms/studio-musik-mayang-sunda', floor: '', capacity: 10 },
                         ].map((room, i) => {
                             const roomGradients = [
                                 'from-emerald-400 to-green-600',
@@ -558,8 +558,9 @@ export default function PadepokanSeniMayangSunda() {
                                 stage: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
                             };
                             return (
-                                <div
+                                <Link
                                     key={i}
+                                    href={room.href}
                                     className="group relative flex items-start gap-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                                 >
                                     <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white ${gradient}`}>
@@ -579,7 +580,7 @@ export default function PadepokanSeniMayangSunda() {
                                         </div>
                                     </div>
                                     <div className={`absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r opacity-0 transition group-hover:opacity-100 ${gradient}`} />
-                                </div>
+                                </Link>
                             );
                         })}
                     </div>
