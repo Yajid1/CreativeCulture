@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
-import { Bell, ChevronDown, Moon, Search, Sun, ChevronRight } from 'lucide-react';
+import { Bell, ChevronDown, Moon, Sun, ChevronRight } from 'lucide-react';
+import { SearchCommandPalette } from '@/components/search-command-palette';
 import AppLogo from '@/components/app-logo';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useAppearance } from '@/hooks/use-appearance';
@@ -77,18 +78,8 @@ export function AppSidebarHeader({
 
                 {/* Right Side: Search, Language, Dark Mode, Notification, Profile */}
                 <div className="flex items-center gap-2 sm:gap-3">
-                    {/* Search Input Box */}
-                    <div className="relative hidden md:flex items-center">
-                        <Search className="absolute left-3 h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className="h-8 w-44 lg:w-56 rounded-full border-0 bg-[#f1f4f9] dark:bg-[#1c1c21] py-1 pl-8 pr-14 text-xs text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:bg-white dark:focus:bg-[#121215] focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
-                        />
-                        <kbd className="absolute right-2.5 inline-flex items-center rounded bg-white dark:bg-[#282830] px-1.5 py-0.5 text-[10px] font-mono text-gray-400 dark:text-gray-300 border border-gray-200/80 dark:border-[#33333d] shadow-2xs">
-                            Ctrl+K
-                        </kbd>
-                    </div>
+                    {/* Search Command Palette */}
+                    <SearchCommandPalette />
 
                     {/* Language Selector */}
                     <button className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#f1f4f9] dark:bg-[#1c1c21] px-2.5 py-1 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-[#282830] transition">

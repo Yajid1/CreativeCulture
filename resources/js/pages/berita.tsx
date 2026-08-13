@@ -547,21 +547,21 @@ export default function Berita() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <span className="mt-4 text-xs font-bold text-gray-700 uppercase tracking-wider text-center">Edisi 01 — Kabar Kebudayaan</span>
+                                        <span className="mt-4 text-xs font-bold text-gray-700 uppercase tracking-wider text-center">Kabar Kebudayaan</span>
                                     </div>
 
                                     {/* BOOK 2 (VOL 02) */}
                                     <div className="flex flex-col items-center w-full">
                                         <div className="book-cover-perspective cursor-pointer group" onClick={() => setIsBookOpen(true)}>
-                                            <div className="book-cover-card relative w-[250px] sm:w-[290px] h-[370px] sm:h-[430px] rounded-r-2xl rounded-l-sm bg-[#0f2d24] text-white shadow-2xl overflow-hidden border-r-4 border-b-4 border-emerald-950/60 transform transition-transform duration-500 group-hover:scale-105">
-                                                <div className="absolute top-0 bottom-0 left-0 w-6 bg-gradient-to-r from-emerald-950 via-emerald-900 to-transparent z-20 border-r border-white/10 shadow-inner" />
+                                            <div className="book-cover-card relative w-[250px] sm:w-[290px] h-[370px] sm:h-[430px] rounded-r-2xl rounded-l-sm bg-[#1e2a38] text-white shadow-2xl overflow-hidden border-r-4 border-b-4 border-gray-900/40 transform transition-transform duration-500 group-hover:scale-105">
+                                                <div className="absolute top-0 bottom-0 left-0 w-6 bg-gradient-to-r from-gray-900 via-gray-800 to-transparent z-20 border-r border-white/10 shadow-inner" />
                                                 <div className="absolute inset-0 z-0">
                                                     <img
                                                         src="/images/berita_book_cover_vol2.png"
                                                         alt="Warta Seni Sunda Cover Vol 02"
                                                         className="w-full h-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
                                                     />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#064e3b] via-[#064e3b]/40 to-transparent" />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/40 to-transparent" />
                                                 </div>
                                                 <div className="relative z-10 flex h-full flex-col justify-between p-5 sm:p-6 pl-8">
                                                     <div className="flex items-start justify-between">
@@ -589,21 +589,21 @@ export default function Berita() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <span className="mt-4 text-xs font-bold text-emerald-800 uppercase tracking-wider text-center">Edisi 02 — Warta Seni Sunda</span>
+                                        <span className="mt-4 text-xs font-bold text-gray-700 uppercase tracking-wider text-center">Warta Seni Sunda</span>
                                     </div>
 
                                     {/* BOOK 3 (VOL 03) */}
                                     <div className="flex flex-col items-center w-full">
                                         <div className="book-cover-perspective cursor-pointer group" onClick={() => setIsBookOpen(true)}>
-                                            <div className="book-cover-card relative w-[250px] sm:w-[290px] h-[370px] sm:h-[430px] rounded-r-2xl rounded-l-sm bg-[#4a1525] text-white shadow-2xl overflow-hidden border-r-4 border-b-4 border-rose-950/60 transform transition-transform duration-500 group-hover:scale-105">
-                                                <div className="absolute top-0 bottom-0 left-0 w-6 bg-gradient-to-r from-rose-950 via-rose-900 to-transparent z-20 border-r border-white/10 shadow-inner" />
+                                            <div className="book-cover-card relative w-[250px] sm:w-[290px] h-[370px] sm:h-[430px] rounded-r-2xl rounded-l-sm bg-[#1e2a38] text-white shadow-2xl overflow-hidden border-r-4 border-b-4 border-gray-900/40 transform transition-transform duration-500 group-hover:scale-105">
+                                                <div className="absolute top-0 bottom-0 left-0 w-6 bg-gradient-to-r from-gray-900 via-gray-800 to-transparent z-20 border-r border-white/10 shadow-inner" />
                                                 <div className="absolute inset-0 z-0">
                                                     <img
                                                         src="/images/berita_book_cover_vol3.png"
                                                         alt="Jurnal Budaya Cover Vol 03"
                                                         className="w-full h-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
                                                     />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#881337] via-[#881337]/40 to-transparent" />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/40 to-transparent" />
                                                 </div>
                                                 <div className="relative z-10 flex h-full flex-col justify-between p-5 sm:p-6 pl-8">
                                                     <div className="flex items-start justify-between">
@@ -631,7 +631,7 @@ export default function Berita() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <span className="mt-4 text-xs font-bold text-rose-900 uppercase tracking-wider text-center">Edisi 03 — Jurnal Budaya</span>
+                                        <span className="mt-4 text-xs font-bold text-gray-700 uppercase tracking-wider text-center">Jurnal Budaya</span>
                                     </div>
 
                                 </div>

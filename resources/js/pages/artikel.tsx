@@ -350,72 +350,134 @@ export default function Artikel() {
                                     </div>
                                 </div>
 
-                                {/* RIGHT CONTENT - 3 IMAGE CARDS SHOWCASE COLLAGE */}
-                                <div className="relative h-[480px] sm:h-[560px] w-full flex items-center justify-center mt-6 lg:mt-0">
+                                {/* RIGHT CONTENT - 5 IMAGE COLLAGE SHOWCASE (MATCHING IMAGE 1 DESIGN) */}
+                                <div className="relative w-full max-w-[540px] h-[500px] sm:h-[580px] mx-auto mt-6 lg:mt-0 flex items-center justify-center select-none">
+                                    
+                                    {/* SVG CONNECTOR LINES */}
+                                    <svg 
+                                        className="absolute inset-0 w-full h-full pointer-events-none z-30 drop-shadow-xs" 
+                                        viewBox="0 0 540 580" 
+                                        fill="none" 
+                                        stroke="#1e293b" 
+                                        strokeWidth="2.2" 
+                                        strokeLinecap="round"
+                                    >
+                                        {/* SENI TARI line: curves down-right into card 1 */}
+                                        <path d="M 180 32 C 150 48 145 95 185 105" />
 
-                                    {/* CARD 1 (LAMINE YAMAL & SPANYOL RECAP IMAGE) */}
+                                        {/* BUDAYA line: curves down-left into card 2 */}
+                                        <path d="M 405 52 C 390 85 392 110 375 135" />
+
+                                        {/* PERTUNJUKAN line: curves up-right into card 3 */}
+                                        <path d="M 115 330 C 92 295 95 260 120 245" />
+
+                                        {/* GAMELAN line: curves up-right into card 4 */}
+                                        <path d="M 215 500 C 180 470 178 430 215 410" />
+
+                                        {/* KOMUNITAS line: curves up-left into card 5 */}
+                                        <path d="M 400 495 C 382 460 385 420 375 390" />
+                                    </svg>
+
+                                    {/* LABELS */}
+                                    {/* SENI TARI Label */}
+                                    <div className="absolute top-[16px] left-[130px] sm:left-[145px] z-40 font-extrabold text-[#1e293b] text-xs sm:text-sm tracking-wider uppercase">
+                                        SENI TARI
+                                    </div>
+
+                                    {/* BUDAYA Label */}
+                                    <div className="absolute top-[30px] right-[75px] sm:right-[95px] z-40 font-extrabold text-[#1e293b] text-xs sm:text-sm tracking-wider uppercase">
+                                        BUDAYA
+                                    </div>
+
+                                    {/* PERTUNJUKAN Label */}
+                                    <div className="absolute top-[320px] sm:top-[335px] left-[0px] z-40 font-extrabold text-[#1e293b] text-xs sm:text-sm tracking-wider uppercase">
+                                        PERTUNJUKAN
+                                    </div>
+
+                                    {/* GAMELAN Label */}
+                                    <div className="absolute bottom-[25px] sm:bottom-[30px] left-[105px] sm:left-[125px] z-40 font-extrabold text-[#1e293b] text-xs sm:text-sm tracking-wider uppercase">
+                                        GAMELAN
+                                    </div>
+
+                                    {/* KOMUNITAS Label */}
+                                    <div className="absolute bottom-[30px] sm:bottom-[35px] right-[25px] sm:right-[35px] z-40 font-extrabold text-[#1e293b] text-xs sm:text-sm tracking-wider uppercase">
+                                        KOMUNITAS
+                                    </div>
+
+                                    {/* COLLAGE CARDS */}
+
+                                    {/* CARD 1: SENI TARI (Top Center-Left) */}
                                     <div 
-                                        className="absolute left-[2%] sm:left-[4%] top-[8%] z-30 hover:z-50 cursor-pointer group -rotate-6 hover:rotate-0 hover:scale-110 hover:-translate-y-2 transition-all duration-300"
+                                        className="absolute top-[60px] left-[185px] sm:left-[200px] w-[150px] sm:w-[185px] h-[170px] sm:h-[205px] z-20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(0)}
                                     >
-                                        <div className="relative w-[185px] sm:w-[215px] h-[280px] sm:h-[330px] rounded-2xl bg-[#1e2a38] text-white shadow-2xl overflow-hidden border-2 border-white/20 transform transition-transform duration-500">
-                                            <img
-                                                src={ARTIKEL_LIST[0]?.image}
-                                                alt={ARTIKEL_LIST[0]?.recapTitle}
-                                                className="w-full h-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/40 to-transparent" />
-                                            <div className="relative z-10 flex h-full flex-col justify-between p-3.5 pl-5">
-                                                <span className="rounded-full bg-blue-600/80 px-2 py-0.5 text-[8px] font-semibold text-white w-fit">{ARTIKEL_LIST[0]?.recapBadge}</span>
-                                                <div>
-                                                    <h3 className="text-base font-bold leading-snug text-white drop-shadow">{ARTIKEL_LIST[0]?.recapTitle}</h3>
-                                                    <span className="text-[9px] text-amber-300 font-semibold block mt-1">Klik Baca Artikel →</span>
-                                                </div>
-                                            </div>
+                                        <img 
+                                            src="/images/DSC01753.jpg" 
+                                            alt="Seni Tari" 
+                                            className="w-full h-full object-cover object-top-left transition-transform duration-500 group-hover:scale-105" 
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                                            <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Seni Tari →</span>
                                         </div>
                                     </div>
 
-                                    {/* CARD 2 (ARTIKEL 1 DRUM STICK IMAGE IN RECAP) */}
+                                    {/* CARD 2: BUDAYA (Top Right) */}
                                     <div 
-                                        className="absolute left-[33%] sm:left-[35%] top-[16%] z-20 hover:z-50 cursor-pointer group rotate-2 hover:rotate-0 hover:scale-110 hover:-translate-y-2 transition-all duration-300"
+                                        className="absolute top-[80px] right-[20px] sm:right-[30px] w-[145px] sm:w-[180px] h-[180px] sm:h-[220px] z-10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(1)}
                                     >
-                                        <div className="relative w-[185px] sm:w-[215px] h-[280px] sm:h-[330px] rounded-2xl bg-[#0f2d24] text-white shadow-2xl overflow-hidden border-2 border-white/20 transform transition-transform duration-500">
-                                            <img
-                                                src={ARTIKEL_LIST[1]?.image}
-                                                alt={ARTIKEL_LIST[1]?.recapTitle}
-                                                className="w-full h-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a8a] via-[#1e3a8a]/40 to-transparent" />
-                                            <div className="relative z-10 flex h-full flex-col justify-between p-3.5 pl-5">
-                                                <span className="rounded-full bg-blue-600/80 px-2 py-0.5 text-[8px] font-semibold text-white w-fit">{ARTIKEL_LIST[1]?.recapBadge}</span>
-                                                <div>
-                                                    <h3 className="text-base font-bold leading-snug text-white drop-shadow">{ARTIKEL_LIST[1]?.recapTitle}</h3>
-                                                    <span className="text-[9px] text-blue-300 font-semibold block mt-1">Klik Baca Artikel →</span>
-                                                </div>
-                                            </div>
+                                        <img 
+                                            src="/images/DSC01757.jpg" 
+                                            alt="Budaya" 
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                                            <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Budaya →</span>
                                         </div>
                                     </div>
 
-                                    {/* CARD 3 (BOOMER VS GEN Z RECAP IMAGE) */}
+                                    {/* CARD 3: PERTUNJUKAN (Middle Left) */}
                                     <div 
-                                        className="absolute right-[2%] sm:right-[4%] top-[26%] z-10 hover:z-50 cursor-pointer group rotate-8 hover:rotate-0 hover:scale-110 hover:-translate-y-2 transition-all duration-300"
+                                        className="absolute top-[175px] sm:top-[195px] left-[45px] sm:left-[55px] w-[180px] sm:w-[220px] h-[135px] sm:h-[165px] z-25 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(2)}
                                     >
-                                        <div className="relative w-[185px] sm:w-[215px] h-[280px] sm:h-[330px] rounded-2xl bg-[#0f2a4a] text-white shadow-2xl overflow-hidden border-2 border-white/20 transform transition-transform duration-500">
-                                            <img
-                                                src={ARTIKEL_LIST[2]?.image}
-                                                alt={ARTIKEL_LIST[2]?.recapTitle}
-                                                className="w-full h-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0284c7] via-[#0284c7]/40 to-transparent" />
-                                            <div className="relative z-10 flex h-full flex-col justify-between p-3.5 pl-5">
-                                                <span className="rounded-full bg-sky-500/80 px-2 py-0.5 text-[8px] font-semibold text-white w-fit">{ARTIKEL_LIST[2]?.recapBadge}</span>
-                                                <div>
-                                                    <h3 className="text-base font-bold leading-snug text-white drop-shadow">{ARTIKEL_LIST[2]?.recapTitle}</h3>
-                                                    <span className="text-[9px] text-sky-200 font-semibold block mt-1">Klik Baca Artikel →</span>
-                                                </div>
-                                            </div>
+                                        <img 
+                                            src="/images/DSC01758.jpg" 
+                                            alt="Pertunjukan" 
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                                            <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Pertunjukan →</span>
+                                        </div>
+                                    </div>
+
+                                    {/* CARD 4: GAMELAN (Bottom Center - Frontmost) */}
+                                    <div 
+                                        className="absolute bottom-[65px] sm:bottom-[75px] left-[195px] sm:left-[210px] w-[150px] sm:w-[185px] h-[175px] sm:h-[210px] z-40 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
+                                        onClick={() => openArticleDetail(0)}
+                                    >
+                                        <img 
+                                            src="/images/DSC01802.jpg" 
+                                            alt="Gamelan" 
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                                            <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Gamelan →</span>
+                                        </div>
+                                    </div>
+
+                                    {/* CARD 5: KOMUNITAS (Bottom Right) */}
+                                    <div 
+                                        className="absolute bottom-[80px] sm:bottom-[90px] right-[25px] sm:right-[35px] w-[135px] sm:w-[170px] h-[180px] sm:h-[215px] z-15 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
+                                        onClick={() => openArticleDetail(1)}
+                                    >
+                                        <img 
+                                            src="/images/DSC01753.jpg" 
+                                            alt="Komunitas" 
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                                            <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Komunitas →</span>
                                         </div>
                                     </div>
 

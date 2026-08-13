@@ -1524,21 +1524,28 @@ img {
 }
 
 .stats-panel {
+    position: relative;
+    overflow: hidden;
     border-radius: 2rem;
-    background: #0a0a0a;
-    padding: 3rem 1.5rem;
-    color: #fff
+    background-image: url('/images/backround2.png');
+    background-size: 100% 120%;
+    background-position: center 75%;
+    background-repeat: no-repeat;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: none;
+    padding: 3.5rem 1.5rem 3rem;
+    color: #ffffff;
 }
 
 @media(min-width:640px) {
     .stats-panel {
-        padding: 4rem 2rem
+        padding: 4.5rem 2.5rem 3.5rem;
     }
 }
 
-@media(min-width:768px) {
+@media(min-width:1024px) {
     .stats-panel {
-        padding-inline: 4rem
+        padding: 5rem 4rem 4rem;
     }
 }
 
@@ -1546,8 +1553,9 @@ img {
     margin-top: 1rem;
     max-width: 20ch;
     font-size: 1.875rem;
-    font-weight: 500;
-    letter-spacing: -.01em
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: #ffffff;
 }
 
 @media(min-width:768px) {
@@ -1557,7 +1565,7 @@ img {
 }
 
 .stats-grid {
-    margin-top: 3.5rem;
+    margin-top: 4.5rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 2rem;
@@ -1592,7 +1600,7 @@ img {
 .stat-label {
     margin-top: .75rem;
     font-size: .875rem;
-    color: rgba(255, 255, 255, .55)
+    color: #ffffff;
 }
 
 .site-footer {

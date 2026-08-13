@@ -31,9 +31,9 @@ export default function AiAssistant() {
         'GPT-4o',
     ];
 
-    const handleSendMessage = (textToSend?: string) => {
+    const handleSendMessage = async (textToSend?: string) => {
         const query = textToSend || inputPrompt;
-        if (!query.trim()) return;
+        if (!query.trim() || isGenerating) return;
 
         const userMsg: Message = {
             id: Date.now(),
@@ -41,19 +41,47 @@ export default function AiAssistant() {
             text: query,
         };
 
-        setMessages((prev) => [...prev, userMsg]);
+        const currentMessages = [...messages, userMsg];
+        setMessages(currentMessages);
         if (!textToSend) setInputPrompt('');
         setIsGenerating(true);
 
-        setTimeout(() => {
+        try {
+            const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content;
+
+            const response = await fetch('/admin/ai-assistant/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+                },
+                body: JSON.stringify({
+                    prompt: query,
+                    model: selectedModel,
+                    history: messages.slice(-6),
+                }),
+            });
+
+            const data = await response.json();
+
             const aiMsg: Message = {
                 id: Date.now() + 1,
                 sender: 'ai',
-                text: `Tentu! Mengenai "${query}", UPTD Kebudayaan memiliki berbagai data dan program fasilitas terkait. Apakah Anda memerlukan ringkasan laporan, draf publikasi, atau bantuan analisis jadwal ruangan?`,
+                text: data.reply || 'Maaf, tidak ada respons dari AI.',
             };
             setMessages((prev) => [...prev, aiMsg]);
+        } catch (error) {
+            console.error('Error in AI Assistant API:', error);
+            const errorMsg: Message = {
+                id: Date.now() + 1,
+                sender: 'ai',
+                text: 'Maaf, terjadi kendala saat menghubungkan ke AI Assistant. Silakan coba beberapa saat lagi.',
+            };
+            setMessages((prev) => [...prev, errorMsg]);
+        } finally {
             setIsGenerating(false);
-        }, 1000);
+        }
     };
 
     const handleNewChat = () => {

@@ -11,7 +11,6 @@ import {
     Plus,
     Power,
     RotateCcw,
-    Search,
     Shield,
     ShieldAlert,
     Trash2,
@@ -92,7 +91,6 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
 
     // Filters
     const [roleNameQuery, setRoleNameQuery] = useState('');
-    const [guardNameQuery, setGuardNameQuery] = useState('');
     const [createdFrom, setCreatedFrom] = useState('');
     const [createdTo, setCreatedTo] = useState('');
     const [activeRowMenu, setActiveRowMenu] = useState<number | null>(null);
@@ -125,22 +123,16 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
     const inactiveRolesCount = rolesList.filter((r) => r.status === 'Offline').length;
 
     const filteredRoles = rolesList.filter((role) => {
-        const matchesName =
+        return (
             roleNameQuery === '' ||
             role.name.toLowerCase().includes(roleNameQuery.toLowerCase()) ||
             role.description.toLowerCase().includes(roleNameQuery.toLowerCase()) ||
-            (role.email && role.email.toLowerCase().includes(roleNameQuery.toLowerCase()));
-
-        const matchesEnv =
-            guardNameQuery === '' ||
-            role.environment.toLowerCase().includes(guardNameQuery.toLowerCase());
-
-        return matchesName && matchesEnv;
+            (role.email && role.email.toLowerCase().includes(roleNameQuery.toLowerCase()))
+        );
     });
 
     const handleReset = () => {
         setRoleNameQuery('');
-        setGuardNameQuery('');
         setCreatedFrom('');
         setCreatedTo('');
     };
@@ -251,7 +243,7 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
                 </div>
 
                 {/* 2. STAT CARDS ROW */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {/* Card 1: Total Roles */}
                     <div className="relative overflow-hidden rounded-2xl border border-gray-100 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-5 shadow-xs transition hover:shadow-sm">
                         <div className="flex items-center justify-between">
@@ -308,25 +300,6 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
                         </div>
                         <ShieldAlert className="absolute -right-3 -bottom-3 h-20 w-20 text-gray-100/60 dark:text-gray-800/10 pointer-events-none stroke-[1]" />
                     </div>
-
-                    {/* Card 4: Recently Updated */}
-                    <div className="relative overflow-hidden rounded-2xl border border-gray-100 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-5 shadow-xs transition hover:shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <Clock className="h-4 w-4 text-gray-500" />
-                                <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
-                                    Environment
-                                </span>
-                            </div>
-                            <span className="text-[11px] font-mono text-gray-300 dark:text-gray-600 tracking-tighter">:::</span>
-                        </div>
-                        <div className="mt-4">
-                            <h3 className="text-2xl font-black text-gray-900 dark:text-white">
-                                Production
-                            </h3>
-                        </div>
-                        <Clock className="absolute -right-3 -bottom-3 h-20 w-20 text-gray-100/60 dark:text-gray-800/10 pointer-events-none stroke-[1]" />
-                    </div>
                 </div>
 
                 {/* 3. FILTER BOX SECTION */}
@@ -342,20 +315,6 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
                                 value={roleNameQuery}
                                 onChange={(e) => setRoleNameQuery(e.target.value)}
                                 placeholder="Search role name or email"
-                                className="w-full rounded-xl border-0 bg-[#f5f6f9] dark:bg-[#1a1a20] px-4 py-2.5 text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-[#121215] focus:ring-2 focus:ring-gray-300 transition"
-                            />
-                        </div>
-
-                        {/* Guard Name Input */}
-                        <div>
-                            <label className="block text-xs font-bold text-gray-900 dark:text-white mb-2">
-                                Guard / Environment
-                            </label>
-                            <input
-                                type="text"
-                                value={guardNameQuery}
-                                onChange={(e) => setGuardNameQuery(e.target.value)}
-                                placeholder="Search environment (Production, Staging)"
                                 className="w-full rounded-xl border-0 bg-[#f5f6f9] dark:bg-[#1a1a20] px-4 py-2.5 text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-[#121215] focus:ring-2 focus:ring-gray-300 transition"
                             />
                         </div>
@@ -397,11 +356,6 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
 
                     {/* Action Buttons */}
                     <div className="flex items-center justify-end gap-2.5 pt-3">
-                        <button className="inline-flex items-center gap-2 rounded-full bg-[#18181b] dark:bg-white px-5 py-2 text-xs font-bold text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition shadow-xs cursor-pointer">
-                            <Search className="h-3.5 w-3.5 stroke-[2.5]" />
-                            <span>Filter</span>
-                        </button>
-
                         <button
                             onClick={handleReset}
                             className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#16161a] px-4 py-2 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1f1f24] transition cursor-pointer"
