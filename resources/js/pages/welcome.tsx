@@ -666,7 +666,7 @@ export default function Welcome() {
 
   return (
     <>
-      <Head title="Lumora — Independent Design & Engineering Studio">
+      <Head title="UPTD - CreativeCulture">
         <meta
           name="description"
           content="Lumora is an independent studio crafting brands, products, and the systems that connect them — bold ideas, shipped with quiet precision."
@@ -1176,69 +1176,69 @@ const BODY_HTML = `
     <section class="stats-section">
       <div class="stats-wrapper shell">
         <div class="stats-panel reveal-item" data-reveal data-translate="40">
-          <div class="eyebrow eyebrow--light">
+          <div class="eyebrow eyebrow--light drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
             <span class="eyebrow-dot"></span>
             Lokasi Fasilitas
           </div>
-          <h2 class="stats-h2 line-reveal" data-line-reveal data-delay="120">
+          <h2 class="stats-h2 line-reveal drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]" data-line-reveal data-delay="120">
             <span class="line-wrap"><span class="line-inner">Peta & Alamat</span></span>
             <span class="line-wrap"><span class="line-inner">4 Fasilitas Kebudayaan</span></span>
           </h2>
           <ul class="stats-grid">
             <!-- 01: BCH -->
             <li class="reveal-item" data-reveal data-delay="0" data-translate="20">
-              <div class="flex flex-col gap-2">
-                <a href="https://maps.google.com/?q=Bandung+Creative+Hub" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+              <div class="flex flex-col gap-2 group/card">
+                <a href="https://maps.google.com/?q=Bandung+Creative+Hub" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold text-xs uppercase tracking-wider transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
                   <span>Buka Google Maps ↗</span>
                 </a>
-                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Bandung Creative Hub</div>
-                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Jl. Laswi No.7, Kacapiring, Batununggal, Kota Bandung</div>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight group-hover/card:text-amber-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Bandung Creative Hub</div>
+                <div class="stat-label !text-white text-xs sm:text-sm mt-1 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] font-bold opacity-100 leading-normal">Jl. Laswi No.7, Kacapiring, Batununggal, Kota Bandung</div>
               </div>
             </li>
             <!-- 02: PSMS -->
             <li class="reveal-item" data-reveal data-delay="90" data-translate="20">
-              <div class="flex flex-col gap-2">
-                <a href="https://maps.google.com/?q=Padepokan+Seni+Mayang+Sunda" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+              <div class="flex flex-col gap-2 group/card">
+                <a href="https://maps.google.com/?q=Padepokan+Seni+Mayang+Sunda" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold text-xs uppercase tracking-wider transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
                   <span>Buka Google Maps ↗</span>
                 </a>
-                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Padepokan Seni Mayang Sunda</div>
-                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Jl. Peta No.209, Suka Asih, Bojongloa Kaler, Kota Bandung</div>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight group-hover/card:text-amber-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Padepokan Seni Mayang Sunda</div>
+                <div class="stat-label !text-white text-xs sm:text-sm mt-1 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] font-bold opacity-100 leading-normal">Jl. Peta No.209, Suka Asih, Bojongloa Kaler, Kota Bandung</div>
               </div>
             </li>
             <!-- 03: TSC -->
             <li class="reveal-item" data-reveal data-delay="180" data-translate="20">
-              <div class="flex flex-col gap-2">
-                <a href="https://maps.google.com/?q=Teras+Sunda+Cibiru" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+              <div class="flex flex-col gap-2 group/card">
+                <a href="https://maps.google.com/?q=Teras+Sunda+Cibiru" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold text-xs uppercase tracking-wider transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
                   <span>Buka Google Maps ↗</span>
                 </a>
-                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Teras Sunda Cibiru</div>
-                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Jl. Raya Cipadung, Cipadung, Kec. Cibiru, Kota Bandung</div>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight group-hover/card:text-amber-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Teras Sunda Cibiru</div>
+                <div class="stat-label !text-white text-xs sm:text-sm mt-1 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] font-bold opacity-100 leading-normal">Jl. Raya Cipadung, Cipadung, Kec. Cibiru, Kota Bandung</div>
               </div>
             </li>
             <!-- 04: Pasir Kunci -->
             <li class="reveal-item" data-reveal data-delay="270" data-translate="20">
-              <div class="flex flex-col gap-2">
-                <a href="https://maps.google.com/?q=Kampung+Wisata+Pasir+Kunci" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium text-xs uppercase tracking-wider transition-colors">
+              <div class="flex flex-col gap-2 group/card">
+                <a href="https://maps.google.com/?q=Kampung+Wisata+Pasir+Kunci" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold text-xs uppercase tracking-wider transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
                   <span>Buka Google Maps ↗</span>
                 </a>
-                <div class="text-lg sm:text-xl font-bold text-white leading-tight">Kampung Wisata Pasir Kunci</div>
-                <div class="stat-label text-gray-400 text-xs sm:text-sm mt-1">Pasirjati, Kec. Ujung Berung, Kota Bandung</div>
+                <div class="text-lg sm:text-xl font-bold text-white leading-tight group-hover/card:text-amber-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Kampung Wisata Pasir Kunci</div>
+                <div class="stat-label !text-white text-xs sm:text-sm mt-1 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)] font-bold opacity-100 leading-normal">Pasirjati, Kec. Ujung Berung, Kota Bandung</div>
               </div>
             </li>
           </ul>

@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 
 export default function BandungCreativeHub() {
@@ -61,7 +61,13 @@ export default function BandungCreativeHub() {
     const [clockTime, setClockTime] = useState('');
     const [clockDate, setClockDate] = useState('');
 
+    const pageRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
+        let rafId: number;
+        let lenisInstance: any = null;
+        const observers: IntersectionObserver[] = [];
+
         function tick() {
             const now = new Date();
             setClockTime(
@@ -73,12 +79,96 @@ export default function BandungCreativeHub() {
         }
         tick();
         const id = setInterval(tick, 1000);
-        return () => clearInterval(id);
+
+        // === Lenis Smooth Scroll (mengacu pada welcome.tsx) ===
+        (async () => {
+            const { default: Lenis } = await import('lenis');
+            lenisInstance = new Lenis({ smoothWheel: true });
+            function raf(t: number) {
+                if (lenisInstance) {
+                    lenisInstance.raf(t);
+                    rafId = requestAnimationFrame(raf);
+                }
+            }
+            rafId = requestAnimationFrame(raf);
+        })();
+
+        // === Scroll Reveal Animations (mengacu pada welcome.tsx) ===
+        const root = pageRef.current || document;
+
+        // data-scroll reveal
+        const revealEls = root.querySelectorAll('[data-scroll]');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const el = entry.target as HTMLElement;
+                    const delay = parseInt(el.dataset.delay || '0', 10);
+                    setTimeout(() => {
+                        el.classList.add('bch-revealed');
+                    }, delay);
+                    revealObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.15 });
+        revealEls.forEach((el) => revealObserver.observe(el));
+        observers.push(revealObserver);
+
+        // data-scroll-children (stagger children)
+        const staggerEls = root.querySelectorAll('[data-scroll-children]');
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const parent = entry.target as HTMLElement;
+                    const stagger = parseInt(parent.dataset.stagger || '80', 10);
+                    const children = parent.children;
+                    Array.from(children).forEach((child, i) => {
+                        const el = child as HTMLElement;
+                        setTimeout(() => {
+                            el.classList.add('bch-revealed');
+                        }, i * stagger);
+                    });
+                    staggerObserver.unobserve(parent);
+                }
+            });
+        }, { threshold: 0.1 });
+        staggerEls.forEach((el) => staggerObserver.observe(el));
+        observers.push(staggerObserver);
+
+        return () => {
+            clearInterval(id);
+            if (rafId) cancelAnimationFrame(rafId);
+            if (lenisInstance) lenisInstance.destroy();
+            observers.forEach((o) => o.disconnect());
+        };
     }, []);
 
     return (
-        <>
+        <div ref={pageRef}>
             <Head title={facility.name} />
+
+            {/* Scoped scroll animation styles — tidak mengubah layout global */}
+            <style>{`
+                .bch-scroll {
+                    opacity: 0;
+                    transform: translateY(24px);
+                    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+                }
+                .bch-scroll.bch-revealed {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                .bch-stagger-child {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                                transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+                }
+                .bch-stagger-child.bch-revealed {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            `}</style>
 
             <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
                 {/* Video Background - 100% jernih, tanpa fade/overlay apapun */}
@@ -185,20 +275,20 @@ export default function BandungCreativeHub() {
 
                 <div className="relative mx-auto max-w-4xl">
                     {/* Label kecil dengan dot */}
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 bch-scroll" data-scroll>
                         <span className="h-2 w-2 rounded-full bg-blue-600" />
                         Tentang Kami
                     </div>
 
                     {/* Heading besar */}
-                    <h2 className="mt-6 max-w-2xl text-3xl font-bold leading-tight text-gray-900 sm:text-4xl">
+                    <h2 className="mt-6 max-w-2xl text-3xl font-bold leading-tight text-gray-900 sm:text-4xl bch-scroll" data-scroll data-delay="100">
                         {facility.name} adalah ruang kolaborasi kreatif di jantung kota Bandung,
                         dirancang untuk menyatukan seniman, inovator, dan pelaku bisnis dalam satu
                         ekosistem yang saling menumbuhkan.
                     </h2>
 
                     {/* Tombol CTA */}
-                    <div className="mt-8">
+                    <div className="mt-8 bch-scroll" data-scroll data-delay="200">
                         <Link
                             href="/kontak"
                             className="inline-flex items-center gap-3 rounded-full bg-gray-100 py-2 pl-2 pr-5 text-sm font-medium text-gray-900 transition hover:bg-gray-200"
@@ -214,8 +304,8 @@ export default function BandungCreativeHub() {
                     </div>
 
                     {/* 2 Kolom info */}
-                    <div className="mt-16 grid grid-cols-1 gap-10 border-t border-gray-200 pt-10 sm:grid-cols-2">
-                        <div className="border-b border-gray-200 pb-8 sm:border-b-0">
+                    <div className="mt-16 grid grid-cols-1 gap-10 border-t border-gray-200 pt-10 sm:grid-cols-2" data-scroll-children data-stagger="120">
+                        <div className="border-b border-gray-200 pb-8 sm:border-b-0 bch-stagger-child">
                             <h3 className="text-base font-semibold text-gray-900">
                                 Ruang & Fasilitas
                             </h3>
@@ -224,7 +314,7 @@ export default function BandungCreativeHub() {
                             </p>
                         </div>
 
-                        <div className="pb-8">
+                        <div className="pb-8 bch-stagger-child">
                             <h3 className="text-base font-semibold text-gray-900">
                                 Bergabung Bersama Kami
                             </h3>
@@ -252,19 +342,19 @@ export default function BandungCreativeHub() {
                 />
 
                 <div className="relative mx-auto max-w-6xl">
-                    <h2 className="max-w-xl text-3xl font-bold leading-tight sm:text-4xl">
+                    <h2 className="max-w-xl text-3xl font-bold leading-tight sm:text-4xl bch-scroll" data-scroll>
                         Kegiatan yang bisa dan
                         <br />
                         tidak bisa difasilitasi
                     </h2>
-                    <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-500">
+                    <p className="mt-3 max-w-md text-sm leading-relaxed text-gray-500 bch-scroll" data-scroll data-delay="100">
                         Tidak semua kegiatan cocok dengan ruang kami. Berikut panduan agar
                         kegiatanmu selaras dengan fungsi Bandung Creative Hub.
                     </p>
 
-                    <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2" data-scroll-children data-stagger="150">
                         {/* Panel kiri - Tidak bisa difasilitasi */}
-                        <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
+                        <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 bch-stagger-child">
                             <h3 className="text-lg font-semibold text-gray-900">
                                 Kegiatan yang tidak selaras
                             </h3>
@@ -294,7 +384,7 @@ export default function BandungCreativeHub() {
                         </div>
 
                         {/* Panel kanan - Bisa difasilitasi */}
-                        <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
+                        <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 bch-stagger-child">
                             <h3 className="text-lg font-semibold text-gray-900">
                                 Kegiatan yang kami fasilitasi
                             </h3>
@@ -325,7 +415,7 @@ export default function BandungCreativeHub() {
                     </div>
 
                     {/* 4 kolom fitur/aturan singkat */}
-                    <div className="mt-16 grid grid-cols-1 gap-8 border-t border-gray-200 pt-10 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="mt-16 grid grid-cols-1 gap-8 border-t border-gray-200 pt-10 sm:grid-cols-2 lg:grid-cols-4" data-scroll-children data-stagger="100">
                         <div>
                             <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
@@ -380,13 +470,13 @@ export default function BandungCreativeHub() {
             {/* Section 17 Subsektor Ekonomi Kreatif */}
             <section className="bg-white px-6 py-24 text-gray-900 sm:px-10">
                 <div className="mx-auto max-w-6xl">
-                    <h2 className="max-w-2xl text-3xl font-bold leading-tight sm:text-4xl">
+                    <h2 className="max-w-2xl text-3xl font-bold leading-tight sm:text-4xl bch-scroll" data-scroll>
                         17 Subsektor
                         <br />
                         Ekonomi Kreatif
                     </h2>
 
-                    <div className="mt-6 max-w-3xl space-y-4 text-sm leading-relaxed text-gray-500 sm:text-base">
+                    <div className="mt-6 max-w-3xl space-y-4 text-sm leading-relaxed text-gray-500 sm:text-base bch-scroll" data-scroll data-delay="100">
                         <p>
                             Ekonomi kreatif merupakan konsep ekonomi yang mengedepankan
                             kreativitas, ide, dan gagasan sebagai modal utama dalam
@@ -477,8 +567,8 @@ export default function BandungCreativeHub() {
             {/* Section Ruangan dan Area Tersedia */}
             <section className="bg-white px-6 py-24 text-gray-900 sm:px-10">
                 <div className="mx-auto max-w-6xl">
-                    <h2 className="text-3xl font-bold leading-tight sm:text-4xl">Ruangan dan Area Tersedia</h2>
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-500">
+                    <h2 className="text-3xl font-bold leading-tight sm:text-4xl bch-scroll" data-scroll>Ruangan dan Area Tersedia</h2>
+                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-500 bch-scroll" data-scroll data-delay="100">
                         Tersedia berbagai ruang dengan kapasitas dan fungsi berbeda untuk mendukung kegiatan kreatifmu di Bandung Creative Hub.
                     </p>
 
@@ -562,7 +652,7 @@ export default function BandungCreativeHub() {
                 <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-2">
 
                     {/* Kiri — Ajakan */}
-                    <div className="flex flex-col justify-center">
+                    <div className="flex flex-col justify-center bch-scroll" data-scroll>
                         <span className="inline-flex items-center gap-2 text-sm font-medium text-gray-900">
                             <span className="h-1.5 w-6 rounded-full bg-gray-900" />
                             Bergabung Sekarang
@@ -613,7 +703,7 @@ export default function BandungCreativeHub() {
                     </div>
 
                     {/* Kanan — Lokasi Google Maps */}
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 bch-scroll" data-scroll data-delay="150">
                         <div className="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
                             <iframe
                                 title="Lokasi Bandung Creative Hub"
@@ -791,6 +881,6 @@ export default function BandungCreativeHub() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

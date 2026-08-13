@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AiAssistantController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -76,7 +78,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Admin AI Assistant, Task, & Roles
     Route::inertia('admin/ai-assistant', 'admin/ai-assistant')->name('admin.ai_assistant');
-    Route::inertia('admin/task', 'admin/task-admin')->name('admin.task');
+    Route::post('admin/ai-assistant/chat', [AiAssistantController::class, 'chat'])->name('admin.ai_assistant.chat');
+    Route::get('admin/task', [TaskController::class, 'index'])->name('admin.task');
+    Route::post('admin/task', [TaskController::class, 'store'])->name('admin.task.store');
+    Route::put('admin/task/{task}', [TaskController::class, 'update'])->name('admin.task.update');
+    Route::delete('admin/task/{task}', [TaskController::class, 'destroy'])->name('admin.task.destroy');
     Route::get('admin/roles', [RoleController::class, 'index'])->name('admin.roles');
     Route::post('admin/roles', [RoleController::class, 'store'])->name('admin.roles.store');
     Route::put('admin/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');

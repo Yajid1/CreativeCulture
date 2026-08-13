@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function KampungWisataPasirKunci() {
     const facility = {
@@ -39,13 +39,13 @@ export default function KampungWisataPasirKunci() {
     ];
 
     const objectGradients = [
-        'from-emerald-400 to-green-600',
-        'from-teal-400 to-emerald-500',
-        'from-green-400 to-emerald-600',
-        'from-emerald-500 to-teal-600',
-        'from-cyan-400 to-emerald-500',
-        'from-teal-400 to-cyan-600',
-        'from-green-500 to-emerald-700',
+        'from-blue-400 to-blue-600',
+        'from-sky-400 to-blue-500',
+        'from-indigo-400 to-blue-600',
+        'from-blue-500 to-indigo-600',
+        'from-cyan-400 to-blue-500',
+        'from-blue-400 to-sky-600',
+        'from-indigo-500 to-blue-700',
     ];
 
     const [clockTime, setClockTime] = useState('');
@@ -53,7 +53,13 @@ export default function KampungWisataPasirKunci() {
     const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
     const [activeObject, setActiveObject] = useState<(typeof objects)[0] | null>(null);
 
+    const pageRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
+        let rafId: number;
+        let lenisInstance: any = null;
+        const observers: IntersectionObserver[] = [];
+
         function tick() {
             const now = new Date();
             setClockTime(
@@ -65,12 +71,94 @@ export default function KampungWisataPasirKunci() {
         }
         tick();
         const id = setInterval(tick, 1000);
-        return () => clearInterval(id);
+
+        // === Lenis Smooth Scroll ===
+        (async () => {
+            const { default: Lenis } = await import('lenis');
+            lenisInstance = new Lenis({ smoothWheel: true });
+            function raf(t: number) {
+                if (lenisInstance) {
+                    lenisInstance.raf(t);
+                    rafId = requestAnimationFrame(raf);
+                }
+            }
+            rafId = requestAnimationFrame(raf);
+        })();
+
+        // === Scroll Reveal Animations ===
+        const root = pageRef.current || document;
+
+        const revealEls = root.querySelectorAll('[data-scroll]');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const el = entry.target as HTMLElement;
+                    const delay = parseInt(el.dataset.delay || '0', 10);
+                    setTimeout(() => {
+                        el.classList.add('fac-revealed');
+                    }, delay);
+                    revealObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.15 });
+        revealEls.forEach((el) => revealObserver.observe(el));
+        observers.push(revealObserver);
+
+        const staggerEls = root.querySelectorAll('[data-scroll-children]');
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const parent = entry.target as HTMLElement;
+                    const stagger = parseInt(parent.dataset.stagger || '80', 10);
+                    const children = parent.children;
+                    Array.from(children).forEach((child, i) => {
+                        const el = child as HTMLElement;
+                        setTimeout(() => {
+                            el.classList.add('fac-revealed');
+                        }, i * stagger);
+                    });
+                    staggerObserver.unobserve(parent);
+                }
+            });
+        }, { threshold: 0.1 });
+        staggerEls.forEach((el) => staggerObserver.observe(el));
+        observers.push(staggerObserver);
+
+        return () => {
+            clearInterval(id);
+            if (rafId) cancelAnimationFrame(rafId);
+            if (lenisInstance) lenisInstance.destroy();
+            observers.forEach((o) => o.disconnect());
+        };
     }, []);
 
     return (
-        <>
+        <div ref={pageRef}>
             <Head title={facility.name} />
+
+            {/* Scoped scroll animation styles */}
+            <style>{`
+                .fac-scroll {
+                    opacity: 0;
+                    transform: translateY(24px);
+                    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+                }
+                .fac-scroll.fac-revealed {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                .fac-stagger-child {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                                transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+                }
+                .fac-stagger-child.fac-revealed {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            `}</style>
 
             <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
                 {/* Video Background */}
@@ -196,9 +284,9 @@ export default function KampungWisataPasirKunci() {
                     <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-20 items-center">
                         
                         {/* Left Content */}
-                        <div className="flex flex-col items-start space-y-6 z-10">
-                            <div className="flex items-center gap-3 text-sm font-semibold text-slate-500 tracking-wide">
-                                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                        <div className="flex flex-col items-start space-y-6 z-10 fac-scroll" data-scroll>
+                            <div className="flex items-center gap-3 text-sm font-semibold text-slate-500 tracking-wide fac-scroll" data-scroll>
+                                <span className="h-2 w-2 rounded-full bg-blue-600" />
                                 Tentang Kami
                             </div>
                             
@@ -215,7 +303,7 @@ export default function KampungWisataPasirKunci() {
                                     href="/kontak"
                                     className="inline-flex items-center gap-3 rounded-full bg-slate-100/80 pr-6 pl-2 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-200"
                                 >
-                                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-white">
+                                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                                             <line x1="5" y1="12" x2="19" y2="12" />
                                             <polyline points="12 5 19 12 12 19" />
@@ -305,20 +393,20 @@ export default function KampungWisataPasirKunci() {
             <section className="relative w-full bg-white py-20 overflow-hidden">
                 <div className="container mx-auto px-6 sm:px-10 max-w-[1300px]">
                     <div className="mb-16">
-                        <h3 className="text-2xl sm:text-3xl font-bold text-[#1e2330]">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-[#1e2330] fac-scroll" data-scroll>
                             Daya Tarik & Aktivitas
                         </h3>
-                        <p className="mt-4 text-slate-600 max-w-2xl">
+                        <p className="mt-4 text-slate-600 max-w-2xl fac-scroll" data-scroll data-delay="100">
                             Kampung Wisata Pasir Kunci menawarkan kombinasi wisata alam, budaya, dan edukasi yang menjadikannya destinasi lengkap.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16" data-scroll-children data-stagger="100">
                         
                         {/* Feature 1 */}
                         <div className="flex flex-col space-y-4">
                             <div className="flex items-center gap-4">
-                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
                                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                         <circle cx="12" cy="10" r="3" />
@@ -412,7 +500,7 @@ export default function KampungWisataPasirKunci() {
                         kegiatanmu selaras dengan fungsi {facility.name}.
                     </p>
 
-                    <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2" data-scroll-children data-stagger="150">
                         {/* Panel kiri - Tidak bisa difasilitasi */}
                         <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
                             <h3 className="text-lg font-semibold text-gray-900">
@@ -482,7 +570,7 @@ export default function KampungWisataPasirKunci() {
                         10 Obyek Pemajuan Kebudayaan
                     </h2>
 
-                    <div className="mt-6 max-w-3xl space-y-4 text-sm leading-relaxed text-gray-500 sm:text-base">
+                    <div className="mt-6 max-w-3xl space-y-4 text-sm leading-relaxed text-gray-500 sm:text-base fac-scroll" data-scroll data-delay="100">
                         <p>
                             Pemajuan Kebudayaan adalah upaya meningkatkan ketahanan budaya dan kontribusi budaya Indonesia di tengah peradaban dunia melalui Pelindungan, Pengembangan, Pemanfaatan, dan Pembinaan Kebudayaan.
                         </p>
@@ -560,7 +648,7 @@ export default function KampungWisataPasirKunci() {
             {/* Section Ruangan dan Area Tersedia */}
             <section className="bg-white px-6 py-24 text-gray-900 sm:px-10">
                 <div className="mx-auto max-w-6xl">
-                    <h2 className="text-3xl font-bold leading-tight sm:text-4xl">Ruangan dan Area Tersedia</h2>
+                    <h2 className="text-3xl font-bold leading-tight sm:text-4xl fac-scroll" data-scroll>Ruangan dan Area Tersedia</h2>
                     <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-500">
                         Tersedia berbagai ruang dengan kapasitas dan fungsi berbeda untuk mendukung kegiatan pelestarian dan pertunjukan seni di {facility.name}.
                     </p>
@@ -573,9 +661,9 @@ export default function KampungWisataPasirKunci() {
                             { icon: 'music', name: 'Kalang (Ampitheater)', href: '/ruangan-kwpk/kalang-amphitheater', floor: '', capacity: 200 },
                         ].map((room, i) => {
                             const roomGradients = [
-                                'from-emerald-400 to-green-600',
-                                'from-teal-400 to-emerald-500',
-                                'from-green-400 to-emerald-600',
+                                'from-blue-400 to-blue-600',
+                                'from-sky-400 to-blue-500',
+                                'from-indigo-400 to-blue-600',
                             ];
                             const gradient = roomGradients[i % roomGradients.length];
                             const icons = {
@@ -591,11 +679,11 @@ export default function KampungWisataPasirKunci() {
                                         {icons[room.icon as keyof typeof icons]}
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <h3 className="text-sm font-bold text-gray-900 transition group-hover:text-emerald-600">
+                                        <h3 className="text-sm font-bold text-gray-900 transition group-hover:text-blue-600">
                                             {room.name}
                                         </h3>
                                         {room.floor && <p className="mt-1 text-xs text-gray-400">{room.floor}</p>}
-                                        <div className={`inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-600 ${!room.floor ? 'mt-2.5' : 'mt-2'}`}>
+                                        <div className={`inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-600 ${!room.floor ? 'mt-2.5' : 'mt-2'}`}>
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
                                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                                 <circle cx="9" cy="7" r="4" />
@@ -635,7 +723,7 @@ export default function KampungWisataPasirKunci() {
                         <div className="mt-8 flex flex-wrap items-center gap-3">
                             <Link
                                 href="/kontak"
-                                className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                                className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
                             >
                                 Daftarkan Kegiatan
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
@@ -682,7 +770,7 @@ export default function KampungWisataPasirKunci() {
 
                         {/* Info alamat */}
                         <div className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-white px-5 py-4">
-                            <div className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white">
+                            <div className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                     <circle cx="12" cy="10" r="3" />
@@ -697,7 +785,7 @@ export default function KampungWisataPasirKunci() {
                                     href="https://maps.google.com/?q=Kampung+Wisata+Pasir+Kunci"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-emerald-600 hover:underline"
+                                    className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:underline"
                                 >
                                     Buka di Google Maps
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3">
@@ -747,6 +835,6 @@ export default function KampungWisataPasirKunci() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

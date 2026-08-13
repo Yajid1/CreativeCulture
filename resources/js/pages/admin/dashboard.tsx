@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Head } from '@inertiajs/react';
 import { dashboard } from '@/routes';
 import {
@@ -43,6 +43,9 @@ export default function Dashboard() {
     const [timeString, setTimeString] = useState<string>('10:08 AM');
     const [dateString, setDateString] = useState<string>('Saturday, Dec 27, 2025');
 
+    // Dynamic Calendar state
+    const [calendarDate, setCalendarDate] = useState<Date>(new Date());
+
     useEffect(() => {
         const updateClock = () => {
             const now = new Date();
@@ -66,6 +69,73 @@ export default function Dashboard() {
         const timer = setInterval(updateClock, 1000);
         return () => clearInterval(timer);
     }, []);
+
+    // Month Navigation Handlers
+    const handlePrevMonth = () => {
+        setCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+    };
+
+    const handleNextMonth = () => {
+        setCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+    };
+
+    // Calculate Days for Current Calendar View
+    const calendarDays = useMemo(() => {
+        const year = calendarDate.getFullYear();
+        const month = calendarDate.getMonth();
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const prevMonthDays = new Date(year, month, 0).getDate();
+
+        const today = new Date();
+
+        const days: Array<{
+            day: number;
+            isCurrentMonth: boolean;
+            isToday: boolean;
+            dateKey: string;
+        }> = [];
+
+        // Previous month trailing days
+        for (let i = firstDayIndex - 1; i >= 0; i--) {
+            const dayNum = prevMonthDays - i;
+            days.push({
+                day: dayNum,
+                isCurrentMonth: false,
+                isToday: false,
+                dateKey: `prev-${dayNum}`,
+            });
+        }
+
+        // Current month days
+        for (let d = 1; d <= daysInMonth; d++) {
+            const isToday =
+                d === today.getDate() &&
+                month === today.getMonth() &&
+                year === today.getFullYear();
+
+            days.push({
+                day: d,
+                isCurrentMonth: true,
+                isToday,
+                dateKey: `curr-${d}`,
+            });
+        }
+
+        // Next month leading days to complete grid (total cells multiple of 7)
+        const remainingCells = (7 - (days.length % 7)) % 7;
+        for (let d = 1; d <= remainingCells; d++) {
+            days.push({
+                day: d,
+                isCurrentMonth: false,
+                isToday: false,
+                dateKey: `next-${d}`,
+            });
+        }
+
+        return days;
+    }, [calendarDate]);
 
     // Quick tasks state
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -329,13 +399,27 @@ export default function Dashboard() {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">Calendar</h3>
-                                        <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Saturday, December 27, 2025</p>
+                                        <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
+                                            {calendarDate.getMonth() === new Date().getMonth() && calendarDate.getFullYear() === new Date().getFullYear()
+                                                ? new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+                                                : calendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                        </p>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <button className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#1c1c21] text-gray-500 dark:text-gray-400">
+                                        <button
+                                            type="button"
+                                            onClick={handlePrevMonth}
+                                            title="Previous month"
+                                            className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#1c1c21] text-gray-500 dark:text-gray-400 transition cursor-pointer"
+                                        >
                                             <ChevronLeft className="h-4 w-4" />
                                         </button>
-                                        <button className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#1c1c21] text-gray-500 dark:text-gray-400">
+                                        <button
+                                            type="button"
+                                            onClick={handleNextMonth}
+                                            title="Next month"
+                                            className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-[#1c1c21] text-gray-500 dark:text-gray-400 transition cursor-pointer"
+                                        >
                                             <ChevronRight className="h-4 w-4" />
                                         </button>
                                     </div>
@@ -347,22 +431,29 @@ export default function Dashboard() {
                                         <span>SU</span><span>MO</span><span>TU</span><span>WE</span><span>TH</span><span>FR</span><span>SA</span>
                                     </div>
                                     <div className="grid grid-cols-7 gap-1 text-center text-xs">
-                                        <div className="py-1.5 text-gray-300 dark:text-gray-600 font-medium">30</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">1</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">2</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">3</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">4</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">5</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">6</div>
-                                        <div className="py-1.5 text-gray-300 dark:text-gray-600 font-medium">25</div>
-                                        <div className="py-1.5 text-gray-300 dark:text-gray-600 font-medium">26</div>
-                                        <div className="flex items-center justify-center py-1.5 rounded-lg bg-blue-600 text-white font-bold shadow-md shadow-blue-500/30">
-                                            27
-                                        </div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">28</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">29</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">30</div>
-                                        <div className="py-1.5 text-gray-700 dark:text-gray-300 font-medium">31</div>
+                                        {calendarDays.map((item) => {
+                                            if (item.isToday) {
+                                                return (
+                                                    <div
+                                                        key={item.dateKey}
+                                                        className="flex items-center justify-center py-1.5 rounded-lg bg-blue-600 text-white font-bold shadow-md shadow-blue-500/30"
+                                                    >
+                                                        {item.day}
+                                                    </div>
+                                                );
+                                            }
+                                            return (
+                                                <div
+                                                    key={item.dateKey}
+                                                    className={`flex items-center justify-center py-1.5 font-medium rounded-lg transition ${item.isCurrentMonth
+                                                            ? 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                            : 'text-gray-300 dark:text-gray-600'
+                                                        }`}
+                                                >
+                                                    {item.day}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
