@@ -1,18 +1,34 @@
 import { useState, useRef, useEffect } from 'react';
-import { usePage } from '@inertiajs/react';
+import { usePage, Link } from '@inertiajs/react';
 import { Bell, ChevronDown, Moon, Sun, ChevronRight } from 'lucide-react';
 import { SearchCommandPalette } from '@/components/search-command-palette';
 import AppLogo from '@/components/app-logo';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useAppearance } from '@/hooks/use-appearance';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
+import { dashboard } from '@/routes';
+
+type NotificationItem = {
+    id: number;
+    userName: string;
+    action: string;
+    title: string;
+    description: string;
+    module: string;
+    link: string;
+    created_at_human: string;
+};
 
 export function AppSidebarHeader({
     breadcrumbs = [],
 }: {
     breadcrumbs?: BreadcrumbItemType[];
 }) {
-    const { auth } = usePage().props;
+    const { auth, recentNotifications } = usePage().props as unknown as {
+        auth?: { user?: { name?: string } };
+        recentNotifications?: NotificationItem[];
+    };
+
     const userName = auth?.user?.name || 'Demo';
     const userInitials = userName
         .split(' ')
@@ -36,34 +52,8 @@ export function AppSidebarHeader({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const activities = [
-        {
-            id: 1,
-            user: 'Sarah Chen',
-            action: 'updated the',
-            target: 'Global Brand Assets',
-            time: '2 hours ago',
-            avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80',
-            type: 'image',
-        },
-        {
-            id: 2,
-            user: 'AI Assistant',
-            action: 'generated a new performance report for Q4 Growth.',
-            target: '',
-            time: '5 hours ago',
-            type: 'ai',
-        },
-        {
-            id: 3,
-            user: 'Marcus Thorne',
-            action: 'joined the',
-            target: 'Enterprise Security',
-            time: 'Yesterday at 4:30 PM',
-            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
-            type: 'image',
-        },
-    ];
+    const notificationsList = recentNotifications && recentNotifications.length > 0 ? recentNotifications : [];
+    const badgeCount = notificationsList.length;
 
     return (
         <header className="sticky top-0 z-30 px-4 sm:px-6 pt-4 pb-2 bg-[#f5f7fa] dark:bg-[#09090b] transition-colors">
@@ -108,9 +98,11 @@ export function AppSidebarHeader({
                             className="relative flex h-8 w-8 items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21] transition"
                         >
                             <Bell className="h-4 w-4" />
-                            <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white shadow-2xs">
-                                3
-                            </span>
+                            {badgeCount > 0 && (
+                                <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white shadow-2xs">
+                                    {badgeCount}
+                                </span>
+                            )}
                         </button>
 
                         {/* Recent Activities Dropdown Popover */}
@@ -120,7 +112,7 @@ export function AppSidebarHeader({
                                     <div className="flex items-center gap-2">
                                         <h3 className="text-sm font-bold text-gray-900 dark:text-white">Recent Activities</h3>
                                         <span className="rounded-full bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:text-blue-400">
-                                            3 New
+                                            {badgeCount} New
                                         </span>
                                     </div>
                                     <button
@@ -132,47 +124,49 @@ export function AppSidebarHeader({
                                 </div>
 
                                 <div className="space-y-3 max-h-80 overflow-y-auto">
-                                    {activities.map((item) => (
-                                        <div
-                                            key={item.id}
-                                            className="flex items-start gap-3 rounded-xl p-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition cursor-pointer"
-                                        >
-                                            {item.type === 'image' ? (
-                                                <img
-                                                    src={item.avatar}
-                                                    alt={item.user}
-                                                    className="h-8 w-8 rounded-full object-cover shrink-0 mt-0.5"
-                                                />
-                                            ) : (
-                                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/10 text-amber-500 shrink-0 mt-0.5">
-                                                    <Sun className="h-4 w-4" />
-                                                </div>
-                                            )}
-                                            <div className="flex-1 text-xs">
-                                                <p className="text-gray-700 dark:text-gray-300 leading-snug">
-                                                    <strong className="font-bold text-gray-900 dark:text-white">{item.user}</strong>{' '}
-                                                    {item.action}{' '}
-                                                    {item.target && (
-                                                        <span className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-                                                            {item.target}
+                                    {notificationsList.length > 0 ? (
+                                        notificationsList.map((item) => {
+                                            const initial = item.userName ? item.userName.charAt(0).toUpperCase() : 'A';
+                                            return (
+                                                <Link
+                                                    key={item.id}
+                                                    href={item.link && item.link !== '#' ? item.link : dashboard()}
+                                                    onClick={() => setShowNotifications(false)}
+                                                    className="flex items-start gap-3 rounded-xl p-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition cursor-pointer"
+                                                >
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-extrabold text-xs shrink-0 mt-0.5">
+                                                        {initial}
+                                                    </div>
+                                                    <div className="flex-1 text-xs">
+                                                        <p className="text-gray-700 dark:text-gray-300 leading-snug">
+                                                            <strong className="font-bold text-gray-900 dark:text-white">{item.userName}</strong>{' '}
+                                                            {item.action}{' '}
+                                                            {item.title && (
+                                                                <span className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                                                                    {item.title}
+                                                                </span>
+                                                            )}
+                                                        </p>
+                                                        <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 block">
+                                                            {item.created_at_human}
                                                         </span>
-                                                    )}
-                                                </p>
-                                                <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 block">
-                                                    {item.time}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ))}
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })
+                                    ) : (
+                                        <p className="text-xs text-gray-400 text-center py-4">Belum ada aktivitas terbaru.</p>
+                                    )}
                                 </div>
 
                                 <div className="mt-3 pt-2 border-t border-gray-100 dark:border-gray-800 text-center">
-                                    <a
-                                        href="#"
+                                    <Link
+                                        href={dashboard()}
+                                        onClick={() => setShowNotifications(false)}
                                         className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
                                     >
                                         Lihat Semua Aktivitas <ChevronRight className="h-3 w-3" />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         )}

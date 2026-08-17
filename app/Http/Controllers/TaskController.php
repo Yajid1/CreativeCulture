@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -55,7 +56,16 @@ class TaskController extends Controller
             'task_time' => ['nullable', 'date_format:H:i'],
         ]);
 
-        Task::create($validated);
+        $task = Task::create($validated);
+
+        ActivityLog::log(
+            module: 'Task',
+            action: 'Created',
+            title: "Penambahan Tugas: {$task->title}",
+            description: $task->description ?? "Membuat tugas baru pada kategori {$task->category}",
+            status: $task->status === 'completed' ? 'Completed' : 'In Progress',
+            link: '/admin/task'
+        );
 
         return redirect()->back()->with('success', 'Task berhasil dibuat.');
     }
@@ -76,6 +86,15 @@ class TaskController extends Controller
 
         $task->update($validated);
 
+        ActivityLog::log(
+            module: 'Task',
+            action: 'Updated',
+            title: $task->status === 'completed' ? "Penyelesaian Tugas: {$task->title}" : "Pembaruan Tugas: {$task->title}",
+            description: "Memperbarui status tugas ke {$task->status}",
+            status: $task->status === 'completed' ? 'Completed' : 'In Progress',
+            link: '/admin/task'
+        );
+
         return redirect()->back()->with('success', 'Task berhasil diperbarui.');
     }
 
@@ -86,6 +105,14 @@ class TaskController extends Controller
     {
         $name = $task->title;
         $task->delete();
+
+        ActivityLog::log(
+            module: 'Task',
+            action: 'Deleted',
+            title: "Penghapusan Tugas: {$name}",
+            description: 'Menghapus tugas dari sistem',
+            status: 'Deleted'
+        );
 
         return redirect()->back()->with('success', "Task \"{$name}\" berhasil dihapus.");
     }

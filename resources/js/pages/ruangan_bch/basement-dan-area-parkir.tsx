@@ -1,9 +1,40 @@
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
-export default function BasementDanAreaParkir() {
+import { useMemo } from 'react';
+
+type UserRoomData = {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    capacity: string;
+    image: string | null;
+    section2_title: string;
+    section2_description: string;
+    facilities_list: string;
+    secondary_image: string | null;
+    status: string;
+    gallery_images?: (string | null)[];
+};
+
+export default function BasementDanAreaParkir({ room }: { room?: UserRoomData | null }) {
     const [clockTime, setClockTime] = useState('');
     const [clockDate, setClockDate] = useState('');
+
+    const name = room?.name || 'Basement dan Area Parkir';
+    const description = room?.description || 'Terletak di dasar gedung Bandung Creative Hub, area ini berfungsi utama sebagai tempat parkir kendaraan sepeda motor. Dipenuhi oleh hiasan mural seni rupa yang ekspresif, area ini menghadirkan suasana kreatif yang unik sejak awal kedatangan pengunjung.';
+    const capacity = room?.capacity || '200 Orang / Kendaraan';
+    const imageSrc = room?.image || '/images/BCH01927.JPG';
+
+    const section2Title = room?.section2_title || 'Ruang Ekspresi Multi-Fungsi';
+    const section2Description = room?.section2_description || 'Dinding basement yang kaya akan mural seni tidak menutup kemungkinan untuk dimanfaatkan sebagai ruang pelaksanaan kegiatan kreatif komunitas.';
+    const secondaryImageSrc = room?.secondary_image || '/images/BCH01909.JPG';
+
+    const parsedFacilities = useMemo(() => {
+        if (!room?.facilities_list) return null;
+        return room.facilities_list.split(/\n|,/).map(item => item.trim()).filter(Boolean);
+    }, [room?.facilities_list]);
 
     useEffect(() => {
         function tick() {
@@ -22,7 +53,7 @@ export default function BasementDanAreaParkir() {
 
     return (
         <>
-            <Head title="Basement dan Area Parkir - Bandung Creative Hub" />
+            <Head title={`${name} - Bandung Creative Hub`} />
 
             <div className="min-h-screen bg-white text-gray-900 font-sans">
                 {/* ===== NAVBAR ===== */}
@@ -82,13 +113,13 @@ export default function BasementDanAreaParkir() {
                         {/* Text Left */}
                         <div className="lg:col-span-5">
                             <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.15]">
-                                Basement dan Area Parkir
+                                {name}
                             </h1>
                             <p className="mt-2 text-sm font-semibold text-gray-500">
                                 Bandung Creative Hub
                             </p>
                             <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed">
-                                Terletak di dasar gedung Bandung Creative Hub, area ini berfungsi utama sebagai tempat parkir kendaraan sepeda motor. Dipenuhi oleh hiasan mural seni rupa yang ekspresif, area ini menghadirkan suasana kreatif yang unik sejak awal kedatangan pengunjung.
+                                {description}
                             </p>
 
                             {/* Capacity Badge */}
@@ -101,17 +132,17 @@ export default function BasementDanAreaParkir() {
                                 </div>
                                 <div>
                                     <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Kapasitas Maksimal</p>
-                                    <p className="text-base font-extrabold text-gray-900">200 Orang / Kendaraan</p>
+                                    <p className="text-base font-extrabold text-gray-900">{capacity}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Image Right */}
                         <div className="lg:col-span-7">
-                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm">
+                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm bg-gray-100 flex items-center justify-center border border-gray-100">
                                 <img
-                                    src="/images/BCH01927.JPG"
-                                    alt="Basement dan Area Parkir Bandung Creative Hub"
+                                    src={imageSrc}
+                                    alt={name}
                                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                 />
                             </div>
@@ -122,10 +153,10 @@ export default function BasementDanAreaParkir() {
                     <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
                         {/* Image Left */}
                         <div className="order-2 lg:order-1 lg:col-span-7">
-                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm">
+                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm bg-gray-100 flex items-center justify-center border border-gray-100">
                                 <img
-                                    src="/images/BCH01909.JPG"
-                                    alt="Alternatif Venue Mural Basement"
+                                    src={secondaryImageSrc}
+                                    alt={section2Title}
                                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                 />
                             </div>
@@ -134,25 +165,35 @@ export default function BasementDanAreaParkir() {
                         {/* Text Right */}
                         <div className="order-1 lg:order-2 lg:col-span-5">
                             <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.15]">
-                                Ruang Ekspresi Multi-Fungsi
+                                {section2Title}
                             </h2>
                             <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed">
-                                Dinding basement yang kaya akan mural seni tidak menutup kemungkinan untuk dimanfaatkan sebagai ruang pelaksanaan kegiatan kreatif komunitas.
+                                {section2Description}
                             </p>
 
                             {/* Alternatif Venue List Badges */}
                             <div className="mt-6 space-y-3">
                                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Pilihan Penggunaan Venue:</p>
-                                <div className="flex flex-wrap gap-2">
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-4 py-2 text-xs font-semibold text-blue-700">
-                                        🎨 Pameran Seni Rupa
-                                    </span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-50 px-4 py-2 text-xs font-semibold text-purple-700">
-                                        ✨ Mini Showcase Komunitas
-                                    </span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
-                                        🎬 Latar Movieclips / Video
-                                    </span>
+                                <div className="flex flex-wrap gap-2 text-xs font-semibold">
+                                    {parsedFacilities ? (
+                                        parsedFacilities.map((fac, idx) => (
+                                            <span key={idx} className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-4 py-2 text-blue-700">
+                                                ✨ {fac}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-4 py-2 text-xs font-semibold text-blue-700">
+                                                🎨 Pameran Seni Rupa
+                                            </span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-50 px-4 py-2 text-xs font-semibold text-purple-700">
+                                                ✨ Mini Showcase Komunitas
+                                            </span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
+                                                🎬 Latar Movieclips / Video
+                                            </span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -360,19 +401,29 @@ export default function BasementDanAreaParkir() {
                         {/* Row 1: Scroll Left (Placeholders) */}
                         <div className="relative w-full overflow-hidden">
                             <div className="animate-marquee-scroll-left gap-5">
-                                {[...Array(12)].map((_, idx) => (
-                                    <div
-                                        key={`row1-ph-${idx}`}
-                                        className="h-48 w-72 sm:h-56 sm:w-88 flex-shrink-0 flex flex-col items-center justify-center gap-2 rounded-3xl border border-gray-200/80 bg-gray-100/90 text-gray-400 shadow-xs transition-all duration-300 hover:border-gray-300 hover:bg-gray-100"
-                                    >
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-gray-300">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                            <circle cx="8.5" cy="8.5" r="1.5" />
-                                            <polyline points="21 15 16 10 5 21" />
-                                        </svg>
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Area Foto {idx + 1}</span>
-                                    </div>
-                                ))}
+                                {[...Array(12)].map((_, idx) => {
+                                    const imageIndex = idx % 8;
+                                    const imgUrl = room?.gallery_images?.[imageIndex];
+                                    return (
+                                        <div
+                                            key={`row1-ph-${idx}`}
+                                            className="h-48 w-72 sm:h-56 sm:w-88 flex-shrink-0 flex flex-col items-center justify-center gap-2 rounded-3xl border border-gray-200/80 bg-gray-100/90 text-gray-400 shadow-xs transition-all duration-300 hover:border-gray-300 hover:bg-gray-100 overflow-hidden"
+                                        >
+                                            {imgUrl ? (
+                                                <img src={imgUrl} alt={`${name} ${imageIndex + 1}`} className="h-full w-full object-cover" />
+                                            ) : (
+                                                <>
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-gray-300">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                                        <circle cx="8.5" cy="8.5" r="1.5" />
+                                                        <polyline points="21 15 16 10 5 21" />
+                                                    </svg>
+                                                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Foto {name} {imageIndex + 1}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 

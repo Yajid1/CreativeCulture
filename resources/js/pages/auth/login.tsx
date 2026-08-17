@@ -100,7 +100,7 @@ export default function Login({ status, canResetPassword }: Props) {
             <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 p-6">
 
                 {/* Card: ukuran dibatasi, rounded, shadow */}
-                <div className="flex w-full max-w-4xl h-[560px] rounded-2xl overflow-hidden shadow-xl bg-white">
+                <div className="flex w-full max-w-4xl h-[580px] rounded-2xl overflow-hidden shadow-xl bg-white">
 
                     {/* Panel kiri: karakter animasi */}
                     <div
@@ -141,9 +141,18 @@ export default function Login({ status, canResetPassword }: Props) {
                     </div>
 
                     {/* Panel kanan: form login */}
-                    <div className="w-full md:w-[380px] bg-white flex flex-col justify-center px-10 py-12">
+                    <div className="w-full md:w-[420px] bg-white flex flex-col justify-center px-8 py-8">
+                        {/* Row of 5 Logos */}
+                        <div className="flex items-center justify-between gap-2 mb-6">
+                            <img src="/images/Logo Pemkot.png" alt="Pemkot Bandung" className="h-8 w-auto object-contain" />
+                            <img src="/images/Logo Disbudpar.png" alt="Disbudpar Kota Bandung" className="h-8 w-auto object-contain" />
+                            <img src="/images/Logo BCH.png" alt="Bandung Creative Hub" className="h-8 w-auto object-contain" />
+                            <img src="/images/Logo TCS.png" alt="Teras Sunda Cibiru" className="h-8 w-auto object-contain" />
+                            <img src="/images/Logo Pasir Kunci.png" alt="Pasir Kunci" className="h-8 w-auto object-contain" />
+                        </div>
+
                         <h1 className="text-2xl font-bold mb-1 text-gray-900">Welcome back</h1>
-                        <p className="text-sm text-gray-500 mb-8">
+                        <p className="text-sm text-gray-500 mb-6">
                             Enter your email and password below to log in
                         </p>
 

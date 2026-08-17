@@ -1,9 +1,40 @@
+import { useMemo } from 'react';
+
+type UserRoomData = {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    capacity: string;
+    image: string | null;
+    section2_title: string;
+    section2_description: string;
+    facilities_list: string;
+    secondary_image: string | null;
+    status: string;
+    gallery_images?: (string | null)[];
+};
+
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
-export default function RecordingStudio() {
+export default function RecordingStudio({ room }: { room?: UserRoomData | null }) {
     const [clockTime, setClockTime] = useState('');
     const [clockDate, setClockDate] = useState('');
+
+    const roomName = room?.name;
+    const roomDesc = room?.description;
+    const roomCap = room?.capacity;
+    const roomImg = room?.image;
+    const roomSec2Title = room?.section2_title;
+    const roomSec2Desc = room?.section2_description;
+    const roomSec2Img = room?.secondary_image;
+
+    const parsedFacilities = useMemo(() => {
+        if (!room?.facilities_list) return null;
+        return room.facilities_list.split(/\n|,/).map(item => item.trim()).filter(Boolean);
+    }, [room?.facilities_list]);
+
 
     useEffect(() => {
         function tick() {
@@ -354,19 +385,29 @@ export default function RecordingStudio() {
                         {/* Row 1: Scroll Left */}
                         <div className="relative w-full overflow-hidden">
                             <div className="animate-marquee-scroll-left gap-5">
-                                {[...Array(12)].map((_, idx) => (
-                                    <div
-                                        key={`row1-ph-${idx}`}
-                                        className="h-48 w-72 sm:h-56 sm:w-88 flex-shrink-0 flex flex-col items-center justify-center gap-2 rounded-3xl border border-gray-200/80 bg-gray-100/90 text-gray-400 shadow-xs transition-all duration-300 hover:border-gray-300 hover:bg-gray-100"
-                                    >
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-gray-300">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                            <circle cx="8.5" cy="8.5" r="1.5" />
-                                            <polyline points="21 15 16 10 5 21" />
-                                        </svg>
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Foto Recording {idx + 1}</span>
-                                    </div>
-                                ))}
+                                {[...Array(12)].map((_, idx) => {
+                                    const imageIndex = idx % 8;
+                                    const imgUrl = room?.gallery_images?.[imageIndex];
+                                    return (
+                                        <div
+                                            key={`row1-ph-${idx}`}
+                                            className="h-48 w-72 sm:h-56 sm:w-88 flex-shrink-0 flex flex-col items-center justify-center gap-2 rounded-3xl border border-gray-200/80 bg-gray-100/90 text-gray-400 shadow-xs transition-all duration-300 hover:border-gray-300 hover:bg-gray-100 overflow-hidden"
+                                        >
+                                            {imgUrl ? (
+                                                <img src={imgUrl} alt={`${name} ${imageIndex + 1}`} className="h-full w-full object-cover" />
+                                            ) : (
+                                                <>
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-gray-300">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                                        <circle cx="8.5" cy="8.5" r="1.5" />
+                                                        <polyline points="21 15 16 10 5 21" />
+                                                    </svg>
+                                                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Foto {name} {imageIndex + 1}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 

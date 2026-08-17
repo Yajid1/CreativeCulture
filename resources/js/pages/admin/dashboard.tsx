@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Head } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { dashboard } from '@/routes';
 import {
     Bell,
@@ -30,15 +30,55 @@ import {
     Trash2,
     TrendingUp,
     Users,
+    X,
 } from 'lucide-react';
 
 type Task = {
     id: number;
+    title: string;
     text: string;
+    description: string;
     completed: boolean;
+    status: 'in_progress' | 'completed';
+    category: string;
+    task_date: string;
+    task_time: string;
 };
 
-export default function Dashboard() {
+type ActivityLogItem = {
+    id: number;
+    userName: string;
+    module: string;
+    action: string;
+    title: string;
+    description: string;
+    status: string;
+    link: string;
+    lastUpdated: string;
+    created_at_human: string;
+};
+
+type RecentActivitiesProp = {
+    data: ActivityLogItem[];
+    total: number;
+    currentPage: number;
+    lastPage: number;
+    perPage: number;
+    from: number;
+    to: number;
+};
+
+export default function Dashboard({
+    totalRooms,
+    quickTasks = [],
+    taskCompletionRate = 0,
+    recentActivities,
+}: {
+    totalRooms: number;
+    quickTasks?: Task[];
+    taskCompletionRate?: number;
+    recentActivities?: RecentActivitiesProp;
+}) {
     // Live clock time state
     const [timeString, setTimeString] = useState<string>('10:08 AM');
     const [dateString, setDateString] = useState<string>('Saturday, Dec 27, 2025');
@@ -137,25 +177,125 @@ export default function Dashboard() {
         return days;
     }, [calendarDate]);
 
-    // Quick tasks state
-    const [tasks, setTasks] = useState<Task[]>([]);
+    // Quick tasks state synced with props from backend
+    const [tasks, setTasks] = useState<Task[]>(quickTasks);
     const [newTaskText, setNewTaskText] = useState('');
     const [taskFilter, setTaskFilter] = useState<'active' | 'completed'>('active');
 
-    const handleAddTask = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!newTaskText.trim()) return;
-        setTasks([
-            ...tasks,
-            { id: Date.now(), text: newTaskText.trim(), completed: false },
-        ]);
-        setNewTaskText('');
+    // Edit & Create task modal state
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const [editForm, setEditForm] = useState({
+        title: '',
+        description: '',
+        category: '',
+        status: 'in_progress' as 'in_progress' | 'completed',
+        task_date: '',
+        task_time: '',
+    });
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [createForm, setCreateForm] = useState({
+        title: '',
+        description: '',
+        category: '',
+        status: 'in_progress' as 'in_progress' | 'completed',
+        task_date: new Date().toISOString().slice(0, 10),
+        task_time: '',
+    });
+    const [isSubmittingTask, setIsSubmittingTask] = useState(false);
+
+    useEffect(() => {
+        setTasks(quickTasks);
+    }, [quickTasks]);
+
+    const openCreateModal = (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        setCreateForm({
+            title: newTaskText.trim(),
+            description: '',
+            category: 'General',
+            status: 'in_progress',
+            task_date: new Date().toISOString().slice(0, 10),
+            task_time: '',
+        });
+        setIsCreateModalOpen(true);
     };
 
-    const toggleTask = (id: number) => {
-        setTasks(
-            tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
-        );
+    const handleCreateTask = () => {
+        if (!createForm.title.trim()) return;
+        setIsSubmittingTask(true);
+        router.post('/admin/task', {
+            ...createForm,
+            title: createForm.title.trim(),
+            task_time: createForm.task_time || null,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsCreateModalOpen(false);
+                setNewTaskText('');
+                setCreateForm({
+                    title: '',
+                    description: '',
+                    category: 'General',
+                    status: 'in_progress',
+                    task_date: new Date().toISOString().slice(0, 10),
+                    task_time: '',
+                });
+            },
+            onFinish: () => setIsSubmittingTask(false),
+        });
+    };
+
+    const openEditModal = (task: Task) => {
+        setEditingTask(task);
+        setEditForm({
+            title: task.title || task.text,
+            description: task.description || '',
+            category: task.category || '',
+            status: task.status || (task.completed ? 'completed' : 'in_progress'),
+            task_date: task.task_date || new Date().toISOString().slice(0, 10),
+            task_time: task.task_time || '',
+        });
+    };
+
+    const handleUpdateTask = () => {
+        if (!editingTask) return;
+        setIsSubmittingTask(true);
+        router.put(`/admin/task/${editingTask.id}`, {
+            ...editForm,
+            task_time: editForm.task_time || null,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setEditingTask(null);
+            },
+            onFinish: () => {
+                setIsSubmittingTask(false);
+            },
+        });
+    };
+
+    const handleDeleteTask = (taskId: number) => {
+        if (!confirm('Apakah Anda yakin ingin menghapus task ini?')) return;
+        router.delete(`/admin/task/${taskId}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setEditingTask(null);
+            },
+        });
+    };
+
+    const toggleTask = (task: Task) => {
+        const newStatus = task.completed ? 'in_progress' : 'completed';
+        router.put(`/admin/task/${task.id}`, {
+            title: task.title || task.text,
+            description: task.description || '',
+            status: newStatus,
+            task_date: task.task_date || new Date().toISOString().slice(0, 10),
+            category: task.category || 'General',
+            task_time: task.task_time || null,
+        }, {
+            preserveScroll: true,
+        });
     };
 
     const activeTasks = tasks.filter((t) => !t.completed);
@@ -163,7 +303,7 @@ export default function Dashboard() {
 
     const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
 
-    const [showRowActionMenu, setShowRowActionMenu] = useState<number | null>(2);
+    const [showRowActionMenu, setShowRowActionMenu] = useState<number | null>(null);
 
     return (
         <>
@@ -243,7 +383,7 @@ export default function Dashboard() {
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
                                 <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">27</p>
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">{totalRooms}</p>
                                     <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                                         <TrendingUp className="h-3 w-3" /> +3
                                     </span>
@@ -300,7 +440,7 @@ export default function Dashboard() {
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
                                 <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">78%</p>
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">{taskCompletionRate}%</p>
                                     <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                                         <TrendingUp className="h-3 w-3" /> +5%
                                     </span>
@@ -338,7 +478,7 @@ export default function Dashboard() {
                                     </div>
 
                                     {/* Add Task Input Form */}
-                                    <form onSubmit={handleAddTask} className="flex gap-2">
+                                    <form onSubmit={openCreateModal} className="flex gap-2">
                                         <input
                                             type="text"
                                             value={newTaskText}
@@ -363,8 +503,12 @@ export default function Dashboard() {
                                                 <Inbox className="h-6 w-6" />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-bold text-gray-700 dark:text-gray-300">No active tasks</p>
-                                                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Create a task to get started</p>
+                                                <p className="text-xs font-bold text-gray-700 dark:text-gray-300">
+                                                    {taskFilter === 'active' ? 'No active tasks' : 'No completed tasks'}
+                                                </p>
+                                                <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                                                    {taskFilter === 'active' ? 'Create a task to get started' : 'Completed tasks will appear here'}
+                                                </p>
                                             </div>
                                         </>
                                     ) : (
@@ -372,21 +516,13 @@ export default function Dashboard() {
                                             {(taskFilter === 'active' ? activeTasks : completedTasks).map((t) => (
                                                 <div
                                                     key={t.id}
-                                                    onClick={() => toggleTask(t.id)}
-                                                    className={`flex items-center gap-3 rounded-xl border p-3 cursor-pointer text-left transition ${t.completed
-                                                        ? 'bg-gray-50 dark:bg-[#1c1c21]/40 border-gray-200 dark:border-[#2a2a32] text-gray-400 line-through'
-                                                        : 'bg-white dark:bg-[#1c1c21] border-gray-200 dark:border-[#2a2a32] text-gray-700 dark:text-gray-200 hover:border-blue-300'
+                                                    onClick={() => openEditModal(t)}
+                                                    className={`flex items-center rounded-xl border p-3 cursor-pointer text-left transition ${t.completed
+                                                        ? 'bg-gray-100/60 dark:bg-[#1a1a20]/40 border-gray-200 dark:border-[#2a2a32] text-gray-400 line-through'
+                                                        : 'bg-gray-100/80 dark:bg-[#1a1a20] border-gray-200/90 dark:border-[#282830] text-gray-800 dark:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-[#22222a] hover:border-gray-300 dark:hover:border-[#383842]'
                                                         }`}
                                                 >
-                                                    <div
-                                                        className={`flex h-4 w-4 items-center justify-center rounded border transition ${t.completed
-                                                            ? 'bg-blue-600 border-blue-600 text-white'
-                                                            : 'border-gray-300 dark:border-[#33333d]'
-                                                            }`}
-                                                    >
-                                                        {t.completed && <Check className="h-3 w-3 stroke-[3]" />}
-                                                    </div>
-                                                    <span className="text-xs font-medium">{t.text}</span>
+                                                    <span className="text-xs font-medium flex-1 truncate">{t.title || t.text}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -446,8 +582,8 @@ export default function Dashboard() {
                                                 <div
                                                     key={item.dateKey}
                                                     className={`flex items-center justify-center py-1.5 font-medium rounded-lg transition ${item.isCurrentMonth
-                                                            ? 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                                            : 'text-gray-300 dark:text-gray-600'
+                                                        ? 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                        : 'text-gray-300 dark:text-gray-600'
                                                         }`}
                                                 >
                                                     {item.day}
@@ -596,7 +732,32 @@ export default function Dashboard() {
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent Activities</h3>
                             <p className="text-xs text-gray-400 dark:text-gray-400 mt-0.5">Overview of active updates across Fasilitas, Ruangan, Artikel &amp; Berita</p>
                         </div>
-                        <button className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#1c1c21] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#25252c] transition self-start sm:self-auto">
+                        <button
+                            onClick={() => {
+                                const items = recentActivities?.data || [];
+                                if (items.length === 0) return;
+                                const headers = ['ID', 'User', 'Module', 'Action', 'Title', 'Description', 'Status', 'Date'];
+                                const rows = items.map(item => [
+                                    item.id,
+                                    `"${item.userName.replace(/"/g, '""')}"`,
+                                    `"${item.module.replace(/"/g, '""')}"`,
+                                    `"${item.action.replace(/"/g, '""')}"`,
+                                    `"${item.title.replace(/"/g, '""')}"`,
+                                    `"${item.description.replace(/"/g, '""')}"`,
+                                    `"${item.status.replace(/"/g, '""')}"`,
+                                    `"${item.lastUpdated}"`
+                                ]);
+                                const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+                                const encodedUri = encodeURI(csvContent);
+                                const link = document.createElement('a');
+                                link.setAttribute('href', encodedUri);
+                                link.setAttribute('download', `recent_activities_${new Date().toISOString().slice(0, 10)}.csv`);
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }}
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#1c1c21] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#25252c] transition self-start sm:self-auto cursor-pointer"
+                        >
                             <Download className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
                             <span>Export</span>
                         </button>
@@ -614,239 +775,417 @@ export default function Dashboard() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-[#1f1f23]">
-                                {/* Row 1: Fasilitas (Gedung Baru) */}
-                                <tr className="hover:bg-gray-50/60 dark:hover:bg-[#1c1c21]/50 transition">
-                                    <td className="py-4 pl-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0">
-                                                <Building2 className="h-4 w-4" />
-                                            </div>
-                                            <div>
-                                                <p className="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">Penambahan Gedung Baru Teras Sunda</p>
-                                                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Penyelesaian renovasi &amp; penambahan fasilitas sanggar seni...</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4">
-                                        <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-900/60">
-                                            Ready
-                                        </span>
-                                    </td>
-                                    <td className="py-4 text-gray-600 dark:text-gray-300 font-medium">
-                                        7/22/2026
-                                    </td>
-                                    <td className="py-4 pr-2 text-right relative">
-                                        <button
-                                            onClick={() => setShowRowActionMenu(showRowActionMenu === 1 ? null : 1)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 1
-                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                                }`}
-                                        >
-                                            <MoreVertical className="h-4 w-4" />
-                                        </button>
+                                {recentActivities && recentActivities.data && recentActivities.data.length > 0 ? (
+                                    recentActivities.data.map((activity) => {
+                                        const getModuleIcon = (mod: string) => {
+                                            switch (mod) {
+                                                case 'Ruangan':
+                                                    return (
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 shrink-0">
+                                                            <DoorClosed className="h-4 w-4" />
+                                                        </div>
+                                                    );
+                                                case 'Fasilitas':
+                                                    return (
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0">
+                                                            <Building2 className="h-4 w-4" />
+                                                        </div>
+                                                    );
+                                                case 'Artikel':
+                                                    return (
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 shrink-0">
+                                                            <FileText className="h-4 w-4" />
+                                                        </div>
+                                                    );
+                                                case 'Berita':
+                                                    return (
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 shrink-0">
+                                                            <Newspaper className="h-4 w-4" />
+                                                        </div>
+                                                    );
+                                                case 'Task':
+                                                    return (
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 shrink-0">
+                                                            <CheckCircle2 className="h-4 w-4" />
+                                                        </div>
+                                                    );
+                                                case 'Roles':
+                                                    return (
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 shrink-0">
+                                                            <Users className="h-4 w-4" />
+                                                        </div>
+                                                    );
+                                                default:
+                                                    return (
+                                                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 shrink-0">
+                                                            <FolderKanban className="h-4 w-4" />
+                                                        </div>
+                                                    );
+                                            }
+                                        };
 
-                                        {showRowActionMenu === 1 && (
-                                            <div className="absolute right-0 mt-1 w-36 rounded-2xl border border-gray-200/80 dark:border-[#2a2a32] bg-white dark:bg-[#1c1c21] p-1.5 shadow-xl z-20 text-left animate-in fade-in-50 slide-in-from-top-1">
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Eye className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>View Details</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Edit3 className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>Edit</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition">
-                                                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                                    <span>Delete</span>
-                                                </button>
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
+                                        const getStatusBadge = (st: string) => {
+                                            switch (st) {
+                                                case 'Ready':
+                                                case 'Completed':
+                                                case 'Online':
+                                                    return (
+                                                        <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-900/60">
+                                                            {st}
+                                                        </span>
+                                                    );
+                                                case 'In Progress':
+                                                case 'Draft':
+                                                    return (
+                                                        <span className="inline-flex items-center rounded-full bg-amber-50 dark:bg-amber-950/60 px-3 py-1 text-xs font-bold text-amber-600 dark:text-amber-400 border border-amber-200/50 dark:border-amber-900/60">
+                                                            {st}
+                                                        </span>
+                                                    );
+                                                case 'Blocked':
+                                                case 'Deleted':
+                                                case 'Offline':
+                                                    return (
+                                                        <span className="inline-flex items-center rounded-full bg-rose-50 dark:bg-rose-950/60 px-3 py-1 text-xs font-bold text-rose-600 dark:text-rose-400 border border-rose-200/50 dark:border-rose-900/60">
+                                                            {st}
+                                                        </span>
+                                                    );
+                                                default:
+                                                    return (
+                                                        <span className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1 text-xs font-bold text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                                                            {st}
+                                                        </span>
+                                                    );
+                                            }
+                                        };
 
-                                {/* Row 2: Ruangan */}
-                                <tr className="hover:bg-gray-50/60 dark:hover:bg-[#1c1c21]/50 transition">
-                                    <td className="py-4 pl-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 shrink-0">
-                                                <DoorClosed className="h-4 w-4" />
-                                            </div>
-                                            <div>
-                                                <p className="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">Pembaruan Data Ruangan Teater Mayang Sunda</p>
-                                                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Pembaruan kapasitas, fasilitas pencahayaan &amp; galeri foto...</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4">
-                                        <span className="inline-flex items-center rounded-full bg-amber-50 dark:bg-amber-950/60 px-3 py-1 text-xs font-bold text-amber-600 dark:text-amber-400 border border-amber-200/50 dark:border-amber-900/60">
-                                            In Progress
-                                        </span>
-                                    </td>
-                                    <td className="py-4 text-gray-600 dark:text-gray-300 font-medium">
-                                        7/22/2026
-                                    </td>
-                                    <td className="py-4 pr-2 text-right relative">
-                                        <button
-                                            onClick={() => setShowRowActionMenu(showRowActionMenu === 2 ? null : 2)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 2
-                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                                }`}
-                                        >
-                                            <MoreVertical className="h-4 w-4" />
-                                        </button>
+                                        return (
+                                            <tr key={activity.id} className="hover:bg-gray-50/60 dark:hover:bg-[#1c1c21]/50 transition">
+                                                <td className="py-4 pl-2">
+                                                    <div className="flex items-center gap-3">
+                                                        {getModuleIcon(activity.module)}
+                                                        <div>
+                                                            <p className="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">
+                                                                {activity.title}
+                                                            </p>
+                                                            <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5 line-clamp-1">
+                                                                {activity.description || `${activity.action} by ${activity.userName}`}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="py-4">
+                                                    {getStatusBadge(activity.status)}
+                                                </td>
+                                                <td className="py-4 text-gray-600 dark:text-gray-300 font-medium">
+                                                    <div>{activity.lastUpdated}</div>
+                                                    <div className="text-[10px] text-gray-400 font-normal">{activity.created_at_human}</div>
+                                                </td>
+                                                <td className="py-4 pr-2 text-right relative">
+                                                    <button
+                                                        onClick={() => setShowRowActionMenu(showRowActionMenu === activity.id ? null : activity.id)}
+                                                        className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === activity.id
+                                                            ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
+                                                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                            }`}
+                                                    >
+                                                        <MoreVertical className="h-4 w-4" />
+                                                    </button>
 
-                                        {showRowActionMenu === 2 && (
-                                            <div className="absolute right-0 mt-1 w-36 rounded-2xl border border-gray-200/80 dark:border-[#2a2a32] bg-white dark:bg-[#1c1c21] p-1.5 shadow-xl z-20 text-left animate-in fade-in-50 slide-in-from-top-1">
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Eye className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>View Details</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Edit3 className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>Edit</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition">
-                                                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                                    <span>Delete</span>
-                                                </button>
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-
-                                {/* Row 3: Artikel */}
-                                <tr className="hover:bg-gray-50/60 dark:hover:bg-[#1c1c21]/50 transition">
-                                    <td className="py-4 pl-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 shrink-0">
-                                                <FileText className="h-4 w-4" />
-                                            </div>
-                                            <div>
-                                                <p className="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">Publikasi Artikel Kebudayaan Bandung</p>
-                                                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Dokumentasi sejarah seni tari daerah &amp; kearifan lokal...</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4">
-                                        <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-900/60">
-                                            Ready
-                                        </span>
-                                    </td>
-                                    <td className="py-4 text-gray-600 dark:text-gray-300 font-medium">
-                                        7/22/2026
-                                    </td>
-                                    <td className="py-4 pr-2 text-right relative">
-                                        <button
-                                            onClick={() => setShowRowActionMenu(showRowActionMenu === 3 ? null : 3)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 3
-                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                                }`}
-                                        >
-                                            <MoreVertical className="h-4 w-4" />
-                                        </button>
-
-                                        {showRowActionMenu === 3 && (
-                                            <div className="absolute right-0 mt-1 w-36 rounded-2xl border border-gray-200/80 dark:border-[#2a2a32] bg-white dark:bg-[#1c1c21] p-1.5 shadow-xl z-20 text-left animate-in fade-in-50 slide-in-from-top-1">
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Eye className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>View Details</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Edit3 className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>Edit</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition">
-                                                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                                    <span>Delete</span>
-                                                </button>
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-
-                                {/* Row 4: Berita */}
-                                <tr className="hover:bg-gray-50/60 dark:hover:bg-[#1c1c21]/50 transition">
-                                    <td className="py-4 pl-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 shrink-0">
-                                                <Newspaper className="h-4 w-4" />
-                                            </div>
-                                            <div>
-                                                <p className="font-bold text-gray-900 dark:text-white text-xs sm:text-sm">Rilis Berita Festival Seni &amp; Budaya 2026</p>
-                                                <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">Liputan pers persiapan penyelenggaraan event tahunan...</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4">
-                                        <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-900/60">
-                                            Ready
-                                        </span>
-                                    </td>
-                                    <td className="py-4 text-gray-600 dark:text-gray-300 font-medium">
-                                        7/22/2026
-                                    </td>
-                                    <td className="py-4 pr-2 text-right relative">
-                                        <button
-                                            onClick={() => setShowRowActionMenu(showRowActionMenu === 4 ? null : 4)}
-                                            className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === 4
-                                                ? 'bg-gray-100 dark:bg-[#282830] text-gray-900 dark:text-white'
-                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
-                                                }`}
-                                        >
-                                            <MoreVertical className="h-4 w-4" />
-                                        </button>
-
-                                        {showRowActionMenu === 4 && (
-                                            <div className="absolute right-0 mt-1 w-36 rounded-2xl border border-gray-200/80 dark:border-[#2a2a32] bg-white dark:bg-[#1c1c21] p-1.5 shadow-xl z-20 text-left animate-in fade-in-50 slide-in-from-top-1">
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Eye className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>View Details</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition">
-                                                    <Edit3 className="h-3.5 w-3.5 text-gray-500" />
-                                                    <span>Edit</span>
-                                                </button>
-                                                <button className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition">
-                                                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                                    <span>Delete</span>
-                                                </button>
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
+                                                    {showRowActionMenu === activity.id && (
+                                                        <div className="absolute right-0 mt-1 w-36 rounded-2xl border border-gray-200/80 dark:border-[#2a2a32] bg-white dark:bg-[#1c1c21] p-1.5 shadow-xl z-20 text-left animate-in fade-in-50 slide-in-from-top-1">
+                                                            {activity.link && activity.link !== '#' ? (
+                                                                <Link
+                                                                    href={activity.link}
+                                                                    className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition"
+                                                                >
+                                                                    <Eye className="h-3.5 w-3.5 text-gray-500" />
+                                                                    <span>View Details</span>
+                                                                </Link>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => alert(`Title: ${activity.title}\nDescription: ${activity.description}\nUser: ${activity.userName}`)}
+                                                                    className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#282830] transition"
+                                                                >
+                                                                    <Eye className="h-3.5 w-3.5 text-gray-500" />
+                                                                    <span>View Details</span>
+                                                                </button>
+                                                            )}
+                                                            <button
+                                                                onClick={() => {
+                                                                    if (confirm('Apakah Anda yakin ingin menghapus log aktivitas ini?')) {
+                                                                        router.delete(`/admin/activity-logs/${activity.id}`, {
+                                                                            preserveScroll: true,
+                                                                            onSuccess: () => setShowRowActionMenu(null),
+                                                                        });
+                                                                    }
+                                                                }}
+                                                                className="flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition"
+                                                            >
+                                                                <Trash2 className="h-3.5 w-3.5 text-red-500" />
+                                                                <span>Delete</span>
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                ) : (
+                                    <tr>
+                                        <td colSpan={4} className="py-8 text-center text-gray-400">
+                                            Belum ada aktivitas tercatat.
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
 
                     {/* Table Footer Pagination */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-gray-100 dark:border-[#1f1f23] text-xs">
-                        <p className="text-gray-500 dark:text-gray-400 font-medium">
-                            Showing 1 to 4 of 15 results
-                        </p>
+                    {recentActivities && recentActivities.total > 0 && (
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-gray-100 dark:border-[#1f1f23] text-xs">
+                            <p className="text-gray-500 dark:text-gray-400 font-medium">
+                                Showing {recentActivities.from} to {recentActivities.to} of {recentActivities.total} results
+                            </p>
 
-                        <div className="flex items-center gap-1.5">
-                            <button className="rounded-full px-3 py-1 font-semibold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#1c1c21] transition">
-                                Previous
+                            <div className="flex items-center gap-1.5">
+                                <button
+                                    disabled={recentActivities.currentPage === 1}
+                                    onClick={() => router.get(dashboard(), { page: recentActivities.currentPage - 1 }, { preserveState: true, preserveScroll: true })}
+                                    className="rounded-full px-3 py-1 font-semibold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#1c1c21] disabled:opacity-40 disabled:hover:bg-transparent transition cursor-pointer"
+                                >
+                                    Previous
+                                </button>
+                                {Array.from({ length: recentActivities.lastPage }, (_, i) => i + 1).map((p) => (
+                                    <button
+                                        key={p}
+                                        onClick={() => router.get(dashboard(), { page: p }, { preserveState: true, preserveScroll: true })}
+                                        className={`flex h-7 w-7 items-center justify-center rounded-full font-semibold transition cursor-pointer ${p === recentActivities.currentPage
+                                                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold shadow-xs'
+                                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                            }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ))}
+                                <button
+                                    disabled={recentActivities.currentPage === recentActivities.lastPage}
+                                    onClick={() => router.get(dashboard(), { page: recentActivities.currentPage + 1 }, { preserveState: true, preserveScroll: true })}
+                                    className="rounded-full px-3 py-1 font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21] disabled:opacity-40 disabled:hover:bg-transparent transition cursor-pointer"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* CREATE TASK MODAL */}
+            {isCreateModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setIsCreateModalOpen(false)}>
+                    <div className="relative w-full max-w-lg rounded-2xl bg-white dark:bg-[#16161a] border border-gray-200 dark:border-[#25252d] shadow-2xl p-6 space-y-5" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Buat Task Baru</h3>
+                            <button onClick={() => setIsCreateModalOpen(false)} className="text-gray-400 hover:text-gray-700 dark:hover:text-white transition cursor-pointer">
+                                <X className="h-5 w-5" />
                             </button>
-                            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold shadow-xs">
-                                1
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Judul *</label>
+                                <input
+                                    type="text"
+                                    value={createForm.title}
+                                    onChange={(e) => setCreateForm({ ...createForm, title: e.target.value })}
+                                    placeholder="Nama kegiatan / tugas"
+                                    className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Deskripsi</label>
+                                <textarea
+                                    value={createForm.description}
+                                    onChange={(e) => setCreateForm({ ...createForm, description: e.target.value })}
+                                    placeholder="Detail kegiatan (opsional)"
+                                    rows={3}
+                                    className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition resize-none"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Tanggal *</label>
+                                    <input
+                                        type="date"
+                                        value={createForm.task_date}
+                                        onChange={(e) => setCreateForm({ ...createForm, task_date: e.target.value })}
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-300 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Waktu</label>
+                                    <input
+                                        type="time"
+                                        value={createForm.task_time}
+                                        onChange={(e) => setCreateForm({ ...createForm, task_time: e.target.value })}
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-300 transition"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Kategori</label>
+                                    <input
+                                        type="text"
+                                        value={createForm.category}
+                                        onChange={(e) => setCreateForm({ ...createForm, category: e.target.value })}
+                                        placeholder="cth: Kebudayaan"
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
+                                    <select
+                                        value={createForm.status}
+                                        onChange={(e) => setCreateForm({ ...createForm, status: e.target.value as 'in_progress' | 'completed' })}
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-300 transition"
+                                    >
+                                        <option value="in_progress">Sedang Berjalan</option>
+                                        <option value="completed">Selesai</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-2.5 pt-2">
+                            <button
+                                onClick={() => setIsCreateModalOpen(false)}
+                                className="rounded-full border border-gray-200 dark:border-[#25252d] px-5 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1f1f24] transition cursor-pointer"
+                            >
+                                Batal
                             </button>
-                            <button className="flex h-7 w-7 items-center justify-center rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21] font-semibold transition">
-                                2
-                            </button>
-                            <button className="flex h-7 w-7 items-center justify-center rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21] font-semibold transition">
-                                3
-                            </button>
-                            <button className="rounded-full px-3 py-1 font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#1c1c21] transition">
-                                Next
+                            <button
+                                onClick={handleCreateTask}
+                                disabled={isSubmittingTask}
+                                className="rounded-full bg-[#18181b] dark:bg-white px-6 py-2.5 text-xs font-bold text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition shadow-xs cursor-pointer disabled:opacity-50"
+                            >
+                                {isSubmittingTask ? 'Menyimpan...' : 'Simpan Task'}
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
+
+            {/* EDIT TASK MODAL */}
+            {editingTask && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setEditingTask(null)}>
+                    <div className="relative w-full max-w-lg rounded-2xl bg-white dark:bg-[#16161a] border border-gray-200 dark:border-[#25252d] shadow-2xl p-6 space-y-5" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Edit Task</h3>
+                            <button onClick={() => setEditingTask(null)} className="text-gray-400 hover:text-gray-700 dark:hover:text-white transition cursor-pointer">
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Judul *</label>
+                                <input
+                                    type="text"
+                                    value={editForm.title}
+                                    onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                                    placeholder="Nama kegiatan / tugas"
+                                    className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Deskripsi</label>
+                                <textarea
+                                    value={editForm.description}
+                                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                                    placeholder="Detail kegiatan (opsional)"
+                                    rows={3}
+                                    className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition resize-none"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Tanggal *</label>
+                                    <input
+                                        type="date"
+                                        value={editForm.task_date}
+                                        onChange={(e) => setEditForm({ ...editForm, task_date: e.target.value })}
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-300 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Waktu</label>
+                                    <input
+                                        type="time"
+                                        value={editForm.task_time}
+                                        onChange={(e) => setEditForm({ ...editForm, task_time: e.target.value })}
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-300 transition"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Kategori</label>
+                                    <input
+                                        type="text"
+                                        value={editForm.category}
+                                        onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                                        placeholder="cth: Kebudayaan"
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-300 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
+                                    <select
+                                        value={editForm.status}
+                                        onChange={(e) => setEditForm({ ...editForm, status: e.target.value as 'in_progress' | 'completed' })}
+                                        className="w-full rounded-xl border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#121215] px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-300 transition"
+                                    >
+                                        <option value="in_progress">Sedang Berjalan</option>
+                                        <option value="completed">Selesai</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2">
+                            <button
+                                onClick={() => handleDeleteTask(editingTask.id)}
+                                className="rounded-full border border-red-200 dark:border-red-900/40 px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition cursor-pointer"
+                            >
+                                Hapus
+                            </button>
+                            <div className="flex items-center gap-2.5">
+                                <button
+                                    onClick={() => setEditingTask(null)}
+                                    className="rounded-full border border-gray-200 dark:border-[#25252d] px-5 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1f1f24] transition cursor-pointer"
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    onClick={handleUpdateTask}
+                                    disabled={isSubmittingTask}
+                                    className="rounded-full bg-[#18181b] dark:bg-white px-6 py-2.5 text-xs font-bold text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition shadow-xs cursor-pointer disabled:opacity-50"
+                                >
+                                    {isSubmittingTask ? 'Menyimpan...' : 'Simpan Task'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

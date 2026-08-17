@@ -30,39 +30,23 @@ export default function Welcome() {
     }
 
     function revealHeroGated() {
-      const gatedItems = document.querySelectorAll('[data-hero-gate][data-reveal]');
-      gatedItems.forEach(el => {
-        const elH = el as HTMLElement;
-        const delay = parseInt(elH.dataset.delay || '0', 10);
-        const translate = elH.dataset.translate || '16';
-        elH.style.transform = 'translateY(' + translate + 'px)';
-        setTimeout(() => {
-          elH.classList.add('revealed');
-          elH.style.transform = '';
-        }, delay);
-      });
-
       const heroLines = document.querySelectorAll('[data-hero-gate][data-line-reveal]');
       heroLines.forEach(el => {
         const elH = el as HTMLElement;
-        const delay = parseInt(elH.dataset.delay || '0', 10);
-        const stagger = parseInt(elH.dataset.stagger || '0', 10);
         const lines = elH.querySelectorAll('.line-inner') as NodeListOf<HTMLElement>;
-        setTimeout(() => {
-          elH.classList.add('revealed');
-          lines.forEach((line, i) => {
-            line.style.transitionDelay = (i * stagger) + 'ms';
-          });
-        }, delay);
+        elH.classList.add('revealed');
+        lines.forEach((line, i) => {
+          line.style.transitionDelay = (i * 400) + 'ms';
+        });
       });
 
-      setTimeout(() => {
-        document.getElementById('heroCard')?.classList.add('revealed');
-      }, 400);
-
-      setTimeout(() => {
-        document.getElementById('heroWatermark')?.classList.add('revealed');
-      }, 300);
+      const gatedItems = document.querySelectorAll('[data-hero-gate][data-reveal]');
+      gatedItems.forEach(el => {
+        const elH = el as HTMLElement;
+        setTimeout(() => {
+          elH.classList.add('revealed');
+        }, 1700);
+      });
     }
 
     let loaderStart: number | null = null;
@@ -93,7 +77,6 @@ export default function Welcome() {
           document.documentElement.style.removeProperty('position');
           document.documentElement.style.removeProperty('overflow');
           document.documentElement.style.removeProperty('height');
-          revealHeroGated();
           revealHeader();
         }, 700);
       }
@@ -105,7 +88,6 @@ export default function Welcome() {
       document.documentElement.style.removeProperty('position');
       document.documentElement.style.removeProperty('overflow');
       document.documentElement.style.removeProperty('height');
-      revealHeroGated();
       revealHeader();
     }
 
@@ -114,10 +96,58 @@ export default function Welcome() {
       document.documentElement.style.removeProperty('position');
       document.documentElement.style.removeProperty('overflow');
       document.documentElement.style.removeProperty('height');
-      revealHeroGated();
       revealHeader();
     }, 1500);
     cleanupFns.push(() => clearTimeout(fallbackTimer));
+
+    // ===== PINNED HERO SCROLL REVEAL =====
+    let heroRevealed = false;
+    let heroUnlocked = false;
+    let lenisInstance: any = null;
+
+    function lockScrollAndRevealHero() {
+      if (heroRevealed) return;
+      heroRevealed = true;
+
+      // Lock screen in place at top: 0 so navbar and hero are 100% visible without any cut-off
+      window.scrollTo(0, 0);
+      if (lenisInstance) {
+        lenisInstance.scrollTo(0, { immediate: true });
+        lenisInstance.stop();
+      }
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.height = '100%';
+
+      // Trigger line-by-line reveal
+      revealHeroGated();
+
+      // Wait until last sentence/buttons appear (2400ms), then unlock screen to allow downward scroll
+      setTimeout(() => {
+        heroUnlocked = true;
+        if (lenisInstance) lenisInstance.start();
+        document.documentElement.style.removeProperty('overflow');
+        document.documentElement.style.removeProperty('height');
+      }, 2400);
+    }
+
+    const onUserScrollAttempt = () => {
+      if (!heroUnlocked && !heroRevealed) {
+        lockScrollAndRevealHero();
+      }
+    };
+
+    window.addEventListener('wheel', onUserScrollAttempt, { passive: true });
+    window.addEventListener('touchmove', onUserScrollAttempt, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 5 && !heroRevealed) {
+        lockScrollAndRevealHero();
+      }
+    }, { passive: true });
+
+    cleanupFns.push(() => {
+      window.removeEventListener('wheel', onUserScrollAttempt);
+      window.removeEventListener('touchmove', onUserScrollAttempt);
+    });
 
     // ===== SISANYA - JALAN DI BELAKANG LAYAR, TIDAK MENGHAMBAT LOADER =====
     (async () => {
@@ -125,6 +155,13 @@ export default function Welcome() {
 
       window.scrollTo(0, 0);
       const lenis = new Lenis({ smoothWheel: true });
+      lenisInstance = lenis;
+
+      lenis.on('scroll', (e: { scroll: number }) => {
+        if (e.scroll > 5 && !heroRevealed) {
+          lockScrollAndRevealHero();
+        }
+      });
       function raf(t: number) { lenis.raf(t); rafId = requestAnimationFrame(raf); }
       rafId = requestAnimationFrame(raf);
 
@@ -759,15 +796,13 @@ const BODY_HTML = `
 
     <!-- HERO -->
     <section class="hero" id="home">
-      <div class="hero-vignette"></div>
+      <div class="hero-bg-container">
+        <img src="/images/backround2.png" alt="Hero Background" class="hero-bg-img" />
+        <div class="hero-vignette"></div>
+      </div>
 
       <div class="hero-content shell">
         <div class="hero-left">
-          <div class="reveal-item eyebrow eyebrow--dark" data-reveal data-delay="200" data-hero-gate>
-            <span class="eyebrow-dot"></span>
-            Independent Studio
-          </div>
-
           <h1 class="hero-h1 line-reveal" data-line-reveal data-delay="250" data-stagger="120" data-hero-gate>
             <span class="line-wrap"><span class="line-inner">Unit</span></span>
             <span class="line-wrap"><span class="line-inner">Pelaksana</span></span>
@@ -797,40 +832,6 @@ const BODY_HTML = `
               </span>
             </button>
           </div>
-        </div>
-
-        <div class="hero-right">
-          <div class="hero-card" id="heroCard" data-hero-gate>
-            <div class="hero-card-row" id="heroCardRow">
-              <div class="hero-card-tile">
-                <svg viewBox="0 0 48 48" fill="currentColor">
-                  <path
-                    d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                </svg>
-              </div>
-              <div class="hero-card-panel">
-                <div class="hero-card-content" id="heroCardContent">
-                  <div class="hero-card-caption" id="heroCardCaption">Conversion design</div>
-                  <div class="hero-card-title" id="heroCardTitle">Crafted to convert.</div>
-                </div>
-                <div class="hero-card-bottom">
-                  <div class="hero-card-dots" id="heroCardDots"></div>
-                  <div class="hero-card-nav">
-                    <button class="prev-btn" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14" />
-                        <path d="M13 6l6 6-6 6" />
-                      </svg></button>
-                    <button class="next-btn" aria-label="Next"><svg viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14" />
-                        <path d="M13 6l6 6-6 6" />
-                      </svg></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
         </div>
       </div>
 
@@ -917,116 +918,140 @@ const BODY_HTML = `
           </h2>
         </div>
         <ul class="portfolio-grid">
+          <!-- CARD 01 — BANDUNG CREATIVE HUB -->
           <li class="reveal-item" data-reveal data-delay="0" data-translate="48">
             <a href="/fasilitas/bandung-creative-hub">
-              <article class="portfolio-card">
-                <div class="portfolio-meta">
-                  <span>Branding — 2025</span>
+              <article class="portfolio-card group relative">
+                <!-- Background Image & Dark Overlay -->
+                <div class="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
+                  <img
+                    src="/images/backroundBCH.jpg"
+                    alt="Bandung Creative HUB"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent"></div>
+                </div>
+
+                <div class="portfolio-meta relative z-10">
+                  <span></span>
                   <span class="portfolio-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17L17 7" />
                       <path d="M8 7h9v9" />
                     </svg></span>
                 </div>
-                <div class="portfolio-watermark">
-                  <svg viewBox="0 0 48 48" fill="currentColor">
-                    <path
-                      d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                  </svg>
-                </div>
-                <div class="portfolio-bottom">
+                <div class="portfolio-bottom relative z-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                   <h3>Bandung Creative HUB</h3>
-                  <p>A complete identity and go-to-market system for a fast-moving research startup.</p>
+                  <p>Pusat inkubasi kreatif, studio rekaman audio, laboratorium desain 3D, & pameran seni digital.</p>
                   <div class="portfolio-tags">
-                    <span class="tag-chip">Branding</span>
-                    <span class="tag-chip">Strategy</span>
-                    <span class="tag-chip">Design</span>
+                    <span class="tag-chip">Studio Audio</span>
+                    <span class="tag-chip">Desain 3D</span>
+                    <span class="tag-chip">Inkubasi</span>
                   </div>
                 </div>
               </article>
             </a>
           </li>
+
+          <!-- CARD 02 — PADEPOKAN SENI MAYANG SUNDA -->
           <li class="reveal-item" data-reveal data-delay="90" data-translate="48">
             <a href="/fasilitas/padepokan-seni-mayang-sunda">
-              <article class="portfolio-card">
-                <div class="portfolio-meta">
-                  <span>Product — 2024</span>
+              <article class="portfolio-card group relative">
+                <!-- Background Image & Dark Overlay -->
+                <div class="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
+                  <img
+                    src="/images/backroundMS.jpg"
+                    alt="Padepokan Seni Mayang Sunda"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent"></div>
+                </div>
+
+                <div class="portfolio-meta relative z-10">
+                  <span></span>
                   <span class="portfolio-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17L17 7" />
                       <path d="M8 7h9v9" />
                     </svg></span>
                 </div>
-                <div class="portfolio-watermark">
-                  <svg viewBox="0 0 48 48" fill="currentColor">
-                    <path
-                      d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                  </svg>
-                </div>
-                <div class="portfolio-bottom">
-                  <h3> Padekopakan Seni Mayang Sunda </h3>
-                  <p>A finance platform reimagined — clear data, calm interfaces, and effortless flows.</p>
+                <div class="portfolio-bottom relative z-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                  <h3>Padepokan Seni Mayang Sunda</h3>
+                  <p>Ruang ekspresi seni pertunjukan tradisional, sanggar tari Sunda, & teater panggung daerah.</p>
                   <div class="portfolio-tags">
-                    <span class="tag-chip">Product Design</span>
-                    <span class="tag-chip">Web App</span>
-                    <span class="tag-chip">QA</span>
+                    <span class="tag-chip">Teater & Tari</span>
+                    <span class="tag-chip">Karawitan</span>
+                    <span class="tag-chip">Pertunjukan</span>
                   </div>
                 </div>
               </article>
             </a>
           </li>
+
+          <!-- CARD 03 — TERAS SUNDA CIBIRU -->
           <li class="reveal-item" data-reveal data-delay="180" data-translate="48">
             <a href="/fasilitas/teras-sunda-cibiru">
-              <article class="portfolio-card">
-                <div class="portfolio-meta">
-                  <span>Identity — 2023</span>
+              <article class="portfolio-card group relative">
+                <!-- Background Image & Dark Overlay -->
+                <div class="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
+                  <img
+                    src="/images/backroundTSC.jpg"
+                    alt="Teras Sunda Cibiru"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent"></div>
+                </div>
+
+                <div class="portfolio-meta relative z-10">
+                  <span></span>
                   <span class="portfolio-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17L17 7" />
                       <path d="M8 7h9v9" />
                     </svg></span>
                 </div>
-                <div class="portfolio-watermark">
-                  <svg viewBox="0 0 48 48" fill="currentColor">
-                    <path
-                      d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                  </svg>
-                </div>
-                <div class="portfolio-bottom">
-                  <h3>Teras Sunda Cibiru </h3>
-                  <p>A bold visual identity and art direction system built to scale across every surface.</p>
+                <div class="portfolio-bottom relative z-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                  <h3>Teras Sunda Cibiru</h3>
+                  <p>Pusat riset, pelestarian musik tradisional Sunda, & laboratorium kerajinan bambu.</p>
                   <div class="portfolio-tags">
-                    <span class="tag-chip">Brand Identity</span>
-                    <span class="tag-chip">Art Direction</span>
+                    <span class="tag-chip">Kriya Bambu</span>
+                    <span class="tag-chip">Musik Sunda</span>
+                    <span class="tag-chip">Seni Alam</span>
                   </div>
                 </div>
               </article>
             </a>
           </li>
+
+          <!-- CARD 04 — KAMPUNG WISATA PASIR KUNCI -->
           <li class="reveal-item" data-reveal data-delay="270" data-translate="48">
             <a href="/fasilitas/kampung-wisata-pasir-kunci">
-              <article class="portfolio-card">
-                <div class="portfolio-meta">
-                  <span>Mobile — 2023</span>
+              <article class="portfolio-card group relative">
+                <!-- Background Image & Dark Overlay -->
+                <div class="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
+                  <img
+                    src="/images/backroundPSKC.jpg"
+                    alt="Kampung Wisata Pasir Kunci"
+                    class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent"></div>
+                </div>
+
+                <div class="portfolio-meta relative z-10">
+                  <span></span>
                   <span class="portfolio-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17L17 7" />
                       <path d="M8 7h9v9" />
                     </svg></span>
                 </div>
-                <div class="portfolio-watermark">
-                  <svg viewBox="0 0 48 48" fill="currentColor">
-                    <path
-                      d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                  </svg>
-                </div>
-                <div class="portfolio-bottom">
+                <div class="portfolio-bottom relative z-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                   <h3>Kampung Wisata Pasir Kunci</h3>
-                  <p>A wellness app grounded in research, shipped end to end from concept to release.</p>
+                  <p>Kawasan seni budaya lereng Gunung Manglayang, permainan tradisional anak, & wisata edukasi.</p>
                   <div class="portfolio-tags">
-                    <span class="tag-chip">Mobile App</span>
-                    <span class="tag-chip">UX Research</span>
-                    <span class="tag-chip">Development</span>
+                    <span class="tag-chip">Kaulinan Lembur</span>
+                    <span class="tag-chip">Pencak Silat</span>
+                    <span class="tag-chip">Wisata Edukasi</span>
                   </div>
                 </div>
               </article>

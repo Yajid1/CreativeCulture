@@ -1,9 +1,40 @@
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
-export default function DigitalContentStudio() {
+import { useMemo } from 'react';
+
+type UserRoomData = {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    capacity: string;
+    image: string | null;
+    section2_title: string;
+    section2_description: string;
+    facilities_list: string;
+    secondary_image: string | null;
+    status: string;
+    gallery_images?: (string | null)[];
+};
+
+export default function DigitalContentStudio({ room }: { room?: UserRoomData | null }) {
     const [clockTime, setClockTime] = useState('');
     const [clockDate, setClockDate] = useState('');
+
+    const name = room?.name || 'Digital Content Studio (Lt.3)';
+    const description = room?.description || 'Studio yang terletak di pojok lantai 3 ini berfungsi sebagai ruang produksi konten digital. Fasilitas yang tersedia berupa sistem tata cahaya komplit dan area white space beratap tinggi (High Ceiling Roof 5x5m) yang bebas dieksplorasi oleh kreator konten digital.';
+    const capacity = room?.capacity || '15 Orang';
+    const imageSrc = room?.image || '/images/DSC01758.jpg';
+
+    const section2Title = room?.section2_title || 'Kamera, Lighting & Background';
+    const section2Description = room?.section2_description || 'Cocok untuk pembuatan Digital Content, Campaign Video, dan Fashion Lookbook Video dengan pilihan latar background kain, paper, green screen, serta pencahayaan Profoto & Godox.';
+    const secondaryImageSrc = room?.secondary_image || '/images/DSC01802.jpg';
+
+    const parsedFacilities = useMemo(() => {
+        if (!room?.facilities_list) return null;
+        return room.facilities_list.split(/\n|,/).map(item => item.trim()).filter(Boolean);
+    }, [room?.facilities_list]);
 
     useEffect(() => {
         function tick() {
@@ -22,7 +53,7 @@ export default function DigitalContentStudio() {
 
     return (
         <>
-            <Head title="Digital Content Studio (Lt.3) - Bandung Creative Hub" />
+            <Head title={`${name} - Bandung Creative Hub`} />
 
             <div className="min-h-screen bg-white text-gray-900 font-sans">
                 {/* ===== NAVBAR ===== */}
@@ -82,13 +113,13 @@ export default function DigitalContentStudio() {
                         {/* Text Left */}
                         <div className="lg:col-span-5">
                             <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.15]">
-                                Digital Content Studio (Lt.3)
+                                {name}
                             </h1>
                             <p className="mt-2 text-sm font-semibold text-gray-500">
                                 Bandung Creative Hub
                             </p>
                             <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed">
-                                Studio yang terletak di pojok lantai 3 ini berfungsi sebagai ruang produksi konten digital. Fasilitas yang tersedia berupa sistem tata cahaya komplit dan area *white space* beratap tinggi (High Ceiling Roof 5x5m) yang bebas dieksplorasi oleh kreator konten digital.
+                                {description}
                             </p>
 
                             {/* Capacity Badge */}
@@ -101,17 +132,17 @@ export default function DigitalContentStudio() {
                                 </div>
                                 <div>
                                     <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Kapasitas Pengunjung</p>
-                                    <p className="text-base font-extrabold text-gray-900">15 Orang</p>
+                                    <p className="text-base font-extrabold text-gray-900">{capacity}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Image Right: DSC01758.jpg */}
                         <div className="lg:col-span-7">
-                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm">
+                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm bg-gray-100 flex items-center justify-center border border-gray-100">
                                 <img
-                                    src="/images/DSC01758.jpg"
-                                    alt="Digital Content Studio Bandung Creative Hub"
+                                    src={imageSrc}
+                                    alt={name}
                                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                 />
                             </div>
@@ -122,10 +153,10 @@ export default function DigitalContentStudio() {
                     <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
                         {/* Image Left: DSC01802.jpg */}
                         <div className="order-2 lg:order-1 lg:col-span-7">
-                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm">
+                            <div className="relative h-[360px] sm:h-[450px] w-full overflow-hidden rounded-3xl shadow-sm bg-gray-100 flex items-center justify-center border border-gray-100">
                                 <img
-                                    src="/images/DSC01802.jpg"
-                                    alt="Fasilitas Studio Konten Digital BCH"
+                                    src={secondaryImageSrc}
+                                    alt={section2Title}
                                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                 />
                             </div>
@@ -134,24 +165,34 @@ export default function DigitalContentStudio() {
                         {/* Text Right */}
                         <div className="order-1 lg:order-2 lg:col-span-5">
                             <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.15]">
-                                Kamera, Lighting & Background
+                                {section2Title}
                             </h2>
                             <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed">
-                                Cocok untuk pembuatan Digital Content, Campaign Video, dan Fashion Lookbook Video dengan pilihan latar background kain, paper, green screen, serta pencahayaan Profoto & Godox.
+                                {section2Description}
                             </p>
 
                             {/* Facilities Badges */}
                             <div className="mt-6 space-y-3">
                                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Peralatan Studio Konten:</p>
                                 <div className="flex flex-wrap gap-2 text-xs">
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">📸 Sony A7III & Nikon D7200</span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">💡 Lighting Profoto & Trigger</span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">💡 Godox SL60W & Avangarde AV-LED</span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🌈 RGB Light Stick (4) & ParLED (2)</span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🛖 High Ceiling Roof 5x5m</span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🟩 Green Screen (3) & BG Hitam/Putih</span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">📺 TV Sony 40" (2) & Standing Mirror</span>
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🎬 Softbox Godox, Clapper Board & Reflektor</span>
+                                    {parsedFacilities ? (
+                                        parsedFacilities.map((fac, idx) => (
+                                            <span key={idx} className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">
+                                                ✨ {fac}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">📸 Sony A7III & Nikon D7200</span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">💡 Lighting Profoto & Trigger</span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">💡 Godox SL60W & Avangarde AV-LED</span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🌈 RGB Light Stick (4) & ParLED (2)</span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🛖 High Ceiling Roof 5x5m</span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🟩 Green Screen (3) & BG Hitam/Putih</span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">📺 TV Sony 40" (2) & Standing Mirror</span>
+                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-semibold text-gray-700">🎬 Softbox Godox, Clapper Board & Reflektor</span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -346,19 +387,29 @@ export default function DigitalContentStudio() {
                         {/* Row 1: Scroll Left */}
                         <div className="relative w-full overflow-hidden">
                             <div className="animate-marquee-scroll-left gap-5">
-                                {[...Array(12)].map((_, idx) => (
-                                    <div
-                                        key={`row1-ph-${idx}`}
-                                        className="h-48 w-72 sm:h-56 sm:w-88 flex-shrink-0 flex flex-col items-center justify-center gap-2 rounded-3xl border border-gray-200/80 bg-gray-100/90 text-gray-400 shadow-xs transition-all duration-300 hover:border-gray-300 hover:bg-gray-100"
-                                    >
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-gray-300">
-                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                            <circle cx="8.5" cy="8.5" r="1.5" />
-                                            <polyline points="21 15 16 10 5 21" />
-                                        </svg>
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Foto Digital Content {idx + 1}</span>
-                                    </div>
-                                ))}
+                                {[...Array(12)].map((_, idx) => {
+                                    const imageIndex = idx % 8;
+                                    const imgUrl = room?.gallery_images?.[imageIndex];
+                                    return (
+                                        <div
+                                            key={`row1-ph-${idx}`}
+                                            className="h-48 w-72 sm:h-56 sm:w-88 flex-shrink-0 flex flex-col items-center justify-center gap-2 rounded-3xl border border-gray-200/80 bg-gray-100/90 text-gray-400 shadow-xs transition-all duration-300 hover:border-gray-300 hover:bg-gray-100 overflow-hidden"
+                                        >
+                                            {imgUrl ? (
+                                                <img src={imgUrl} alt={`${name} ${imageIndex + 1}`} className="h-full w-full object-cover" />
+                                            ) : (
+                                                <>
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-gray-300">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                                        <circle cx="8.5" cy="8.5" r="1.5" />
+                                                        <polyline points="21 15 16 10 5 21" />
+                                                    </svg>
+                                                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Foto {name} {imageIndex + 1}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 

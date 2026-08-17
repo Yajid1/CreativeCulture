@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -63,6 +64,15 @@ class RoleController extends Controller
             );
         }
 
+        ActivityLog::log(
+            module: 'Roles',
+            action: 'Created',
+            title: "Penambahan Role Admin: {$role->name}",
+            description: "Memberikan akses role admin untuk email {$role->email}",
+            status: $role->status === 'Online' ? 'Ready' : 'In Progress',
+            link: '/admin/roles'
+        );
+
         return redirect()->back()->with('success', 'Admin Role berhasil ditambahkan.');
     }
 
@@ -91,6 +101,15 @@ class RoleController extends Controller
             ]);
         }
 
+        ActivityLog::log(
+            module: 'Roles',
+            action: 'Updated',
+            title: "Pembaruan Role Admin: {$role->name}",
+            description: 'Memperbarui izin & status role admin',
+            status: $role->status === 'Online' ? 'Ready' : 'In Progress',
+            link: '/admin/roles'
+        );
+
         return redirect()->back()->with('success', 'Admin Role berhasil diperbarui.');
     }
 
@@ -101,6 +120,15 @@ class RoleController extends Controller
     {
         $newStatus = $role->status === 'Online' ? 'Offline' : 'Online';
         $role->update(['status' => $newStatus]);
+
+        ActivityLog::log(
+            module: 'Roles',
+            action: 'Updated',
+            title: "Perubahan Status Role: {$role->name}",
+            description: "Mengubah status role menjadi {$newStatus}",
+            status: $newStatus === 'Online' ? 'Ready' : 'In Progress',
+            link: '/admin/roles'
+        );
 
         return redirect()->back()->with('success', "Status role {$role->name} berhasil diubah menjadi {$newStatus}.");
     }
@@ -118,6 +146,14 @@ class RoleController extends Controller
         if (! empty($email)) {
             User::where('email', $email)->delete();
         }
+
+        ActivityLog::log(
+            module: 'Roles',
+            action: 'Deleted',
+            title: "Penghapusan Role Admin: {$name}",
+            description: "Menghapus role admin {$name} dari sistem",
+            status: 'Deleted'
+        );
 
         return redirect()->back()->with('success', "Admin Role {$name} berhasil dihapus.");
     }
