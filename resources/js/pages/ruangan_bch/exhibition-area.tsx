@@ -22,7 +22,8 @@ export default function ExhibitionArea({ room }: { room?: UserRoomData | null })
     const [clockTime, setClockTime] = useState('');
     const [clockDate, setClockDate] = useState('');
 
-    const roomName = room?.name;
+    const name = room?.name;
+    const roomName = name;
     const roomDesc = room?.description;
     const roomCap = room?.capacity;
     const roomImg = room?.image;

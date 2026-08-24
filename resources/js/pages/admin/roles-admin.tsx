@@ -303,10 +303,10 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
                 </div>
 
                 {/* 3. FILTER BOX SECTION */}
-                <div className="rounded-2xl border border-gray-100 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-5 shadow-xs space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="rounded-2xl border border-gray-100 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-5 shadow-xs">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                         {/* Name / Email Search */}
-                        <div>
+                        <div className="w-full sm:max-w-md">
                             <label className="block text-xs font-bold text-gray-900 dark:text-white mb-2">
                                 Search Name / Email
                             </label>
@@ -319,50 +319,16 @@ export default function RolesAdmin({ roles: serverRoles }: Props) {
                             />
                         </div>
 
-                        {/* Created From Input */}
-                        <div>
-                            <label className="block text-xs font-bold text-gray-900 dark:text-white mb-2">
-                                Created From
-                            </label>
-                            <div className="relative flex items-center">
-                                <CalendarIcon className="absolute left-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
-                                <input
-                                    type="text"
-                                    value={createdFrom}
-                                    onChange={(e) => setCreatedFrom(e.target.value)}
-                                    placeholder="Select start date"
-                                    className="w-full rounded-xl border-0 bg-[#f5f6f9] dark:bg-[#1a1a20] pl-10 pr-4 py-2.5 text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-[#121215] focus:ring-2 focus:ring-gray-300 transition"
-                                />
-                            </div>
+                        {/* Action Buttons */}
+                        <div className="flex items-center justify-end gap-2.5">
+                            <button
+                                onClick={handleReset}
+                                className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#16161a] px-4 py-2 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1f1f24] transition cursor-pointer"
+                            >
+                                <RotateCcw className="h-3.5 w-3.5" />
+                                <span>Reset</span>
+                            </button>
                         </div>
-
-                        {/* Created To Input */}
-                        <div>
-                            <label className="block text-xs font-bold text-gray-900 dark:text-white mb-2">
-                                Created To
-                            </label>
-                            <div className="relative flex items-center">
-                                <CalendarIcon className="absolute left-3.5 h-4 w-4 text-gray-400 pointer-events-none" />
-                                <input
-                                    type="text"
-                                    value={createdTo}
-                                    onChange={(e) => setCreatedTo(e.target.value)}
-                                    placeholder="Select end date"
-                                    className="w-full rounded-xl border-0 bg-[#f5f6f9] dark:bg-[#1a1a20] pl-10 pr-4 py-2.5 text-xs font-medium text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-[#121215] focus:ring-2 focus:ring-gray-300 transition"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex items-center justify-end gap-2.5 pt-3">
-                        <button
-                            onClick={handleReset}
-                            className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-[#25252d] bg-white dark:bg-[#16161a] px-4 py-2 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#1f1f24] transition cursor-pointer"
-                        >
-                            <RotateCcw className="h-3.5 w-3.5" />
-                            <span>Reset</span>
-                        </button>
                     </div>
                 </div>
 

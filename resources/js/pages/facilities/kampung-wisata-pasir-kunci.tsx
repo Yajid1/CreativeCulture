@@ -798,6 +798,90 @@ export default function KampungWisataPasirKunci() {
                 </div>
             </section>
 
+            {/* Footer */}
+            <footer className="bg-[#0a0a0a] text-white pt-20 pb-12 px-6 sm:px-10 border-t border-white/10">
+                <div className="mx-auto max-w-6xl">
+                    {/* CTA Box */}
+                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-16 border-b border-white/10">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight max-w-xl text-white leading-tight">
+                            Punya gagasan kreatif? Mari berkarya bersama.
+                        </h2>
+                        <a
+                            href="https://pusat-kreasi.disbudpar.bandung.go.id/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-black transition-transform duration-300 hover:scale-105 shadow-lg w-fit"
+                        >
+                            <span>Mulai Kolaborasi</span>
+                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5">
+                                    <path d="M7 17L17 7" /><path d="M8 7h9v9" />
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
+
+                    {/* Footer Columns */}
+                    <div className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
+                        {/* Kolom 1 — Brand & Logos */}
+                        <div>
+                            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap mb-4">
+                                <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+                                <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+                                <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)] brightness-110" />
+                                <img src="/images/Logo TCS.png" alt="Logo Teras Sunda Cibiru" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+                                <img src="/images/Logo Pasir Kunci.png" alt="Logo Pasir Kunci" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+                            </div>
+                            <p className="text-base font-bold text-white mb-2">UPTD Kebudayaan</p>
+                            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                                Dinas Kebudayaan dan Pariwisata Kota Bandung. Membangun ruang kreasi, apresiasi, dan pelestarian seni budaya.
+                            </p>
+                        </div>
+
+                        {/* Kolom 2 — Navigasi */}
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Navigasi</p>
+                            <ul className="space-y-2.5 text-sm">
+                                <li><a href="/" className="text-gray-400 transition hover:text-white">Home</a></li>
+                                <li><a href="/berita" className="text-gray-400 transition hover:text-white">Berita</a></li>
+                                <li><a href="/artikel" className="text-gray-400 transition hover:text-white">Artikel</a></li>
+                                <li><a href="/#contact" className="text-gray-400 transition hover:text-white">Contact</a></li>
+                            </ul>
+                        </div>
+
+                        {/* Kolom 3 — Fasilitas */}
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Fasilitas</p>
+                            <ul className="space-y-2.5 text-sm">
+                                <li><a href="/fasilitas/bandung-creative-hub" className="text-gray-400 transition hover:text-white">Bandung Creative Hub</a></li>
+                                <li><a href="/fasilitas/padepokan-seni-mayang-sunda" className="text-gray-400 transition hover:text-white">Mayang Sunda</a></li>
+                                <li><a href="/fasilitas/teras-sunda-cibiru" className="text-gray-400 transition hover:text-white">Teras Sunda Cibiru</a></li>
+                                <li><a href="/fasilitas/kampung-wisata-pasir-kunci" className="text-gray-400 transition hover:text-white">Pasir Kunci</a></li>
+                            </ul>
+                        </div>
+
+                        {/* Kolom 4 — Media Sosial */}
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Media Sosial</p>
+                            <ul className="space-y-2.5 text-sm">
+                                <li><a href="https://www.youtube.com/@BandungCreativeHub" target="_blank" rel="noopener noreferrer" className="text-gray-400 transition hover:text-white">YouTube</a></li>
+                                <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 transition hover:text-white">Instagram</a></li>
+                                <li><a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 transition hover:text-white">TikTok</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Legal Bottom */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-xs text-gray-500">
+                        <p>© 2026 UPTD Kebudayaan Kota Bandung. All rights reserved.</p>
+                        <div className="flex items-center gap-6">
+                            <a href="#privacy" className="hover:text-gray-300 transition">Privacy</a>
+                            <a href="#terms" className="hover:text-gray-300 transition">Terms</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
             {/* Modal Lightbox Preview Gambar Full */}
             {selectedImage && (
                 <div

@@ -388,7 +388,7 @@ export default function TeleconferenceRoom({ room }: { room?: UserRoomData | nul
                                             className="h-48 w-72 sm:h-56 sm:w-88 flex-shrink-0 flex flex-col items-center justify-center gap-2 rounded-3xl border border-gray-200/80 bg-gray-100/90 text-gray-400 shadow-xs transition-all duration-300 hover:border-gray-300 hover:bg-gray-100 overflow-hidden"
                                         >
                                             {imgUrl ? (
-                                                <img src={imgUrl} alt={`${name} ${imageIndex + 1}`} className="h-full w-full object-cover" />
+                                                <img src={imgUrl} alt={`${roomName || 'Teleconference'} ${imageIndex + 1}`} className="h-full w-full object-cover" />
                                             ) : (
                                                 <>
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-gray-300">
@@ -396,7 +396,7 @@ export default function TeleconferenceRoom({ room }: { room?: UserRoomData | nul
                                                         <circle cx="8.5" cy="8.5" r="1.5" />
                                                         <polyline points="21 15 16 10 5 21" />
                                                     </svg>
-                                                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Foto {name} {imageIndex + 1}</span>
+                                                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Foto {roomName || 'Teleconference'} {imageIndex + 1}</span>
                                                 </>
                                             )}
                                         </div>

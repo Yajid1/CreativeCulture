@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Berita;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class BeritaSeeder extends Seeder
 {

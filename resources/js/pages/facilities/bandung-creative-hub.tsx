@@ -751,85 +751,84 @@ export default function BandungCreativeHub() {
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-900 px-6 pt-16 pb-8 text-gray-400 sm:px-10">
+            <footer className="bg-[#0a0a0a] text-white pt-20 pb-12 px-6 sm:px-10 border-t border-white/10">
                 <div className="mx-auto max-w-6xl">
-                    {/* Grid utama */}
-                    <div className="grid grid-cols-1 gap-10 border-b border-white/10 pb-12 sm:grid-cols-2 lg:grid-cols-4">
+                    {/* CTA Box */}
+                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-16 border-b border-white/10">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight max-w-xl text-white leading-tight">
+                            Punya gagasan kreatif? Mari berkarya bersama.
+                        </h2>
+                        <a
+                            href="https://pusat-kreasi.disbudpar.bandung.go.id/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-black transition-transform duration-300 hover:scale-105 shadow-lg w-fit"
+                        >
+                            <span>Mulai Kolaborasi</span>
+                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5">
+                                    <path d="M7 17L17 7" /><path d="M8 7h9v9" />
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
 
-                        {/* Kolom 1 — Branding */}
+                    {/* Footer Columns */}
+                    <div className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
+                        {/* Kolom 1 — Brand & Logos */}
                         <div>
-                            <p className="text-base font-bold text-white">Bandung Creative Hub</p>
-                            <p className="mt-1 text-xs text-gray-500">Jl. Laswi No.7, Kacapiring,<br />Kec. Batununggal, Kota Bandung<br />Jawa Barat 40271</p>
-                            <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Hotline</p>
-                            <p className="mt-1 text-sm font-medium text-white">08112186867</p>
-                            <div className="mt-4 flex items-center gap-3">
-                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-blue-600">
-                                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
-                                </a>
-                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-pink-500">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" /></svg>
-                                </a>
-                                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"
-                                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-red-600">
-                                    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" /><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white" /></svg>
-                                </a>
+                            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap mb-4">
+                                <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+                                <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+                                <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)] brightness-110" />
+                                <img src="/images/Logo TCS.png" alt="Logo Teras Sunda Cibiru" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+                                <img src="/images/Logo Pasir Kunci.png" alt="Logo Pasir Kunci" className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
                             </div>
+                            <p className="text-base font-bold text-white mb-2">UPTD Kebudayaan</p>
+                            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                                Dinas Kebudayaan dan Pariwisata Kota Bandung. Membangun ruang kreasi, apresiasi, dan pelestarian seni budaya.
+                            </p>
                         </div>
 
-                        {/* Kolom 2 — Navigasi Fasilitas */}
+                        {/* Kolom 2 — Navigasi */}
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Fasilitas</p>
-                            <ul className="mt-4 space-y-2 text-sm">
-                                {['Studio Musik', 'Auditorium', 'Coworking Space', 'Recording Studio', 'Studio Tari', 'Exhibition Area'].map(f => (
-                                    <li key={f}>
-                                        <a href="#" className="transition hover:text-white">{f}</a>
-                                    </li>
-                                ))}
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Navigasi</p>
+                            <ul className="space-y-2.5 text-sm">
+                                <li><a href="/" className="text-gray-400 transition hover:text-white">Home</a></li>
+                                <li><a href="/berita" className="text-gray-400 transition hover:text-white">Berita</a></li>
+                                <li><a href="/artikel" className="text-gray-400 transition hover:text-white">Artikel</a></li>
+                                <li><a href="/#contact" className="text-gray-400 transition hover:text-white">Contact</a></li>
                             </ul>
                         </div>
 
-                        {/* Kolom 3 — Navigasi Program */}
+                        {/* Kolom 3 — Fasilitas */}
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Program</p>
-                            <ul className="mt-4 space-y-2 text-sm">
-                                {['Workshop Kreatif', 'Pelatihan Ekraf', 'Pameran Seni', 'Komunitas', 'Inkubasi Bisnis', '17 Subsektor'].map(p => (
-                                    <li key={p}>
-                                        <a href="#" className="transition hover:text-white">{p}</a>
-                                    </li>
-                                ))}
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Fasilitas</p>
+                            <ul className="space-y-2.5 text-sm">
+                                <li><a href="/fasilitas/bandung-creative-hub" className="text-gray-400 transition hover:text-white">Bandung Creative Hub</a></li>
+                                <li><a href="/fasilitas/padepokan-seni-mayang-sunda" className="text-gray-400 transition hover:text-white">Mayang Sunda</a></li>
+                                <li><a href="/fasilitas/teras-sunda-cibiru" className="text-gray-400 transition hover:text-white">Teras Sunda Cibiru</a></li>
+                                <li><a href="/fasilitas/kampung-wisata-pasir-kunci" className="text-gray-400 transition hover:text-white">Pasir Kunci</a></li>
                             </ul>
                         </div>
 
-                        {/* Kolom 4 — Tautan & Kontak */}
+                        {/* Kolom 4 — Media Sosial */}
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Tautan</p>
-                            <ul className="mt-4 space-y-2 text-sm">
-                                <li><Link href="/" className="transition hover:text-white">Beranda</Link></li>
-                                <li><Link href="/subsektor" className="transition hover:text-white">17 Subsektor</Link></li>
-                                <li><Link href="/kontak" className="transition hover:text-white">Hubungi Kami</Link></li>
-                                <li>
-                                    <a href="https://dispar.bandung.go.id" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">
-                                        dispar.bandung.go.id
-                                    </a>
-                                </li>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Media Sosial</p>
+                            <ul className="space-y-2.5 text-sm">
+                                <li><a href="https://www.youtube.com/@BandungCreativeHub" target="_blank" rel="noopener noreferrer" className="text-gray-400 transition hover:text-white">YouTube</a></li>
+                                <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 transition hover:text-white">Instagram</a></li>
+                                <li><a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 transition hover:text-white">TikTok</a></li>
                             </ul>
-
-                            <p className="mt-8 text-xs font-semibold uppercase tracking-wider text-gray-500">Alamat Email</p>
-                            <a href="mailto:info@bandungcreativehub.id" className="mt-1 block text-sm text-white hover:underline">
-                                info@bandungcreativehub.id
-                            </a>
                         </div>
                     </div>
 
-                    {/* Bottom bar */}
-                    <div className="mt-8 flex flex-col items-center justify-between gap-4 text-xs text-gray-600 sm:flex-row">
-                        <p>© {new Date().getFullYear()} Bandung Creative Hub — Dinas Pariwisata Kota Bandung. Hak cipta dilindungi.</p>
-                        <div className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                            <span className="text-gray-500">Bagian dari ekosistem</span>
-                            <span className="font-medium text-white">Lumora</span>
+                    {/* Legal Bottom */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10 text-xs text-gray-500">
+                        <p>© 2026 UPTD Kebudayaan Kota Bandung. All rights reserved.</p>
+                        <div className="flex items-center gap-6">
+                            <a href="#privacy" className="hover:text-gray-300 transition">Privacy</a>
+                            <a href="#terms" className="hover:text-gray-300 transition">Terms</a>
                         </div>
                     </div>
                 </div>

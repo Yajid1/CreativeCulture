@@ -728,14 +728,16 @@ const BODY_HTML = `
   <!-- PAGE LOADER -->
   <div class="page-loader" id="pageLoader">
     <div class="loader-center">
-      <div class="loader-brand">
-        <svg viewBox="0 0 48 48" fill="currentColor">
-          <path
-            d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-        </svg>
-        Lumora
+      <div class="loader-logos flex items-center justify-center gap-3 sm:gap-6 flex-wrap">
+        <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" class="h-9 sm:h-12 w-auto object-contain" />
+        <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" class="h-9 sm:h-12 w-auto object-contain" />
+        <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" class="h-9 sm:h-12 w-auto object-contain" />
+        <img src="/images/Logo TCS.png" alt="Logo Teras Sunda Cibiru" class="h-9 sm:h-12 w-auto object-contain" />
+        <img src="/images/Logo Pasir Kunci.png" alt="Logo Pasir Kunci" class="h-9 sm:h-12 w-auto object-contain" />
       </div>
-      <p class="loader-tagline">Bold ideas, shipped with quiet precision.</p>
+      <p class="loader-tagline font-bold uppercase tracking-wider text-xs sm:text-sm text-gray-900 text-center max-w-lg px-4 mt-2">
+        UPTD PADEPOKAN SENI, KREATIVITAS DAN KEBUDAYAAN
+      </p>
     </div>
     <div class="loader-progress">
       <div class="loader-track">
@@ -797,7 +799,7 @@ const BODY_HTML = `
     <!-- HERO -->
     <section class="hero" id="home">
       <div class="hero-bg-container">
-        <img src="/images/backround2.png" alt="Hero Background" class="hero-bg-img" />
+        <img src="/images/backround3.jpeg" alt="Hero Background" class="hero-bg-img" />
         <div class="hero-vignette"></div>
       </div>
 
@@ -837,70 +839,175 @@ const BODY_HTML = `
 
     </section>
 
-    <!-- ABOUT -->
-    <section class="about" id="about">
-      <div class="about-inner shell">
-        <div class="about-left">
-          <div class="about-globe-bg">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-              <circle cx="12" cy="12" r="9.25" />
-              <path d="M12 2.75c2.6 2.3 4 5.8 4 9.25s-1.4 6.95-4 9.25c-2.6-2.3-4-5.8-4-9.25s1.4-6.95 4-9.25z" />
-              <path d="M2.75 12h18.5" />
-            </svg>
-          </div>
-          <div class="eyebrow eyebrow--dark about-eyebrow reveal-item" data-reveal>
-            <span class="eyebrow-dot"></span>
-            The Studio
-          </div>
-          <div class="about-distributed reveal-item" data-reveal data-translate="12">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-              <circle cx="12" cy="12" r="9.25" />
-              <path d="M12 2.75c2.6 2.3 4 5.8 4 9.25s-1.4 6.95-4 9.25c-2.6-2.3-4-5.8-4-9.25s1.4-6.95 4-9.25z" />
-              <path d="M2.75 12h18.5" />
-            </svg>
-            <span>A distributed team building across every time zone.</span>
-          </div>
+    <!-- SERVICES / FASILITAS KEBUDAYAAN -->
+    <section class="services" id="services">
+      <div class="services-inner shell">
+        <div class="eyebrow eyebrow--dark reveal-item" data-reveal>
+          <span class="eyebrow-dot"></span>
+          Fasilitas Kebudayaan
         </div>
-        <div class="about-right">
-          <h2 class="about-h2 word-reveal" data-word-reveal>We partner with ambitious teams to ship <span
-              class="muted">digital products, brand systems, and the strategy that holds them together.</span></h2>
-          <div class="about-footer reveal-item" data-reveal data-delay="200">
-            <div>
-              <div class="about-social-label">Find us online</div>
-              <div class="about-social-row">
-                <a href="#" class="social-chip social-chip--accent" aria-label="X / Twitter">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path d="M4 4l16 16" />
-                    <path d="M20 4L4 20" />
-                  </svg>
-                </a>
-                <a href="#" class="social-chip social-chip--muted" aria-label="Behance">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <circle cx="12" cy="12" r="9" />
-                    <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                  </svg>
-                </a>
-                <a href="#" class="social-chip social-chip--muted" aria-label="Dribbble">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                    <circle cx="12" cy="12" r="9" />
-                    <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none" />
-                  </svg>
-                </a>
+        <h2 class="services-h2 line-reveal" data-line-reveal data-delay="120">
+          <span class="line-wrap"><span class="line-inner">Fasilitas Utama Kebudayaan</span></span>
+        </h2>
+        <ul class="space-y-4">
+
+          <!-- ITEM 01 — BANDUNG CREATIVE HUB -->
+          <li class="service-row reveal-item" data-reveal data-delay="0" data-translate="24">
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="1">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">01</span>
+                  <h3 class="service-title">Bandung Creative Hub</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Pusat inkubasi kreatif, studio rekaman audio, laboratorium desain 3D, & pameran seni digital.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Bandung Creative Hub (BCH)</strong>, pusat fasilitas kebudayaan dan ekosistem inkubasi kreatif kebanggaan Kota Bandung yang berlokasi strategis di Jalan Laswi No. 7. Diresmikan sebagai wadah akselerasi ide dan kolaborasi talenta muda, gedung futuristik 6 lantai ini dirancang khusus untuk memfasilitasi 17 subsektor ekonomi kreatif, mulai dari industri musik, seni rupa & kriya, desain produk & interior, hingga pengembangan perangkat lunak game dan animasi digital.
+                </p>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed mt-3">
+                  BCH menyediakan fasilitas berstandar industri yang dapat dimanfaatkan secara gratis melalui reservasi resmi, antara lain <strong>Studio Rekaman Audio 'Summen Stag'</strong> dengan instrumen akustik profesional, <strong>Laboratorium Cetak 3D & Desain Produk</strong>, <strong>Studio Animasi & Editing Video</strong>, <strong>Studio Podcast Kedap Suara</strong>, <strong>Studio Tari & Olah Tubuh</strong>, <strong>Studio Fashion & Jahit</strong>, <strong>Perpustakaan Kreatif</strong>, <strong>Coworking Space terbuka</strong>, <strong>Auditorium Teater & Bioskop Mini</strong>, serta <strong>Exhibition Area</strong> untuk pameran seni visual kontemporer.
+                </p>
+                <div class="facility-action-bar" style="margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: flex-end;">
+                  <a href="/fasilitas/bandung-creative-hub" class="facility-action-link" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #111; text-decoration: none;">
+                    <span>Lihat Profil Lengkap Fasilitas BCH</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  </a>
+                </div>
               </div>
             </div>
-            <a href="#about" class="pill-btn pill-btn--outline pill-btn--with-arrow">
-              <span class="pill-btn-inner">
-                About Us
-                <span class="pill-btn-badge"><svg class="arrow-right-icon" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14" />
-                    <path d="M13 6l6 6-6 6" />
-                  </svg></span>
-              </span>
-            </a>
-          </div>
-        </div>
+          </li>
+
+          <!-- ITEM 02 — PADEPOKAN SENI MAYANG SUNDA -->
+          <li class="service-row reveal-item" data-reveal data-delay="80" data-translate="24">
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="2">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">02</span>
+                  <h3 class="service-title">Padepokan Seni Mayang Sunda</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Ruang ekspresi seni pertunjukan tradisional, sanggar tari Sunda, & teater terbuka.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Padepokan Seni Mayang Sunda (PSMS)</strong> yang berlokasi di Jalan Peta No. 209, Bandung. Sebagai episentrum pelestarian dan pengembangan 10 Obyek Pemajuan Kebudayaan di Kota Bandung, PSMS berdiri kokoh sebagai rumah bersama bagi para maestro, seniman tradisi, budayawan, dan puluhan sanggar seni independen untuk melestarikan khazanah warisan leluhur Pasundan.
+                </p>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed mt-3">
+                  Kompleks padepokan ini dilengkapi dengan <strong>Panggung Teater Indoor (Indoor Stage)</strong> berkapasitas besar dengan akustik dan tata pencahayaan pentas lengkap, <strong>Gedung Outdoor & Amphitheater</strong> terbuka untuk festival malam hari, <strong>Studio Musik Tradisional Karawitan</strong> dengan set gamelan Salendro & Pelog, serta balé latihan tari dan teater yang representatif. PSMS rutin menyelenggarakan pagelaran wayang golek, tari jaipong, tembang cianjuran, festival teater daerah, serta diskusi dan riset kebudayaan Sunda.
+                </p>
+                <div class="facility-action-bar" style="margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: flex-end;">
+                  <a href="/fasilitas/padepokan-seni-mayang-sunda" class="facility-action-link" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #111; text-decoration: none;">
+                    <span>Lihat Profil Lengkap Fasilitas Mayang Sunda</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- ITEM 03 — TERAS SUNDA CIBIRU -->
+          <li class="service-row reveal-item" data-reveal data-delay="160" data-translate="24">
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="3">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">03</span>
+                  <h3 class="service-title">Teras Sunda Cibiru</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Pusat pelestarian musik tradisional, kerajinan bambu, & laboratorium seni Sunda.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Teras Sunda Cibiru (TSC)</strong> yang berlokasi di kawasan hijau Cipadung, Bandung Timur. Didirikan sebagai pusat konservasi dan laboratorium riset seni budaya Sunda, TSC mengemban misi khusus dalam pelestarian instrumen musik tradisional berbahan bambu serta penguatan kriya lokal di tengah masyarakat urban modern.
+                </p>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed mt-3">
+                  Kawasan berarsitektur bambu ramah lingkungan ini terbagi menjadi beberapa balé fungsional: <strong>Palataran (Panggung Terbuka Utama)</strong> untuk konser musik etnik dan pentas budaya alam, <strong>Balé Utama & Balé Riung</strong> untuk temu wicara serta pertemuan komunitas, <strong>Balé Karya</strong> sebagai bengkel kerja pembuatan angklung, calung, arumba, dan kriya anyaman bambu, serta <strong>Balé Motekar & Balé Alit</strong> untuk ruang pameran karya seni. TSC menjadi destinasi edukasi budaya yang memadukan keindahan alam pegunungan dengan keharmonisan alunan musik bambu Sunda.
+                </p>
+                <div class="facility-action-bar" style="margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: flex-end;">
+                  <a href="/fasilitas/teras-sunda-cibiru" class="facility-action-link" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #111; text-decoration: none;">
+                    <span>Lihat Profil Lengkap Fasilitas Teras Sunda Cibiru</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- ITEM 04 — KAMPUNG WISATA PASIR KUNCI -->
+          <li class="service-row reveal-item" data-reveal data-delay="240" data-translate="24">
+            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="4">
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-4">
+                  <span class="service-index">04</span>
+                  <h3 class="service-title">Kampung Wisata Pasir Kunci</h3>
+                </div>
+                <div class="flex items-center gap-6">
+                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
+                    Kawasan seni budaya lereng Gunung Manglayang, permainan tradisional anak, & wisata edukasi.
+                  </p>
+                  <span class="service-badge transition-all duration-500">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
+              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                  Selamat datang di <strong>Kampung Wisata Pasir Kunci (KWPK)</strong> yang bertengger di ketinggian lereng Gunung Manglayang, Pasirjati, Ujungberung. Mengusung konsep pelestarian berbasis kearifan lokal dan ekowisata alam, Pasir Kunci merupakan surga edukasi budaya tradisional bagi anak-anak dan generasi penerus di Kota Bandung.
+                </p>
+                <p class="text-gray-600 text-sm sm:text-base leading-relaxed mt-3">
+                  Pasir Kunci berdedikasi menjaga kelestarian <strong>Kaulinan Lembur</strong> (permainan tradisional anak Sunda seperti egrang, gasing kayu, sondah, engklek, rorodaan, congklak, dan bekel), seni bela diri tradisi <strong>Pencak Silat</strong>, serta sanggar tari Jaipongan. Fasilitas di kawasan ini mencakup <strong>Saung Padepokan Seni</strong>, <strong>Balé Puhun Edukasi</strong>, <strong>Wahana Kaulinan Lapang</strong> yang luas, dan <strong>Kalang Amphitheater Alam</strong> dengan panorama memukau lanskap Kota Bandung dari ketinggian pegunungan.
+                </p>
+                <div class="facility-action-bar" style="margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: flex-end;">
+                  <a href="/fasilitas/kampung-wisata-pasir-kunci" class="facility-action-link" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #111; text-decoration: none;">
+                    <span>Lihat Profil Lengkap Fasilitas Pasir Kunci</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+
+        </ul>
       </div>
     </section>
 
@@ -909,10 +1016,6 @@ const BODY_HTML = `
     <section class="portfolio" id="works">
       <div class="portfolio-inner shell">
         <div class="portfolio-header">
-          <span class="eyebrow eyebrow--dark portfolio-eyebrow reveal-item" data-reveal>
-            <span class="eyebrow-dot"></span>
-            Portfolio
-          </span>
           <h2 class="portfolio-h2 line-reveal" data-line-reveal data-delay="120">
             <span class="line-wrap"><span class="line-inner">Fasilitas</span></span>
           </h2>
@@ -925,7 +1028,7 @@ const BODY_HTML = `
                 <!-- Background Image & Dark Overlay -->
                 <div class="absolute inset-0 z-0 overflow-hidden rounded-[2rem]">
                   <img
-                    src="/images/backroundBCH.jpg"
+                    src="/images/backround.jpg"
                     alt="Bandung Creative HUB"
                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
@@ -1061,139 +1164,151 @@ const BODY_HTML = `
       </div>
     </section>
 
-    <!-- SERVICES / FASILITAS KEBUDAYAAN -->
-    <section class="services" id="services">
-      <div class="services-inner shell">
-        <div class="eyebrow eyebrow--dark reveal-item" data-reveal>
-          <span class="eyebrow-dot"></span>
-          Fasilitas Kebudayaan
+    <!-- KREASI & KEBUDAYAAN NARRATIVE (ECOSYSTEM SECTION) -->
+    <section class="ecosystem-section" id="ekosistem">
+      <div class="ecosystem-inner shell">
+        
+        <!-- Section Header -->
+        <div class="ecosystem-header">
+          <div>
+            <div class="eyebrow eyebrow--dark reveal-item" data-reveal>
+              <span class="eyebrow-dot"></span>
+              Ekosistem & Visi Kebudayaan
+            </div>
+            <h2 class="ecosystem-title line-reveal" data-line-reveal data-delay="100">
+              <span class="line-wrap"><span class="line-inner">Harmoni Tradisi &</span></span>
+              <span class="line-wrap"><span class="line-inner">Inovasi Kreatif Kota.</span></span>
+            </h2>
+          </div>
+          <div class="reveal-item" data-reveal data-delay="180" data-translate="20">
+            <p class="ecosystem-lead">
+              UPTD Kebudayaan Dinas Kebudayaan dan Pariwisata Kota Bandung hadir sebagai katalisator ruang hidup bersama—mengintegrasikan 4 fasilitas unggulan untuk melestarikan warisan leluhur Pasundan sekaligus mengakselerasi potensi industri kreatif generasi masa depan.
+            </p>
+          </div>
         </div>
-        <h2 class="services-h2 line-reveal" data-line-reveal data-delay="120">
-          <span class="line-wrap"><span class="line-inner">Fasilitas Utama Kebudayaan</span></span>
-        </h2>
-        <ul class="space-y-4">
 
-          <!-- ITEM 01 — BANDUNG CREATIVE HUB -->
-          <li class="service-row reveal-item" data-reveal data-delay="0" data-translate="24">
-            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="1">
-              <div class="flex items-center justify-between w-full">
-                <div class="flex items-center gap-4">
-                  <span class="service-index">01</span>
-                  <h3 class="service-title">Bandung Creative Hub</h3>
-                </div>
-                <div class="flex items-center gap-6">
-                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
-                    Pusat inkubasi kreatif, studio rekaman audio, laboratorium desain 3D, & pameran seni digital.
-                  </p>
-                  <span class="service-badge transition-all duration-500">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 17L17 7" />
-                      <path d="M8 7h9v9" />
-                    </svg>
-                  </span>
-                </div>
+        <!-- 4 Bento / Interactive Pillars -->
+        <div class="ecosystem-grid">
+          
+          <!-- Pillar 1: Inkubasi Ekraf -->
+          <div class="ecosystem-card reveal-item group" data-reveal data-delay="0" data-translate="30">
+            <div class="ecosystem-card-top">
+              <div class="ecosystem-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
               </div>
-
-              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
-              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
-                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  Selamat datang di <strong>Bandung Creative Hub (BCH)</strong>, pusat fasilitas kebudayaan dan ekosistem inkubasi kreatif di Jalan Laswi No. 7. BCH dilengkapi dengan Studio Rekaman Audio profesional 'Summen Stag', laboratorium cetak 3D, studio podcast kedap suara, bioskop privat untuk pemutaran film independen, serta galeri pameran seni visual kontemporer yang dapat diakses secara gratis oleh warga binaan UPTD Kebudayaan dan masyarakat umum.
-                </p>
-              </div>
+              <div class="ecosystem-card-num">01 / Akselerasi</div>
+              <h3 class="ecosystem-card-title">Inkubasi 17 Subsektor Ekraf</h3>
+              <p class="ecosystem-card-desc">
+                Mendorong talenta muda kota melalui studio rekaman audio, laboratorium cetak 3D, animasi digital, fesyen, serta coworking space kolaboratif berstandar industri.
+              </p>
             </div>
-          </li>
-
-          <!-- ITEM 02 — PADEPOKAN SENI MAYANG SUNDA -->
-          <li class="service-row reveal-item" data-reveal data-delay="80" data-translate="24">
-            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="2">
-              <div class="flex items-center justify-between w-full">
-                <div class="flex items-center gap-4">
-                  <span class="service-index">02</span>
-                  <h3 class="service-title">Padepokan Seni Mayang Sunda</h3>
-                </div>
-                <div class="flex items-center gap-6">
-                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
-                    Ruang ekspresi seni pertunjukan tradisional, sanggar tari Sunda, & teater terbuka.
-                  </p>
-                  <span class="service-badge transition-all duration-500">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 17L17 7" />
-                      <path d="M8 7h9v9" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
-              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
-                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  Selamat datang di <strong>Padepokan Seni Mayang Sunda (PSMS)</strong> di Jalan Peta No. 209. PSMS menjadi ruang ekspresi bagi puluhan sanggar seni tari, teater daerah, seni karawitan, dan pergelaran wayang golek. PSMS dilengkapi dengan panggung teater indoor berkapasitas besar, arena amphitheater terbuka untuk pentas malam, serta studio latihan karawitan & gamelan lengkap.
-                </p>
-              </div>
+            <div class="ecosystem-card-footer">
+              <span class="ecosystem-card-tag">Bandung Creative Hub</span>
+              <a href="/fasilitas/bandung-creative-hub" class="ecosystem-card-arrow" aria-label="Lihat BCH">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
             </div>
-          </li>
+          </div>
 
-          <!-- ITEM 03 — TERAS SUNDA CIBIRU -->
-          <li class="service-row reveal-item" data-reveal data-delay="160" data-translate="24">
-            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="3">
-              <div class="flex items-center justify-between w-full">
-                <div class="flex items-center gap-4">
-                  <span class="service-index">03</span>
-                  <h3 class="service-title">Teras Sunda Cibiru</h3>
-                </div>
-                <div class="flex items-center gap-6">
-                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
-                    Pusat pelestarian musik tradisional, kerajinan bambu, & laboratorium seni Sunda.
-                  </p>
-                  <span class="service-badge transition-all duration-500">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 17L17 7" />
-                      <path d="M8 7h9v9" />
-                    </svg>
-                  </span>
-                </div>
+          <!-- Pillar 2: Seni Pertunjukan & Karawitan -->
+          <div class="ecosystem-card reveal-item group" data-reveal data-delay="90" data-translate="30">
+            <div class="ecosystem-card-top">
+              <div class="ecosystem-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                </svg>
               </div>
-
-              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
-              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
-                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  Selamat datang di <strong>Teras Sunda Cibiru (TSC)</strong> di kawasan Cipadung Cibiru. TSC berfokus pada riset, pelestarian, dan pengembangan instrumen musik tradisional Sunda berbasis bambu seperti angklung, calung, arumba, dan suling. Pengunjung dan peneliti budaya dapat mengeksplorasi studio kriya bambu lokal serta menikmati pertunjukan musik alam terbuka di bawah lanskap lereng pegunungan.
-                </p>
-              </div>
+              <div class="ecosystem-card-num">02 / Pemajuan</div>
+              <h3 class="ecosystem-card-title">10 Objek Pemajuan Budaya</h3>
+              <p class="ecosystem-card-desc">
+                Pusat pertunjukan teater indoor, panggung amphitheater, pagelaran wayang golek, tari jaipong, tembang cianjuran, serta studio karawitan gamelan Salendro & Pelog.
+              </p>
             </div>
-          </li>
-
-          <!-- ITEM 04 — KAMPUNG WISATA PASIR KUNCI -->
-          <li class="service-row reveal-item" data-reveal data-delay="240" data-translate="24">
-            <div class="service-link facility-item-btn cursor-pointer flex-col items-stretch transition-all duration-500 rounded-2xl p-6" data-facility="4">
-              <div class="flex items-center justify-between w-full">
-                <div class="flex items-center gap-4">
-                  <span class="service-index">04</span>
-                  <h3 class="service-title">Kampung Wisata Pasir Kunci</h3>
-                </div>
-                <div class="flex items-center gap-6">
-                  <p class="service-desc transition-all duration-300 text-sm text-gray-500 max-w-xs hidden lg:block">
-                    Kawasan seni budaya lereng Gunung Manglayang, permainan tradisional anak, & wisata edukasi.
-                  </p>
-                  <span class="service-badge transition-all duration-500">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 17L17 7" />
-                      <path d="M8 7h9v9" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              <!-- DROPDOWN CONTENT: SEAMLESS / MERGED DIRECTLY IN ITEM CARD -->
-              <div class="facility-dropdown-content hidden mt-6 pt-6 border-t border-gray-200/80 animate-slide-down-text">
-                <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  Selamat datang di <strong>Kampung Wisata Pasir Kunci</strong> di ketinggian lereng Gunung Manglayang, Ujungberung. Kawasan ini berdedikasi memelihara kelestarian kaulinan lembur (permainan tradisional anak Sunda seperti egrang, gasing, dan bekel), seni pencak silat, dan sanggar tari daerah. Saung edukasi Pasir Kunci menjadi tempat berkumpul anak-anak sekolah dan wisatawan di tengah pemandangan pegunungan yang asri.
-                </p>
-              </div>
+            <div class="ecosystem-card-footer">
+              <span class="ecosystem-card-tag">Mayang Sunda</span>
+              <a href="/fasilitas/padepokan-seni-mayang-sunda" class="ecosystem-card-arrow" aria-label="Lihat PSMS">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
             </div>
-          </li>
+          </div>
 
-        </ul>
+          <!-- Pillar 3: Konservasi Musik Bambu -->
+          <div class="ecosystem-card reveal-item group" data-reveal data-delay="180" data-translate="30">
+            <div class="ecosystem-card-top">
+              <div class="ecosystem-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12h20"/><path d="M20 12v8H4v-8"/><path d="M6 12V4h12v8"/><path d="M10 8h4"/>
+                </svg>
+              </div>
+              <div class="ecosystem-card-num">03 / Konservasi</div>
+              <h3 class="ecosystem-card-title">Laboratorium Seni Bambu</h3>
+              <p class="ecosystem-card-desc">
+                Dedikasi pelestarian instrumen musik bambu Sunda (angklung, calung, arumba), lokakarya kriya anyaman lokal di Balé Karya, serta panggung pentas alam terbuka Palataran.
+              </p>
+            </div>
+            <div class="ecosystem-card-footer">
+              <span class="ecosystem-card-tag">Teras Sunda Cibiru</span>
+              <a href="/fasilitas/teras-sunda-cibiru" class="ecosystem-card-arrow" aria-label="Lihat TSC">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Pillar 4: Kaulinan Lembur & Ekowisata -->
+          <div class="ecosystem-card reveal-item group" data-reveal data-delay="270" data-translate="30">
+            <div class="ecosystem-card-top">
+              <div class="ecosystem-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div class="ecosystem-card-num">04 / Kearifan</div>
+              <h3 class="ecosystem-card-title">Kaulinan Lembur & Tradisi</h3>
+              <p class="ecosystem-card-desc">
+                Ekowisata edukasi lereng Gunung Manglayang yang menghidupkan kembali permainan tradisional anak Sunda, perguruan silat bela diri luhur, serta Saung Padepokan seni.
+              </p>
+            </div>
+            <div class="ecosystem-card-footer">
+              <span class="ecosystem-card-tag">Pasir Kunci</span>
+              <a href="/fasilitas/kampung-wisata-pasir-kunci" class="ecosystem-card-arrow" aria-label="Lihat KWPK">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Impact Metrics & Collaboration Banner -->
+        <div class="ecosystem-impact-banner reveal-item" data-reveal data-translate="36">
+          <div>
+            <div class="text-xs uppercase tracking-widest text-[#b15f2c] font-semibold mb-2">Komitmen Pelayanan</div>
+            <h3 class="text-2xl sm:text-3xl font-bold text-[#111111] leading-tight mb-3">Ruang Terbuka, Merangkul Seluruh Komunitas.</h3>
+            <p class="text-sm text-gray-600 leading-relaxed max-w-md">
+              Seluruh fasilitas, studio, dan sarana panggung kami sediakan untuk memajukan kreasi masyarakat dan melestarikan budaya Kota Bandung.
+            </p>
+          </div>
+          <div class="ecosystem-impact-stats">
+            <div class="ecosystem-stat-item">
+              <span class="ecosystem-stat-val">4</span>
+              <span class="ecosystem-stat-label">Fasilitas Utama Kebudayaan</span>
+            </div>
+            <div class="ecosystem-stat-item">
+              <span class="ecosystem-stat-val">17</span>
+              <span class="ecosystem-stat-label">Subsektor Ekonomi Kreatif</span>
+            </div>
+            <div class="ecosystem-stat-item">
+              <span class="ecosystem-stat-val">10</span>
+              <span class="ecosystem-stat-label">Objek Pemajuan Kebudayaan</span>
+            </div>
+            <div class="ecosystem-stat-item">
+              <span class="ecosystem-stat-val">100%</span>
+              <span class="ecosystem-stat-label">Akses Komunitas & Seniman</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1271,6 +1386,155 @@ const BODY_HTML = `
       </div>
     </section>
 
+    <!-- VIDEO GALLERY / YOUTUBE -->
+    <section class="video-section" id="videoGallery">
+      <div class="video-section-inner shell">
+        <div class="video-section-left">
+          <div class="eyebrow eyebrow--dark video-eyebrow reveal-item" data-reveal>
+            <span class="eyebrow-dot"></span>
+            Video & Dokumentasi
+          </div>
+          <div class="video-embed-wrapper reveal-item" data-reveal data-delay="100" data-translate="24">
+            <div class="video-embed-frame">
+              <iframe
+                src="https://www.youtube.com/embed/cDEhVQlykIw"
+                title="Video Profil UPTD Kebudayaan Kota Bandung"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+          <div class="video-distributed reveal-item" data-reveal data-translate="12">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5,3 19,12 5,21" />
+            </svg>
+            <span>Dokumentasi kegiatan dan program di setiap fasilitas kebudayaan.</span>
+          </div>
+        </div>
+        <div class="video-section-right">
+          <h2 class="video-section-h2 word-reveal" data-word-reveal>Mengenal lebih dekat <span class="muted">fasilitas kebudayaan melalui dokumentasi video resmi UPTD Kota Bandung.</span></h2>
+
+          <div class="video-section-footer reveal-item" data-reveal data-delay="200">
+            <div>
+              <div class="video-social-label">Ikuti kami di YouTube</div>
+              <div class="about-social-row">
+                <a href="https://www.youtube.com/@BandungCreativeHub" target="_blank" rel="noopener noreferrer" class="social-chip social-chip--accent" aria-label="YouTube">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5,3 19,12 5,21" />
+                  </svg>
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-chip social-chip--muted" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                    <circle cx="12" cy="12" r="5" />
+                    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
+                  </svg>
+                </a>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-chip social-chip--muted" aria-label="TikTok">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <a href="https://www.youtube.com/@BandungCreativeHub" target="_blank" rel="noopener noreferrer" class="pill-btn pill-btn--outline pill-btn--with-arrow">
+              <span class="pill-btn-inner">
+                Lihat Semua Video
+                <span class="pill-btn-badge"><svg class="arrow-up-right-icon" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7" />
+                    <path d="M8 7h9v9" />
+                  </svg></span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- E-ZINE / DIGITAL PUBLICATION -->
+    <section class="ezine-section" id="ezine">
+      <div class="ezine-inner shell">
+        <div class="ezine-header">
+          <span class="eyebrow eyebrow--dark reveal-item" data-reveal>
+            <span class="eyebrow-dot"></span>
+            Publikasi & E-Zine
+          </span>
+          <h2 class="ezine-h2 line-reveal" data-line-reveal data-delay="120">
+            <span class="line-wrap"><span class="line-inner">Majalah Digital</span></span>
+            <span class="line-wrap"><span class="line-inner">& Warta Budaya</span></span>
+          </h2>
+          <p class="ezine-desc word-reveal" data-word-reveal>
+            Jelajahi ragam liputan eksklusif geliat seni, profil seniman, dan inovasi ekosistem kebudayaan Kota Bandung dalam format majalah digital interaktif.
+          </p>
+        </div>
+
+        <!-- Featured Edition Highlight -->
+        <div class="ezine-featured-banner reveal-item" data-reveal data-delay="100" data-translate="32">
+          <div class="ezine-featured-left">
+            <span class="ezine-tag-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              E-Zine Bandung Creative Hub
+            </span>
+            <h3 class="ezine-featured-title">Creative Hub .bdg Zine — Volume 01</h3>
+            <p class="ezine-featured-text">
+              Edisi publikasi berkala dari Bandung Creative Hub yang merangkum ruang eksplorasi karya, inspirasi komunitas kreatif muda, dan geliat subsektor ekonomi kreatif Kota Bandung.
+            </p>
+            <div class="ezine-featured-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                Format PDF Interaktif
+              </span>
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Konsisten Gratis
+              </span>
+            </div>
+            <div class="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
+              <a href="https://drive.google.com/file/d/1H0SFh8XnOKEYg1SlC66eSASpkzjGhZwv/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="pill-btn pill-btn--dark pill-btn--with-arrow">
+                <span class="pill-btn-inner">
+                  Baca E-Zine Sekarang
+                  <span class="pill-btn-badge"><svg class="arrow-up-right-icon" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg></span>
+                </span>
+              </a>
+              <a href="https://drive.google.com/drive/folders/109mEECOl-LObCZOfEG2G6KVOY2agbetM?usp=sharing" target="_blank" rel="noopener noreferrer" class="pill-btn pill-btn--outline pill-btn--with-arrow">
+                <span class="pill-btn-inner">
+                  Arsip Lengkap di Google Drive
+                  <span class="pill-btn-badge"><svg class="arrow-up-right-icon" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg></span>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="ezine-book-showcase">
+            <a href="https://drive.google.com/file/d/1H0SFh8XnOKEYg1SlC66eSASpkzjGhZwv/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="ezine-book-3d group" title="Baca E-Zine di Google Drive">
+              <img src="/images/e-Zine.png" alt="Cover Creative Hub .bdg Zine Vol. 01" />
+              <div class="ezine-book-spine"></div>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
@@ -1278,83 +1542,83 @@ const BODY_HTML = `
     <div class="footer-inner shell">
       <div class="footer-cta">
         <h2 class="footer-cta-h2 line-reveal" data-line-reveal data-stagger="100">
-          <span class="line-wrap"><span class="line-inner">Have a project</span></span>
-          <span class="line-wrap"><span class="line-inner">in mind? Let's</span></span>
-          <span class="line-wrap"><span class="line-inner">get to work.</span></span>
+          <span class="line-wrap"><span class="line-inner">Punya gagasan</span></span>
+          <span class="line-wrap"><span class="line-inner">kreatif? Mari</span></span>
+          <span class="line-wrap"><span class="line-inner">berkarya bersama.</span></span>
         </h2>
-        <button class="pill-btn pill-btn--light pill-btn--with-arrow contact-trigger">
+        <a href="https://pusat-kreasi.disbudpar.bandung.go.id/" target="_blank" rel="noopener noreferrer" class="pill-btn pill-btn--light pill-btn--with-arrow">
           <span class="pill-btn-inner">
-            Start a project
+            Mulai Kolaborasi
             <span class="pill-btn-badge"><svg class="arrow-up-right-icon" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 17L17 7" />
                 <path d="M8 7h9v9" />
               </svg></span>
           </span>
-        </button>
+        </a>
       </div>
 
       <div class="footer-columns">
         <div>
-          <div class="footer-col-brand">
-            <svg viewBox="0 0 48 48" fill="currentColor">
-              <path
-                d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-            </svg>
-            Lumora
+          <div class="flex items-center gap-2.5 sm:gap-3.5 flex-wrap mb-4">
+            <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" class="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+            <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" class="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+            <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" class="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)] brightness-110" />
+            <img src="/images/Logo TCS.png" alt="Logo Teras Sunda Cibiru" class="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
+            <img src="/images/Logo Pasir Kunci.png" alt="Logo Pasir Kunci" class="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)]" />
           </div>
-          <p class="footer-tagline">An independent studio crafting brands, products, and the systems that connect them.
+          <div class="footer-col-brand text-white font-bold text-base">
+            UPTD Kebudayaan
+          </div>
+          <p class="footer-tagline">
+            Dinas Kebudayaan dan Pariwisata Kota Bandung. Membangun ruang kreasi, apresiasi, dan pelestarian seni budaya.
           </p>
         </div>
         <div>
-          <div class="footer-col-title">Company</div>
+          <div class="footer-col-title">Navigasi</div>
           <div class="footer-links">
-            <a href="#about" class="animated-link">About</a>
-            <a href="#careers" class="animated-link">Careers</a>
-            <a href="#partners" class="animated-link">Partners</a>
+            <a href="#home" class="animated-link">Home</a>
+            <a href="/berita" class="animated-link">Berita</a>
+            <a href="/artikel" class="animated-link">Artikel</a>
             <a href="#contact" class="animated-link contact-trigger">Contact</a>
           </div>
         </div>
         <div>
-          <div class="footer-col-title">Services</div>
+          <div class="footer-col-title">Fasilitas</div>
           <div class="footer-links">
-            <a href="#development" class="animated-link">Development</a>
-            <a href="#design" class="animated-link">Design</a>
-            <a href="#qa" class="animated-link">Quality Assurance</a>
-            <a href="#consulting" class="animated-link">Consulting</a>
+            <a href="/fasilitas/bandung-creative-hub" class="animated-link">Bandung Creative Hub</a>
+            <a href="/fasilitas/padepokan-seni-mayang-sunda" class="animated-link">Mayang Sunda</a>
+            <a href="/fasilitas/teras-sunda-cibiru" class="animated-link">Teras Sunda Cibiru</a>
+            <a href="/fasilitas/kampung-wisata-pasir-kunci" class="animated-link">Pasir Kunci</a>
           </div>
         </div>
         <div>
-          <div class="footer-col-title">Social</div>
+          <div class="footer-col-title">Media Sosial</div>
           <div class="footer-links">
-            <a href="#" class="animated-link">X / Twitter</a>
-            <a href="#" class="animated-link">Behance</a>
-            <a href="#" class="animated-link">Dribbble</a>
-            <a href="#" class="animated-link">LinkedIn</a>
+            <a href="https://www.youtube.com/@BandungCreativeHub" target="_blank" rel="noopener noreferrer" class="animated-link">YouTube</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="animated-link">Instagram</a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="animated-link">TikTok</a>
           </div>
         </div>
       </div>
 
       <div class="footer-legal">
-        <span>© 2025 Lumora Studio. All rights reserved.</span>
+        <span>© 2026 UPTD Kebudayaan Kota Bandung. All rights reserved.</span>
         <div class="footer-legal-links">
           <a href="#privacy">Privacy</a>
           <a href="#terms">Terms</a>
         </div>
       </div>
     </div>
-    <div class="footer-watermark">LUMORA</div>
   </footer>
 
   <!-- NAV MENU -->
   <div class="nav-menu" id="navMenu" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <div class="nav-top shell">
-      <div class="nav-brand">
-        <svg viewBox="0 0 48 48" fill="currentColor">
-          <path
-            d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-        </svg>
-        Lumora
+      <div class="nav-brand flex items-center gap-2">
+        <img src="/images/Logo Pemkot.png" alt="Logo Pemkot Bandung" class="h-6 sm:h-7 w-auto object-contain drop-shadow-[0_2px_6px_rgba(255,255,255,0.2)]" />
+        <img src="/images/Logo Disbudpar.png" alt="Logo Disbudpar Kota Bandung" class="h-6 sm:h-7 w-auto object-contain drop-shadow-[0_2px_6px_rgba(255,255,255,0.2)]" />
+        <img src="/images/Logo BCH.png" alt="Logo Bandung Creative Hub" class="h-6 sm:h-7 w-auto object-contain drop-shadow-[0_2px_6px_rgba(255,255,255,0.2)] brightness-110" />
       </div>
       <button class="nav-close" id="navClose" aria-label="Close menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -1380,15 +1644,15 @@ const BODY_HTML = `
       </ul>
     </nav>
     <div class="nav-bottom shell">
-      <span>Local time — <span id="navTime">9:41am</span></span>
-      <button class="nav-bottom-cta" id="navStartProject">Start a project →</button>
+      <span>Waktu lokal — <span id="navTime">9:41am</span></span>
+      <a href="https://pusat-kreasi.disbudpar.bandung.go.id/" target="_blank" rel="noopener noreferrer" class="nav-bottom-cta" id="navStartProject">Mulai Kolaborasi →</a>
     </div>
   </div>
 
   <!-- REQUEST MODAL -->
-  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Start a project">
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Mulai Kolaborasi">
     <div class="modal-panel" id="modalPanel">
-      <button class="modal-close" id="modalClose" aria-label="Close">
+      <button class="modal-close" id="modalClose" aria-label="Tutup">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round">
           <path d="M4 4l16 16" />
@@ -1400,29 +1664,29 @@ const BODY_HTML = `
         <div class="modal-heading">
           <div class="modal-heading-row">
             <span class="modal-heading-dot"></span>
-            Start a project
+            Mulai Kolaborasi
           </div>
-          <h2>Tell us what you're building.</h2>
+          <h2>Ceritakan gagasan atau rencana Anda.</h2>
         </div>
         <form class="modal-form" id="requestForm">
           <label class="modal-label">
-            Name
-            <input type="text" class="modal-input" required placeholder="Your name" />
+            Nama Lengkap
+            <input type="text" class="modal-input" required placeholder="Nama Anda" />
           </label>
           <label class="modal-label">
             Email
-            <input type="email" class="modal-input" required placeholder="you@company.com" />
+            <input type="email" class="modal-input" required placeholder="email@contoh.com" />
           </label>
           <label class="modal-label">
-            Project
+            Pesan / Gagasan Kolaborasi
             <textarea class="modal-textarea" rows="4" required
-              placeholder="A few words about your project, timeline, and budget."></textarea>
+              placeholder="Tuliskan ide kolaborasi, rencana kegiatan, atau pertanyaan Anda."></textarea>
           </label>
           <div class="modal-bottom">
-            <span class="modal-note">We reply within one business day.</span>
+            <span class="modal-note">Kami akan membalas dalam 1 hari kerja.</span>
             <button type="submit" class="pill-btn pill-btn--dark pill-btn--with-arrow" id="submitBtn">
               <span class="pill-btn-inner">
-                <span id="submitLabel">Send request</span>
+                <span id="submitLabel">Kirim Pesan</span>
                 <span class="pill-btn-badge"><svg class="arrow-up-right-icon" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M7 17L17 7" />
@@ -1442,10 +1706,10 @@ const BODY_HTML = `
                 d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
             </svg>
           </div>
-          <h2>Request received</h2>
-          <p>Thanks for reaching out — we'll get back to you within one business day.</p>
+          <h2>Pesan Diterima</h2>
+          <p>Terima kasih telah menghubungi kami — tim UPTD Kebudayaan akan segera merespons pesan Anda.</p>
           <button class="pill-btn pill-btn--dark pill-btn--no-arrow" id="modalSuccessClose">
-            <span class="pill-btn-inner">Close</span>
+            <span class="pill-btn-inner">Tutup</span>
           </button>
         </div>
       </div>

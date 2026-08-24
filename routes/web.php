@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AiAssistantController;
+use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FacilityController;
@@ -25,7 +26,7 @@ Route::get('/fasilitas/kampung-wisata-pasir-kunci', [FacilityController::class, 
 
 Route::inertia('/subsektor', 'subsektor')->name('subsektor');
 Route::inertia('/berita', 'berita')->name('berita');
-Route::inertia('/artikel', 'artikel')->name('artikel');
+Route::get('/artikel', [ArtikelController::class, 'userIndex'])->name('artikel');
 Route::get('/{facilityPrefix}/{roomSlug}', [RoomController::class, 'showUserRoom'])
     ->where('facilityPrefix', 'ruangan-bch|ruangan-psms|ruangan-tsc|ruangan-kwpk');
 
@@ -46,7 +47,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('admin/ruangan/room/{room}', [RoomController::class, 'destroy'])->name('admin.ruangan.destroy');
 
     // Admin Artikel & Berita
-    Route::inertia('admin/artikel', 'admin/artikel-admin')->name('admin.artikel');
+    Route::get('admin/artikel', [ArtikelController::class, 'index'])->name('admin.artikel');
+    Route::post('admin/artikel', [ArtikelController::class, 'store'])->name('admin.artikel.store');
+    Route::post('admin/artikel/{artikel}', [ArtikelController::class, 'update'])->name('admin.artikel.update');
+    Route::delete('admin/artikel/{artikel}', [ArtikelController::class, 'destroy'])->name('admin.artikel.destroy');
     Route::get('admin/berita', [BeritaController::class, 'index'])->name('admin.berita');
     Route::post('admin/berita', [BeritaController::class, 'store'])->name('admin.berita.store');
     Route::post('admin/berita/{berita}', [BeritaController::class, 'update'])->name('admin.berita.update');

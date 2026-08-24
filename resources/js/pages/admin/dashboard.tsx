@@ -300,6 +300,17 @@ export default function Dashboard({
 
     const activeTasks = tasks.filter((t) => !t.completed);
     const completedTasks = tasks.filter((t) => t.completed);
+    const totalTasksCount = tasks.length;
+
+    const dynamicTaskCompletionRate = useMemo(() => {
+        if (totalTasksCount === 0) return 0;
+        return Math.round((completedTasks.length / totalTasksCount) * 100);
+    }, [completedTasks.length, totalTasksCount]);
+
+    const dynamicActiveTaskRate = useMemo(() => {
+        if (totalTasksCount === 0) return 0;
+        return Math.round((activeTasks.length / totalTasksCount) * 100);
+    }, [activeTasks.length, totalTasksCount]);
 
     const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
 
@@ -384,9 +395,6 @@ export default function Dashboard({
                                 </div>
                                 <div className="flex items-end justify-between">
                                     <p className="text-xl font-extrabold text-gray-900 dark:text-white">{totalRooms}</p>
-                                    <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
-                                        <TrendingUp className="h-3 w-3" /> +3
-                                    </span>
                                 </div>
                             </div>
 
@@ -440,7 +448,7 @@ export default function Dashboard({
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
                                 <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">{taskCompletionRate}%</p>
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">{dynamicTaskCompletionRate}%</p>
                                     <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                                         <TrendingUp className="h-3 w-3" /> +5%
                                     </span>
@@ -606,14 +614,10 @@ export default function Dashboard({
                                     <p className="text-xs text-gray-400 mt-0.5">Performance analytics</p>
                                 </div>
                                 <div className="flex items-center gap-1 bg-gray-100/80 dark:bg-[#1c1c21] p-1 rounded-full text-xs font-semibold">
-                                    <button className="flex items-center gap-1.5 rounded-full bg-white dark:bg-[#282830] text-gray-900 dark:text-white shadow-2xs">
+                                    <div className="flex items-center gap-1.5 rounded-full bg-white dark:bg-[#282830] px-3 py-1 text-gray-900 dark:text-white shadow-2xs">
                                         <TrendingUp className="h-3.5 w-3.5 text-gray-700 dark:text-gray-200" />
                                         <span>Performance</span>
-                                    </button>
-                                    <button className="flex items-center gap-1.5 rounded-full px-3 py-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                        <TrendingUp className="h-3.5 w-3.5" />
-                                        <span>Trends</span>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -624,7 +628,7 @@ export default function Dashboard({
                                     <circle cx="50" cy="50" r="38" stroke="#f1f5f9" className="dark:stroke-[#1f1f23]" strokeWidth="6" fill="transparent" />
                                     <circle cx="50" cy="50" r="28" stroke="#f1f5f9" className="dark:stroke-[#1f1f23]" strokeWidth="6" fill="transparent" />
 
-                                    {/* Outer Blue Ring (85%) */}
+                                    {/* Outer Blue Ring (Task Completion %) */}
                                     <circle
                                         cx="50"
                                         cy="50"
@@ -632,11 +636,12 @@ export default function Dashboard({
                                         stroke="#60a5fa"
                                         strokeWidth="6"
                                         strokeDasharray="238.76"
-                                        strokeDashoffset="35.8"
+                                        strokeDashoffset={238.76 - (238.76 * dynamicTaskCompletionRate) / 100}
                                         strokeLinecap="round"
                                         fill="transparent"
+                                        className="transition-all duration-500 ease-out"
                                     />
-                                    {/* Inner Green Ring (84%) */}
+                                    {/* Inner Green Ring (Active / In Progress Tasks %) */}
                                     <circle
                                         cx="50"
                                         cy="50"
@@ -644,13 +649,14 @@ export default function Dashboard({
                                         stroke="#4ade80"
                                         strokeWidth="6"
                                         strokeDasharray="175.93"
-                                        strokeDashoffset="28.15"
+                                        strokeDashoffset={175.93 - (175.93 * dynamicActiveTaskRate) / 100}
                                         strokeLinecap="round"
                                         fill="transparent"
+                                        className="transition-all duration-500 ease-out"
                                     />
                                 </svg>
                                 <div className="absolute flex flex-col items-center justify-center text-center">
-                                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">85%</span>
+                                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{dynamicTaskCompletionRate}%</span>
                                 </div>
                             </div>
 
@@ -663,10 +669,12 @@ export default function Dashboard({
                                         </div>
                                         <div>
                                             <div className="font-semibold text-gray-800 dark:text-gray-200">Task Completion</div>
-                                            <div className="text-[10px] text-gray-400">Overall completion rate</div>
+                                            <div className="text-[10px] text-gray-400">
+                                                {totalTasksCount > 0 ? `Selesai (${completedTasks.length} dari ${totalTasksCount} task)` : 'Overall completion rate'}
+                                            </div>
                                         </div>
                                     </div>
-                                    <span className="font-bold text-blue-500">85%</span>
+                                    <span className="font-bold text-blue-500">{dynamicTaskCompletionRate}%</span>
                                 </div>
 
                                 <div className="flex items-center justify-between">
@@ -675,11 +683,13 @@ export default function Dashboard({
                                             <Users className="h-3.5 w-3.5" />
                                         </div>
                                         <div>
-                                            <div className="font-semibold text-gray-800 dark:text-gray-200">User Engagement</div>
-                                            <div className="text-[10px] text-gray-400">Active user participation</div>
+                                            <div className="font-semibold text-gray-800 dark:text-gray-200">Task In Progress</div>
+                                            <div className="text-[10px] text-gray-400">
+                                                {totalTasksCount > 0 ? `Sedang berjalan (${activeTasks.length} dari ${totalTasksCount} task)` : 'Active task participation'}
+                                            </div>
                                         </div>
                                     </div>
-                                    <span className="font-bold text-emerald-500">84%</span>
+                                    <span className="font-bold text-emerald-500">{dynamicActiveTaskRate}%</span>
                                 </div>
 
                                 <div className="flex items-center justify-between">
@@ -697,27 +707,53 @@ export default function Dashboard({
                             </div>
                         </div>
 
-                        {/* REVENUE ANALYTICS */}
+                        {/* REVENUE & TASK ANALYTICS */}
                         <div className="rounded-3xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-6 shadow-sm space-y-4 flex flex-col justify-between">
                             <div>
                                 <div className="flex items-center justify-between">
-                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue Analytics</h3>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue &amp; Task Analytics</h3>
+                                        <p className="text-xs text-gray-400 mt-0.5">Project completion tracking</p>
+                                    </div>
                                     <span className="text-[11px] font-semibold text-gray-400">This Quarter</span>
                                 </div>
 
-                                {/* Chart ticks area */}
-                                <div className="pt-10 pb-6 flex items-end justify-around border-b border-gray-100 dark:border-[#1f1f23]">
-                                    <span className="text-[10px] font-bold text-gray-400">OCT</span>
-                                    <span className="text-[10px] font-bold text-gray-400">NOV</span>
-                                    <span className="text-[10px] font-bold text-gray-900 dark:text-white">DEC</span>
+                                {/* Dynamic Visual Bars for Quarter / Months */}
+                                <div className="pt-8 pb-4 flex items-end justify-around border-b border-gray-100 dark:border-[#1f1f23] h-32">
+                                    <div className="flex flex-col items-center gap-2 h-full justify-end group">
+                                        <div className="w-8 bg-blue-100 dark:bg-blue-950/40 rounded-t-lg transition-all duration-500 relative flex items-end justify-center" style={{ height: '35%' }}>
+                                            <div className="w-full bg-blue-400/40 rounded-t-lg" style={{ height: '50%' }} />
+                                        </div>
+                                        <span className="text-[10px] font-bold text-gray-400">OCT</span>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-2 h-full justify-end group">
+                                        <div className="w-8 bg-blue-100 dark:bg-blue-950/40 rounded-t-lg transition-all duration-500 relative flex items-end justify-center" style={{ height: '55%' }}>
+                                            <div className="w-full bg-blue-400/60 rounded-t-lg" style={{ height: '70%' }} />
+                                        </div>
+                                        <span className="text-[10px] font-bold text-gray-400">NOV</span>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-2 h-full justify-end group">
+                                        <div 
+                                            className="w-8 bg-blue-500/20 dark:bg-blue-600/30 rounded-t-lg transition-all duration-500 relative flex items-end justify-center overflow-hidden" 
+                                            style={{ height: `${Math.max(25, Math.min(100, (completedTasks.length + 1) * 25))}%` }}
+                                        >
+                                            <div 
+                                                className="w-full bg-blue-600 dark:bg-blue-500 rounded-t-lg transition-all duration-500" 
+                                                style={{ height: `${totalTasksCount > 0 ? Math.max(10, (completedTasks.length / totalTasksCount) * 100) : 0}%` }} 
+                                            />
+                                        </div>
+                                        <span className="text-[10px] font-bold text-gray-900 dark:text-white">DEC</span>
+                                    </div>
                                 </div>
                             </div>
 
                             {/* Footer Info */}
-                            <div className="flex items-center justify-between pt-2">
+                            <div className="pt-2">
                                 <div>
-                                    <p className="text-[11px] font-medium text-gray-400">Total Projected</p>
-                                    <p className="text-2xl font-extrabold text-gray-900 dark:text-white mt-0.5">130</p>
+                                    <p className="text-[11px] font-medium text-gray-400">Total Project Selesai</p>
+                                    <p className="text-2xl font-extrabold text-gray-900 dark:text-white mt-0.5">
+                                        {completedTasks.length} <span className="text-xs font-semibold text-gray-400">/ {totalTasksCount} task</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -961,8 +997,8 @@ export default function Dashboard({
                                         key={p}
                                         onClick={() => router.get(dashboard(), { page: p }, { preserveState: true, preserveScroll: true })}
                                         className={`flex h-7 w-7 items-center justify-center rounded-full font-semibold transition cursor-pointer ${p === recentActivities.currentPage
-                                                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold shadow-xs'
-                                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold shadow-xs'
+                                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
                                             }`}
                                     >
                                         {p}
