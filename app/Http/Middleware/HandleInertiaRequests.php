@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,6 +43,21 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'recentNotifications' => ActivityLog::latest()
+                ->take(5)
+                ->get()
+                ->map(function ($log) {
+                    return [
+                        'id' => $log->id,
+                        'userName' => $log->user_name ?? ($log->user ? $log->user->name : 'Super Admin'),
+                        'action' => $log->action,
+                        'title' => $log->title,
+                        'description' => $log->description,
+                        'module' => $log->module,
+                        'link' => $log->link,
+                        'created_at_human' => $log->created_at ? $log->created_at->diffForHumans() : 'Baru saja',
+                    ];
+                }),
         ];
     }
 }

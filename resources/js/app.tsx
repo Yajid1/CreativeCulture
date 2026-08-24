@@ -16,8 +16,23 @@ createInertiaApp({
                 return null;
             case name === 'auth/login':
                 return null;
+            case name === 'subsektor':
+                return null;
+            case name === 'berita':
+                return null;
+            case name === 'artikel':
+                return null;
+            case name.startsWith('facilities/'):
+                return null;
+            case name.startsWith('ruangan_bch/'):
+                return null;
+            case name.startsWith('ruangan_psms/'):
+                return null;
+            case name.startsWith('ruangan_'):
+                return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
+            case name.startsWith('user/'):
             case name.startsWith('settings/'):
                 return [AppLayout, SettingsLayout];
             default:
