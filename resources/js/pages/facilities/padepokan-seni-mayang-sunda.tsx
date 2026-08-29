@@ -6,7 +6,7 @@ export default function PadepokanSeniMayangSunda() {
         name: 'Padepokan Seni Mayang Sunda',
         description:
             'Ruang pelestarian dan pengembangan seni budaya Sunda yang menjadi wadah bagi seniman, komunitas, dan generasi muda untuk belajar, berkarya, dan merayakan kekayaan warisan budaya Jawa Barat.',
-        videoUrl: '/videos/psms.mp4',
+        image: '/images/backroundMS.jpg',
     };
 
     const notAllowedList = [
@@ -161,16 +161,16 @@ export default function PadepokanSeniMayangSunda() {
             `}</style>
 
             <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
-                {/* Video Background */}
-                <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 h-full w-full object-cover"
-                >
-                    <source src={facility.videoUrl} type="video/mp4" />
-                </video>
+                {/* Background Image & Overlay */}
+                <div className="absolute inset-0 z-0 overflow-hidden">
+                    <img
+                        src={facility.image}
+                        alt={facility.name}
+                        className="h-full w-full object-cover object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
+                    <div className="absolute inset-0 bg-black/25" />
+                </div>
 
                 {/* Navbar — samakan dengan landing page */}
                 <header className="relative z-10">
@@ -191,7 +191,7 @@ export default function PadepokanSeniMayangSunda() {
                                 <span className="inline-flex items-center gap-1 transition hover:text-white">
                                     Fasilitas <span className="text-xs opacity-60">▾</span>
                                 </span>
-                                <div className="absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 text-gray-900 shadow-xl group-hover:block">
+                                <div className="absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 text-gray-900 shadow-xl group-hover:block z-50">
                                     <Link href="/fasilitas/bandung-creative-hub" className="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
                                         Bandung Creative Hub
                                     </Link>
@@ -208,7 +208,7 @@ export default function PadepokanSeniMayangSunda() {
                             </div>
                             <Link href="/berita" className="transition hover:text-white">Berita</Link>
                             <Link href="/artikel" className="transition hover:text-white">Artikel</Link>
-                            <Link href="/#contact" className="transition hover:text-white">Contact</Link>
+                            <Link href="/contact" className="transition hover:text-white">Contact</Link>
                         </nav>
 
                         {/* Right: clock + menu */}
@@ -265,7 +265,7 @@ export default function PadepokanSeniMayangSunda() {
                                 Jelajahi Ruang
                             </Link>
                             <Link
-                                href="/kontak"
+                                href="/contact"
                                 className="rounded-full border border-white/60 px-6 py-3 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-sm hover:border-white hover:bg-white/10"
                             >
                                 Hubungi Kami

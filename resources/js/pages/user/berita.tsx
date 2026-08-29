@@ -207,7 +207,7 @@ export default function Berita() {
                                 <span className="inline-flex items-center gap-1 transition hover:text-gray-900">
                                     Fasilitas <span className="text-xs opacity-60">▾</span>
                                 </span>
-                                <div className="absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-xl group-hover:block">
+                                <div className="absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-xl group-hover:block z-50">
                                     <Link href="/fasilitas/bandung-creative-hub" className="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
                                         Bandung Creative Hub
                                     </Link>
@@ -231,7 +231,7 @@ export default function Berita() {
                             <Link href="/artikel" className="transition hover:text-gray-900">
                                 Artikel
                             </Link>
-                            <Link href="/#contact" className="transition hover:text-gray-900">
+                            <Link href="/contact" className="transition hover:text-gray-900">
                                 Contact
                             </Link>
                         </nav>
@@ -293,7 +293,7 @@ export default function Berita() {
                             <Link href="/artikel" onClick={() => setIsMenuOpen(false)} className="transition hover:text-gray-400">
                                 04. Artikel
                             </Link>
-                            <Link href="/#contact" onClick={() => setIsMenuOpen(false)} className="transition hover:text-gray-400">
+                            <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="transition hover:text-gray-400">
                                 05. Contact
                             </Link>
                         </nav>

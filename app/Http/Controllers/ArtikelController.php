@@ -62,7 +62,7 @@ class ArtikelController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return Inertia::render('artikel', [
+        return Inertia::render('user/artikel', [
             'artikels' => $artikels,
         ]);
     }

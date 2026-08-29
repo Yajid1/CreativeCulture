@@ -12,15 +12,17 @@ createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
-            case name === 'welcome':
+            case name === 'welcome' || name === 'user/welcome':
                 return null;
             case name === 'auth/login':
                 return null;
-            case name === 'subsektor':
+            case name === 'subsektor' || name === 'user/subsektor':
                 return null;
-            case name === 'berita':
+            case name === 'berita' || name === 'user/berita':
                 return null;
-            case name === 'artikel':
+            case name === 'artikel' || name === 'user/artikel':
+                return null;
+            case name === 'contact' || name === 'user/contact':
                 return null;
             case name.startsWith('facilities/'):
                 return null;

@@ -36,14 +36,14 @@ const ARTIKEL_LIST: ArtikelItem[] = [
         recapBadge: "Trending Hub",
         href: "/fasilitas/bandung-creative-hub",
         tags: ["Bandung Creative Hub", "Piala Dunia 2026", "Viral"],
-        
+
         // HALAMAN KIRI
         page1Title: "Squad Spanyol Healing di Bandung Creative Hub",
         page1Content: [
             "POV: Lamine Yamal dan Squad Timnas Spanyol yang baru saja menjuarai perhelatan akbar Piala Dunia 2026 secara mengejutkan terlihat menghabiskan waktu liburan dan healing di fasilitas Bandung Creative Hub (BCH), Kota Bandung.",
             "Kedatangan rombongan pemain bintang sepak bola dunia ini disambut hangat oleh komunitas kreator lokal. Mereka sempat mencoba berbagai fasilitas unggulan seperti Studio Rekaman Musik Summen Stag, Laboratorium Desain 3D, hingga ruang pameran seni digital."
         ],
-        
+
         // HALAMAN KANAN (LANJUTAN ARTIKEL SQUAD SPANYOL)
         page2Tag: "DOKUMENTASI & LANJUTAN",
         page2Title: "Impression & Apresiasi Bintang Dunia terhadap Fasilitas BCH",
@@ -64,14 +64,14 @@ const ARTIKEL_LIST: ArtikelItem[] = [
         recapBadge: "Edukasi Musik",
         href: "/fasilitas/bandung-creative-hub",
         tags: ["Teknik Drum", "Musik", "Bandung Creative Hub"],
-        
+
         // HALAMAN KIRI
         page1Title: "Tipe-Tipe Orang Pegang Stik",
         page1Content: [
             "Keliatan dari cara pegang stik drumnya aja, udah ketahuan karakter dan gaya bermain seorang drummer! Memegang stik drum bukan cuma masalah kenyamanan, tapi juga menentukan artikulasi, power, dan ketahanan fisik saat tampil.",
             "Secara umum terdapat tiga teknik memegang stik drum yang paling populer di kalangan musisi: Matched Grip (American, German, French) dan Traditional Grip. Masing-masing gaya memiliki keunikan akustik dan fleksibilitas pergelangan tangan tersendiri."
         ],
-        
+
         // HALAMAN KANAN (LANJUTAN ARTIKEL PEGANG STIK)
         page2Tag: "TEKNIK & FASILITAS STUDIO",
         page2Title: "Eksplorasi Karakter Suara & Otot Pergelangan Tangan",
@@ -92,14 +92,14 @@ const ARTIKEL_LIST: ArtikelItem[] = [
         recapBadge: "Edisi Opini",
         href: "/fasilitas/bandung-creative-hub",
         tags: ["Boomer VS Gen Z", "Fasilitas BCH", "Opini & Edukasi"],
-        
+
         // HALAMAN KIRI
         page1Title: "Ketika Boomer VS Gen Z Menjelaskan Fasilitas di BCH",
         page1Content: [
             "Ketika Boomer VS Gen Z menjelaskan fasilitas di Bandung Creative Hub (BCH), perbedaan istilah dan cara pandang yang muncul sangat menggelitik sekaligus inspiratif!",
             "Generasi Boomer cenderung memandang BCH sebagai 'Gedung Pusat Informasi & Fasilitas Kerajinan Daerah', sementara Gen Z menyebutnya sebagai 'Creative Aesthetic Hub buat WFC, Produksi Podcast, & Content Creation'."
         ],
-        
+
         // HALAMAN KANAN (LANJUTAN ARTIKEL BOOMER VS GEN Z)
         page2Tag: "PERSPEKTIF LINTAS GENERASI",
         page2Title: "Ruang Kolaborasi Publik Tanpa Batas Usia",
@@ -114,7 +114,7 @@ export default function Artikel() {
     const [clockTime, setClockTime] = useState('');
     const [clockDate, setClockDate] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
+
     // STATE MODAL DUA HALAMAN UNTUK DOKUMEN ARTIKEL YANG SAMA
     const [isReaderOpen, setIsReaderOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -194,7 +194,7 @@ export default function Artikel() {
                                 <span className="inline-flex items-center gap-1 transition hover:text-gray-900">
                                     Fasilitas <span className="text-xs opacity-60">▾</span>
                                 </span>
-                                <div className="absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-xl group-hover:block">
+                                <div className="absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-xl group-hover:block z-50">
                                     <Link href="/fasilitas/bandung-creative-hub" className="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
                                         Bandung Creative Hub
                                     </Link>
@@ -218,7 +218,7 @@ export default function Artikel() {
                             >
                                 Artikel
                             </Link>
-                            <Link href="/#contact" className="transition hover:text-gray-900">
+                            <Link href="/contact" className="transition hover:text-gray-900">
                                 Contact
                             </Link>
                         </nav>
@@ -274,7 +274,7 @@ export default function Artikel() {
                             <Link href="/artikel" onClick={() => setIsMenuOpen(false)} className="text-blue-400 transition">
                                 04. Artikel
                             </Link>
-                            <Link href="/#contact" onClick={() => setIsMenuOpen(false)} className="transition hover:text-gray-400">
+                            <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="transition hover:text-gray-400">
                                 05. Contact
                             </Link>
                         </nav>
@@ -287,7 +287,7 @@ export default function Artikel() {
 
                 {/* ===== MAIN CONTENT AREA ===== */}
                 <main className="mx-auto max-w-7xl px-6 sm:px-10 py-6 transition-all duration-500">
-                    
+
                     {/* MODE 1: UTAMA / DAFTAR KARTU ARTIKEL */}
                     {!isReaderOpen && (
                         <>
@@ -352,14 +352,14 @@ export default function Artikel() {
 
                                 {/* RIGHT CONTENT - 5 IMAGE COLLAGE SHOWCASE (MATCHING IMAGE 1 DESIGN) */}
                                 <div className="relative w-full max-w-[540px] h-[500px] sm:h-[580px] mx-auto mt-6 lg:mt-0 flex items-center justify-center select-none">
-                                    
+
                                     {/* SVG CONNECTOR LINES */}
-                                    <svg 
-                                        className="absolute inset-0 w-full h-full pointer-events-none z-30 drop-shadow-xs" 
-                                        viewBox="0 0 540 580" 
-                                        fill="none" 
-                                        stroke="#1e293b" 
-                                        strokeWidth="2.2" 
+                                    <svg
+                                        className="absolute inset-0 w-full h-full pointer-events-none z-30 drop-shadow-xs"
+                                        viewBox="0 0 540 580"
+                                        fill="none"
+                                        stroke="#1e293b"
+                                        strokeWidth="2.2"
                                         strokeLinecap="round"
                                     >
                                         {/* SENI TARI line: curves down-right into card 1 */}
@@ -407,14 +407,14 @@ export default function Artikel() {
                                     {/* COLLAGE CARDS */}
 
                                     {/* CARD 1: SENI TARI (Top Center-Left) */}
-                                    <div 
+                                    <div
                                         className="absolute top-[60px] left-[185px] sm:left-[200px] w-[150px] sm:w-[185px] h-[170px] sm:h-[205px] z-20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(0)}
                                     >
-                                        <img 
-                                            src="/images/DSC01753.jpg" 
-                                            alt="Seni Tari" 
-                                            className="w-full h-full object-cover object-top-left transition-transform duration-500 group-hover:scale-105" 
+                                        <img
+                                            src="/images/DSC01753.jpg"
+                                            alt="Seni Tari"
+                                            className="w-full h-full object-cover object-top-left transition-transform duration-500 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                                             <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Seni Tari →</span>
@@ -422,14 +422,14 @@ export default function Artikel() {
                                     </div>
 
                                     {/* CARD 2: BUDAYA (Top Right) */}
-                                    <div 
+                                    <div
                                         className="absolute top-[80px] right-[20px] sm:right-[30px] w-[145px] sm:w-[180px] h-[180px] sm:h-[220px] z-10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(1)}
                                     >
-                                        <img 
-                                            src="/images/DSC01757.jpg" 
-                                            alt="Budaya" 
-                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        <img
+                                            src="/images/DSC01757.jpg"
+                                            alt="Budaya"
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                                             <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Budaya →</span>
@@ -437,14 +437,14 @@ export default function Artikel() {
                                     </div>
 
                                     {/* CARD 3: PERTUNJUKAN (Middle Left) */}
-                                    <div 
+                                    <div
                                         className="absolute top-[175px] sm:top-[195px] left-[45px] sm:left-[55px] w-[180px] sm:w-[220px] h-[135px] sm:h-[165px] z-25 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(2)}
                                     >
-                                        <img 
-                                            src="/images/DSC01758.jpg" 
-                                            alt="Pertunjukan" 
-                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        <img
+                                            src="/images/DSC01758.jpg"
+                                            alt="Pertunjukan"
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                                             <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Pertunjukan →</span>
@@ -452,14 +452,14 @@ export default function Artikel() {
                                     </div>
 
                                     {/* CARD 4: GAMELAN (Bottom Center - Frontmost) */}
-                                    <div 
+                                    <div
                                         className="absolute bottom-[65px] sm:bottom-[75px] left-[195px] sm:left-[210px] w-[150px] sm:w-[185px] h-[175px] sm:h-[210px] z-40 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(0)}
                                     >
-                                        <img 
-                                            src="/images/DSC01802.jpg" 
-                                            alt="Gamelan" 
-                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        <img
+                                            src="/images/DSC01802.jpg"
+                                            alt="Gamelan"
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                                             <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Gamelan →</span>
@@ -467,14 +467,14 @@ export default function Artikel() {
                                     </div>
 
                                     {/* CARD 5: KOMUNITAS (Bottom Right) */}
-                                    <div 
+                                    <div
                                         className="absolute bottom-[80px] sm:bottom-[90px] right-[25px] sm:right-[35px] w-[135px] sm:w-[170px] h-[180px] sm:h-[215px] z-15 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-white/60 transition-all duration-300 hover:scale-105 hover:z-50 hover:shadow-2xl cursor-pointer group"
                                         onClick={() => openArticleDetail(1)}
                                     >
-                                        <img 
-                                            src="/images/DSC01753.jpg" 
-                                            alt="Komunitas" 
-                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" 
+                                        <img
+                                            src="/images/DSC01753.jpg"
+                                            alt="Komunitas"
+                                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                                             <span className="text-[10px] font-bold text-white bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-xs">Komunitas →</span>
@@ -597,7 +597,7 @@ export default function Artikel() {
 
                             {/* WADAH DUA HALAMAN BUKU TERBUKA (PROSISI PERSIS UNTUK 1 ARTIKEL LENGKAP) */}
                             <div className="relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-200/90 md:flex-row">
-                                
+
                                 {/* BAYANGAN LIPATAN BUKU DI TENGAH */}
                                 <div
                                     className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-10 -translate-x-1/2 z-10 md:block"

@@ -10,7 +10,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::inertia('/', 'user/welcome')->name('home');
 
 Route::get('/fasilitas/bandung-creative-hub', [FacilityController::class, 'bandungCreativeHub'])
     ->name('facilities.bch');
@@ -24,9 +24,10 @@ Route::get('/fasilitas/teras-sunda-cibiru', [FacilityController::class, 'terasSu
 Route::get('/fasilitas/kampung-wisata-pasir-kunci', [FacilityController::class, 'kampungWisataPasirKunci'])
     ->name('facilities.kwpk');
 
-Route::inertia('/subsektor', 'subsektor')->name('subsektor');
-Route::inertia('/berita', 'berita')->name('berita');
+Route::inertia('/subsektor', 'user/subsektor')->name('subsektor');
+Route::inertia('/berita', 'user/berita')->name('berita');
 Route::get('/artikel', [ArtikelController::class, 'userIndex'])->name('artikel');
+Route::inertia('/contact', 'user/contact')->name('contact');
 Route::get('/{facilityPrefix}/{roomSlug}', [RoomController::class, 'showUserRoom'])
     ->where('facilityPrefix', 'ruangan-bch|ruangan-psms|ruangan-tsc|ruangan-kwpk');
 

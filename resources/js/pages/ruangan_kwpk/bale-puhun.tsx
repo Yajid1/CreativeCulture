@@ -79,14 +79,30 @@ export default function BalePuhun({ room }: { room?: UserRoomData | null }) {
                         </Link>
 
                         {/* Nav links */}
-                        <nav className="hidden items-center gap-7 text-sm font-medium text-gray-500 lg:flex" aria-label="Primary">
+                        <nav className="hidden items-center gap-8 text-sm font-medium text-gray-700 lg:flex" aria-label="Primary">
                             <Link href="/" className="transition hover:text-gray-900">Home</Link>
-                            <Link href="/fasilitas/kampung-wisata-pasir-kunci" className="transition hover:text-gray-900">
-                                Fasilitas <span className="text-xs opacity-60">▾</span>
-                            </Link>
+                            <div className="group relative cursor-pointer py-1">
+                                <span className="inline-flex items-center gap-1 transition hover:text-gray-900">
+                                    Fasilitas <span className="text-xs opacity-60">▾</span>
+                                </span>
+                                <div className="absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 text-gray-900 shadow-xl group-hover:block z-50">
+                                    <Link href="/fasilitas/bandung-creative-hub" className="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
+                                        Bandung Creative Hub
+                                    </Link>
+                                    <Link href="/fasilitas/padepokan-seni-mayang-sunda" className="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
+                                        Padepokan Seni Mayang Sunda
+                                    </Link>
+                                    <Link href="/fasilitas/teras-sunda-cibiru" className="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
+                                        Teras Sunda Cibiru
+                                    </Link>
+                                    <Link href="/fasilitas/kampung-wisata-pasir-kunci" className="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
+                                        Kampung Wisata Pasir Kunci
+                                    </Link>
+                                </div>
+                            </div>
                             <Link href="/berita" className="transition hover:text-gray-900">Berita</Link>
                             <Link href="/artikel" className="transition hover:text-gray-900">Artikel</Link>
-                            <Link href="/#contact" className="transition hover:text-gray-900">Contact</Link>
+                            <Link href="/contact" className="transition hover:text-gray-900">Contact</Link>
                         </nav>
 
                         {/* Right: clock + menu */}

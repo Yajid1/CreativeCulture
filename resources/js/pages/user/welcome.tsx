@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useEffect } from 'react';
-import '../../css/lumora.css';
+import '../../../css/creativeculture.css';
 
 export default function Welcome() {
   useEffect(() => {
@@ -766,10 +766,26 @@ const BODY_HTML = `
       <nav class="header-nav" aria-label="Primary">
         <ul>
           <li><button data-scroll="home" aria-current="page">Home</button></li>
-          <li><button data-scroll="services">Fasilitas <span class="caret">▾</span></button></li>
+          <li class="dropdown-parent group relative py-1">
+            <a href="/fasilitas/bandung-creative-hub" class="flex items-center gap-1">Fasilitas <span class="caret text-xs opacity-60">▾</span></a>
+            <div class="dropdown-menu absolute left-0 top-full hidden w-56 rounded-2xl border border-gray-200 bg-white p-2 shadow-xl group-hover:block z-50 text-left">
+              <a href="/fasilitas/bandung-creative-hub" class="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                Bandung Creative Hub
+              </a>
+              <a href="/fasilitas/padepokan-seni-mayang-sunda" class="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                Padepokan Seni Mayang Sunda
+              </a>
+              <a href="/fasilitas/teras-sunda-cibiru" class="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                Teras Sunda Cibiru
+              </a>
+              <a href="/fasilitas/kampung-wisata-pasir-kunci" class="block rounded-xl px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                Kampung Wisata Pasir Kunci
+              </a>
+            </div>
+          </li>
           <li><a href="/berita" class="nav-link">Berita</a></li>
           <li><a href="/artikel" class="nav-link">Artikel</a></li>
-          <li><button class="contact-trigger">Contact</button></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
@@ -813,7 +829,7 @@ const BODY_HTML = `
           </h1>
 
           <div class="hero-ctas reveal-item" data-reveal data-delay="750" data-hero-gate>
-            <button class="pill-btn pill-btn--dark pill-btn--with-arrow contact-trigger">
+            <a href="/contact" class="pill-btn pill-btn--dark pill-btn--with-arrow">
               <span class="pill-btn-inner">
                 Let's Talk
                 <span class="pill-btn-badge"><svg class="arrow-right-icon" viewBox="0 0 24 24" fill="none"
@@ -822,7 +838,7 @@ const BODY_HTML = `
                     <path d="M13 6l6 6-6 6" />
                   </svg></span>
               </span>
-            </button>
+            </a>
             <button class="pill-btn pill-btn--outline pill-btn--with-arrow" id="viewWorkBtn">
               <span class="pill-btn-inner">
                 View Work
@@ -1283,7 +1299,10 @@ const BODY_HTML = `
         <!-- Impact Metrics & Collaboration Banner -->
         <div class="ecosystem-impact-banner reveal-item" data-reveal data-translate="36">
           <div>
-            <div class="text-xs uppercase tracking-widest text-[#b15f2c] font-semibold mb-2">Komitmen Pelayanan</div>
+            <div class="eyebrow eyebrow--dark mb-3">
+              <span class="eyebrow-dot"></span>
+              Komitmen Pelayanan
+            </div>
             <h3 class="text-2xl sm:text-3xl font-bold text-[#111111] leading-tight mb-3">Ruang Terbuka, Merangkul Seluruh Komunitas.</h3>
             <p class="text-sm text-gray-600 leading-relaxed max-w-md">
               Seluruh fasilitas, studio, dan sarana panggung kami sediakan untuk memajukan kreasi masyarakat dan melestarikan budaya Kota Bandung.
@@ -1580,7 +1599,7 @@ const BODY_HTML = `
             <a href="#home" class="animated-link">Home</a>
             <a href="/berita" class="animated-link">Berita</a>
             <a href="/artikel" class="animated-link">Artikel</a>
-            <a href="#contact" class="animated-link contact-trigger">Contact</a>
+            <a href="/contact" class="animated-link">Contact</a>
           </div>
         </div>
         <div>
@@ -1639,8 +1658,8 @@ const BODY_HTML = `
               class="nav-item-label">Berita</span></a></li>
         <li><a class="nav-item" href="/artikel"><span class="nav-item-index">04</span><span
               class="nav-item-label">Artikel</span></a></li>
-        <li><button class="nav-item contact-trigger"><span class="nav-item-index">05</span><span
-              class="nav-item-label">Contact</span></button></li>
+        <li><a class="nav-item" href="/contact"><span class="nav-item-index">05</span><span
+              class="nav-item-label">Contact</span></a></li>
       </ul>
     </nav>
     <div class="nav-bottom shell">
