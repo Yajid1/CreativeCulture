@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AiAssistantController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
@@ -35,12 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::delete('admin/activity-logs/{activityLog}', [DashboardController::class, 'destroyActivity'])->name('admin.activity_logs.destroy');
 
-    // Admin Fasilitas
-    Route::inertia('admin/fasilitas/bch', 'admin/fasilitas/fasilitas_bch_admin')->name('admin.fasilitas.bch');
-    Route::inertia('admin/fasilitas/psms', 'admin/fasilitas/fasilitas_psms_admin')->name('admin.fasilitas.psms');
-    Route::inertia('admin/fasilitas/tsc', 'admin/fasilitas/fasilitas_tsc_admin')->name('admin.fasilitas.tsc');
-    Route::inertia('admin/fasilitas/kwpk', 'admin/fasilitas/fasilitas_kwpk_admin')->name('admin.fasilitas.kwpk');
-
     // Admin Ruangan CRUD
     Route::get('admin/ruangan/{facilityCode}', [RoomController::class, 'index'])->name('admin.ruangan.index');
     Route::post('admin/ruangan/{facilityCode}', [RoomController::class, 'store'])->name('admin.ruangan.store');
@@ -57,9 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('admin/berita/{berita}', [BeritaController::class, 'update'])->name('admin.berita.update');
     Route::delete('admin/berita/{berita}', [BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 
-    // Admin AI Assistant, Task, & Roles
-    Route::inertia('admin/ai-assistant', 'admin/ai-assistant')->name('admin.ai_assistant');
-    Route::post('admin/ai-assistant/chat', [AiAssistantController::class, 'chat'])->name('admin.ai_assistant.chat');
+    // Admin Task & Roles
     Route::get('admin/task', [TaskController::class, 'index'])->name('admin.task');
     Route::post('admin/task', [TaskController::class, 'store'])->name('admin.task.store');
     Route::put('admin/task/{task}', [TaskController::class, 'update'])->name('admin.task.update');

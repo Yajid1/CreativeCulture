@@ -21,7 +21,7 @@ class ActivityLogSeeder extends Seeder
                 'title' => 'Penambahan Gedung Baru Teras Sunda',
                 'description' => 'Penyelesaian renovasi & penambahan fasilitas sanggar seni...',
                 'status' => 'Ready',
-                'link' => '/admin/fasilitas/tsc',
+                'link' => '/admin/ruangan/tsc',
                 'created_at' => now()->subHours(2),
             ],
             [

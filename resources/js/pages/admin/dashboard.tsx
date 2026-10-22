@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { dashboard } from '@/routes';
 import {
@@ -25,6 +25,7 @@ import {
     MoreVertical,
     Newspaper,
     Plus,
+    Printer,
     Search,
     Sun,
     Trash2,
@@ -68,23 +69,141 @@ type RecentActivitiesProp = {
     to: number;
 };
 
+function getWeatherInfo(code: number, isDay: number = 1): { icon: string; text: string } {
+    if (code === 0) return { icon: isDay ? '☀️' : '🌙', text: isDay ? 'Sunny' : 'Clear' };
+    if (code === 1) return { icon: isDay ? '🌤️' : '🌙', text: isDay ? 'Mainly Clear' : 'Mostly Clear' };
+    if (code === 2) return { icon: isDay ? '⛅' : '☁️', text: 'Partly Cloudy' };
+    if (code === 3) return { icon: '☁️', text: 'Overcast' };
+    if (code === 45 || code === 48) return { icon: '🌫️', text: 'Foggy' };
+    if ([51, 53, 55, 56, 57].includes(code)) return { icon: '🌦️', text: 'Drizzle' };
+    if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return { icon: '🌧️', text: 'Rainy' };
+    if ([71, 73, 75, 77, 85, 86].includes(code)) return { icon: '🌨️', text: 'Snowy' };
+    if ([95, 96, 99].includes(code)) return { icon: '⛈️', text: 'Thunderstorm' };
+    return { icon: isDay ? '🌤️' : '🌙', text: 'Partly Cloudy' };
+}
+
 export default function Dashboard({
     totalRooms,
+    totalArtikels = 0,
+    totalBeritas = 0,
     quickTasks = [],
     taskCompletionRate = 0,
     recentActivities,
+    selectedMonth = 'this-month',
+    selectedMonthLabel = 'This Month',
+    availableMonths = [],
 }: {
     totalRooms: number;
+    totalArtikels?: number;
+    totalBeritas?: number;
     quickTasks?: Task[];
     taskCompletionRate?: number;
     recentActivities?: RecentActivitiesProp;
+    selectedMonth?: string;
+    selectedMonthLabel?: string;
+    availableMonths?: string[];
 }) {
     // Live clock time state
     const [timeString, setTimeString] = useState<string>('10:08 AM');
     const [dateString, setDateString] = useState<string>('Saturday, Dec 27, 2025');
 
+    // Live weather state for Bandung
+    const [temperature, setTemperature] = useState<number | null>(null);
+    const [weatherStatus, setWeatherStatus] = useState<string>('Sunny');
+    const [weatherIcon, setWeatherIcon] = useState<string>('☀️');
+    const [isWeatherLoading, setIsWeatherLoading] = useState<boolean>(true);
+
+    const fetchWeather = async () => {
+        try {
+            const res = await fetch(
+                'https://api.open-meteo.com/v1/forecast?latitude=-6.9175&longitude=107.6191&current=temperature_2m,weather_code,is_day'
+            );
+            if (!res.ok) throw new Error('Failed to fetch weather');
+            const data = await res.json();
+            if (data?.current) {
+                const temp = Math.round(data.current.temperature_2m);
+                const code = data.current.weather_code ?? 0;
+                const isDay = data.current.is_day ?? 1;
+                const info = getWeatherInfo(code, isDay);
+                setTemperature(temp);
+                setWeatherIcon(info.icon);
+                setWeatherStatus(info.text);
+                setIsWeatherLoading(false);
+            }
+        } catch (err) {
+            console.error('Weather fetch error:', err);
+            const hour = new Date().getHours();
+            const isDay = hour >= 6 && hour < 18;
+            setTemperature(isDay ? 28 : 22);
+            setWeatherIcon(isDay ? '🌤️' : '🌙');
+            setWeatherStatus(isDay ? 'Partly Cloudy' : 'Clear');
+            setIsWeatherLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchWeather();
+        const weatherTimer = setInterval(fetchWeather, 10 * 60 * 1000);
+        return () => clearInterval(weatherTimer);
+    }, []);
+
     // Dynamic Calendar state
     const [calendarDate, setCalendarDate] = useState<Date>(new Date());
+
+    // Month Picker dropdown state
+    const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
+    const monthPickerRef = useRef<HTMLDivElement>(null);
+
+    const now = new Date();
+    const nowMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthKey = `${lastMonthDate.getFullYear()}-${String(lastMonthDate.getMonth() + 1).padStart(2, '0')}`;
+
+    const [pickerYear, setPickerYear] = useState<number>(() => {
+        if (selectedMonth && selectedMonth !== 'all' && selectedMonth.includes('-')) {
+            return parseInt(selectedMonth.split('-')[0], 10) || now.getFullYear();
+        }
+        return now.getFullYear();
+    });
+
+    useEffect(() => {
+        if (selectedMonth && selectedMonth !== 'all' && selectedMonth.includes('-')) {
+            const [y, m] = selectedMonth.split('-').map(Number);
+            if (y && m) {
+                setCalendarDate(new Date(y, m - 1, 1));
+                setPickerYear(y);
+            }
+        }
+    }, [selectedMonth]);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (monthPickerRef.current && !monthPickerRef.current.contains(event.target as Node)) {
+                setIsMonthPickerOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleSelectMonth = (monthKey: string) => {
+        setIsMonthPickerOpen(false);
+        router.get(
+            '/dashboard',
+            { month: monthKey },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            }
+        );
+    };
+
+    const handleExportPrint = () => {
+        window.print();
+    };
+
+    const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     useEffect(() => {
         const updateClock = () => {
@@ -320,10 +439,28 @@ export default function Dashboard({
         <>
             <Head title="Dashboard Overview" />
 
-            <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#09090b] text-gray-800 dark:text-gray-200 font-sans p-4 sm:p-6 lg:p-8 space-y-6">
+            <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#09090b] text-gray-800 dark:text-gray-200 font-sans p-4 sm:p-6 lg:p-8 space-y-6 print:min-h-0 print:p-0 print:m-0 print:space-y-4 print:bg-white print:text-black">
+
+                {/* ===== PRINT-ONLY REPORT HEADER ===== */}
+                <div className="hidden print:block border-b-2 border-gray-900 pb-3 mb-4">
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <h1 className="text-xl font-black uppercase tracking-tight text-gray-900">
+                                UPTD Pengelolaan Kebudayaan Daerah Jawa Barat
+                            </h1>
+                            <p className="text-xs font-semibold text-gray-700 mt-0.5">
+                                Laporan Overview Dashboard &amp; Monitoring Kinerja Platform
+                            </p>
+                        </div>
+                        <div className="text-right text-[11px] text-gray-600 space-y-0.5">
+                            <p><span className="font-bold">Periode:</span> {selectedMonthLabel || 'This Month'}</p>
+                            <p><span className="font-bold">Waktu Cetak:</span> {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        </div>
+                    </div>
+                </div>
 
                 {/* ===== PAGE TITLE ROW ===== */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 print:hidden">
                     <div>
                         <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 font-medium mb-1">
                             <Home className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
@@ -335,13 +472,123 @@ export default function Dashboard({
                     </div>
 
                     <div className="flex items-center gap-2.5">
-                        <button className="inline-flex items-center gap-1.5 rounded-full border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#1c1c21] transition">
-                            <CalendarIcon className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
-                            <span>This Month</span>
-                            <ChevronDown className="h-3 w-3 text-gray-400" />
-                        </button>
-                        <button className="inline-flex items-center gap-1.5 rounded-full border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#1c1c21] transition">
-                            <Download className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
+                        {/* Month Filter Dropdown */}
+                        <div className="relative" ref={monthPickerRef}>
+                            <button
+                                type="button"
+                                onClick={() => setIsMonthPickerOpen(!isMonthPickerOpen)}
+                                className="inline-flex items-center gap-1.5 rounded-full border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#1c1c21] transition cursor-pointer"
+                            >
+                                <CalendarIcon className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
+                                <span>{selectedMonthLabel || 'This Month'}</span>
+                                <ChevronDown className={`h-3 w-3 text-gray-400 transition-transform duration-200 ${isMonthPickerOpen ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {isMonthPickerOpen && (
+                                <div className="absolute right-0 mt-2 w-72 sm:w-80 rounded-2xl border border-gray-200/90 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-3.5 shadow-2xl z-50 animate-in fade-in-50 slide-in-from-top-2">
+                                    {/* Quick Presets */}
+                                    <div className="space-y-1 pb-2.5 mb-2.5 border-b border-gray-100 dark:border-[#1f1f23]">
+                                        <p className="px-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">Pilihan Cepat</p>
+                                        <div className="grid grid-cols-2 gap-1.5 mt-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleSelectMonth('this-month')}
+                                                className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                                                    selectedMonth === nowMonthKey
+                                                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold'
+                                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                }`}
+                                            >
+                                                <span>This Month</span>
+                                                {selectedMonth === nowMonthKey && <Check className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleSelectMonth(lastMonthKey)}
+                                                className={`flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                                                    selectedMonth === lastMonthKey
+                                                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold'
+                                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                }`}
+                                            >
+                                                <span>Last Month</span>
+                                                {selectedMonth === lastMonthKey && <Check className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />}
+                                            </button>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleSelectMonth('all')}
+                                            className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer mt-1 ${
+                                                selectedMonth === 'all'
+                                                    ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold'
+                                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                            }`}
+                                        >
+                                            <span>Semua Waktu (All Time)</span>
+                                            {selectedMonth === 'all' && <Check className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />}
+                                        </button>
+                                    </div>
+
+                                    {/* Year Navigator */}
+                                    <div className="flex items-center justify-between px-1 mb-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setPickerYear((prev) => prev - 1)}
+                                            className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1c1c21] text-gray-500 hover:text-gray-900 dark:hover:text-white transition cursor-pointer"
+                                        >
+                                            <ChevronLeft className="h-4 w-4" />
+                                        </button>
+                                        <span className="text-xs font-bold text-gray-900 dark:text-white">{pickerYear}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setPickerYear((prev) => prev + 1)}
+                                            className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1c1c21] text-gray-500 hover:text-gray-900 dark:hover:text-white transition cursor-pointer"
+                                        >
+                                            <ChevronRight className="h-4 w-4" />
+                                        </button>
+                                    </div>
+
+                                    {/* 12 Months Grid */}
+                                    <div className="grid grid-cols-3 gap-1.5">
+                                        {MONTH_LABELS.map((m, idx) => {
+                                            const monthNum = String(idx + 1).padStart(2, '0');
+                                            const monthKey = `${pickerYear}-${monthNum}`;
+                                            const isSelected = selectedMonth === monthKey;
+                                            const isCurrent = nowMonthKey === monthKey;
+                                            const hasData = availableMonths.includes(monthKey);
+
+                                            return (
+                                                <button
+                                                    key={monthKey}
+                                                    type="button"
+                                                    onClick={() => handleSelectMonth(monthKey)}
+                                                    className={`relative flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-semibold transition cursor-pointer ${
+                                                        isSelected
+                                                            ? 'bg-blue-600 text-white font-extrabold shadow-sm shadow-blue-500/30'
+                                                            : isCurrent
+                                                            ? 'border border-blue-400/60 dark:border-blue-500/60 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40'
+                                                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1c1c21]'
+                                                    }`}
+                                                >
+                                                    <span>{m}</span>
+                                                    {hasData && (
+                                                        <span className={`h-1 w-1 rounded-full mt-0.5 ${isSelected ? 'bg-white' : 'bg-blue-500'}`} />
+                                                    )}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={handleExportPrint}
+                            title="Cetak atau Simpan PDF seluruh Dashboard Overview dari atas ke bawah"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#1c1c21] transition cursor-pointer"
+                        >
+                            <Printer className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
                             <span>Export</span>
                         </button>
                     </div>
@@ -368,20 +615,32 @@ export default function Dashboard({
                                 </div>
 
                                 {/* Weather Widget */}
-                                <div className="flex flex-col items-end text-right">
+                                <div
+                                    className="flex flex-col items-end text-right cursor-pointer group"
+                                    onClick={() => fetchWeather()}
+                                    title="Klik untuk memperbarui cuaca Bandung terkini"
+                                >
                                     <div className="flex items-center gap-2">
-                                        <span className="text-2xl sm:text-3xl">☀️</span>
-                                        <span className="text-3xl sm:text-4xl font-extrabold text-[#111827] dark:text-white tracking-tight leading-none">31°C</span>
+                                        <span className="text-2xl sm:text-3xl transition-transform duration-300 group-hover:scale-110">
+                                            {weatherIcon}
+                                        </span>
+                                        <span className="text-3xl sm:text-4xl font-extrabold text-[#111827] dark:text-white tracking-tight leading-none">
+                                            {temperature !== null ? `${temperature}°C` : (isWeatherLoading ? '...' : '28°C')}
+                                        </span>
                                     </div>
-                                    <div className="text-[11px] text-gray-400 dark:text-gray-400 font-medium mt-1">Sunny</div>
-                                    <div className="text-[11px] text-gray-400 dark:text-gray-400 font-medium">Bandung</div>
+                                    <div className="text-[11px] text-gray-400 dark:text-gray-400 font-medium mt-1">
+                                        {weatherStatus}
+                                    </div>
+                                    <div className="text-[11px] text-gray-400 dark:text-gray-400 font-medium">
+                                        Bandung
+                                    </div>
                                     <div className="text-[10px] text-gray-400 dark:text-gray-400 mt-0.5">{dateString}</div>
                                 </div>
                             </div>
                         </div>
 
                         {/* 4 STAT CARDS ROW */}
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 print:grid-cols-4 print:gap-2.5">
                             {/* Card 1: Total Ruangan */}
                             <div className="rounded-2xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] px-3.5 py-3 shadow-xs hover:shadow-sm transition">
                                 <div className="flex items-center justify-between mb-2">
@@ -409,11 +668,8 @@ export default function Dashboard({
                                     </div>
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
-                                <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">12</p>
-                                    <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
-                                        <TrendingUp className="h-3 w-3" /> +12%
-                                    </span>
+                                <div>
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">{totalArtikels}</p>
                                 </div>
                             </div>
 
@@ -428,11 +684,8 @@ export default function Dashboard({
                                     </div>
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
-                                <div className="flex items-end justify-between">
-                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">18</p>
-                                    <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
-                                        <TrendingUp className="h-3 w-3" /> +8
-                                    </span>
+                                <div>
+                                    <p className="text-xl font-extrabold text-gray-900 dark:text-white">{totalBeritas}</p>
                                 </div>
                             </div>
 
@@ -447,23 +700,20 @@ export default function Dashboard({
                                     </div>
                                     <button className="text-gray-300 dark:text-gray-600 hover:text-gray-500"><MoreHorizontal className="h-3.5 w-3.5" /></button>
                                 </div>
-                                <div className="flex items-end justify-between">
+                                <div>
                                     <p className="text-xl font-extrabold text-gray-900 dark:text-white">{dynamicTaskCompletionRate}%</p>
-                                    <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
-                                        <TrendingUp className="h-3 w-3" /> +5%
-                                    </span>
                                 </div>
                             </div>
                         </div>
 
                         {/* QUICK TASKS & CALENDAR ROW */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 print:grid-cols-2 print:gap-3">
                             {/* QUICK TASKS */}
-                            <div className="rounded-3xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-6 shadow-sm space-y-5 flex flex-col justify-between">
+                            <div className="rounded-3xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#121215] p-6 shadow-sm space-y-5 flex flex-col justify-between print:p-4">
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Quick Tasks</h3>
-                                        <div className="flex items-center rounded-xl bg-gray-100 dark:bg-[#1c1c21] p-1 gap-1">
+                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white print:text-base">Quick Tasks</h3>
+                                        <div className="flex items-center rounded-xl bg-gray-100 dark:bg-[#1c1c21] p-1 gap-1 print:hidden">
                                             <button
                                                 onClick={() => setTaskFilter('active')}
                                                 className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition ${taskFilter === 'active'
@@ -486,7 +736,7 @@ export default function Dashboard({
                                     </div>
 
                                     {/* Add Task Input Form */}
-                                    <form onSubmit={openCreateModal} className="flex gap-2">
+                                    <form onSubmit={openCreateModal} className="flex gap-2 print:hidden">
                                         <input
                                             type="text"
                                             value={newTaskText}
@@ -549,7 +799,7 @@ export default function Dashboard({
                                                 : calendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1 print:hidden">
                                         <button
                                             type="button"
                                             onClick={handlePrevMonth}
@@ -766,7 +1016,7 @@ export default function Dashboard({
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white">Recent Activities</h3>
-                            <p className="text-xs text-gray-400 dark:text-gray-400 mt-0.5">Overview of active updates across Fasilitas, Ruangan, Artikel &amp; Berita</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-400 mt-0.5">Overview aktivitas pada {selectedMonthLabel || 'This Month'}</p>
                         </div>
                         <button
                             onClick={() => {
@@ -792,7 +1042,7 @@ export default function Dashboard({
                                 link.click();
                                 document.body.removeChild(link);
                             }}
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#1c1c21] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#25252c] transition self-start sm:self-auto cursor-pointer"
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200/80 dark:border-[#1f1f23] bg-white dark:bg-[#1c1c21] px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-2xs hover:bg-gray-50 dark:hover:bg-[#25252c] transition self-start sm:self-auto cursor-pointer print:hidden"
                         >
                             <Download className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
                             <span>Export</span>
@@ -807,7 +1057,7 @@ export default function Dashboard({
                                     <th className="pb-3 pl-2 font-bold text-xs">Name</th>
                                     <th className="pb-3 font-bold text-xs">Status</th>
                                     <th className="pb-3 font-bold text-xs">Last Updated</th>
-                                    <th className="pb-3 pr-2 text-right font-bold text-xs">Actions</th>
+                                    <th className="pb-3 pr-2 text-right font-bold text-xs print:hidden">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-[#1f1f23]">
@@ -916,7 +1166,7 @@ export default function Dashboard({
                                                     <div>{activity.lastUpdated}</div>
                                                     <div className="text-[10px] text-gray-400 font-normal">{activity.created_at_human}</div>
                                                 </td>
-                                                <td className="py-4 pr-2 text-right relative">
+                                                <td className="py-4 pr-2 text-right relative print:hidden">
                                                     <button
                                                         onClick={() => setShowRowActionMenu(showRowActionMenu === activity.id ? null : activity.id)}
                                                         className={`flex h-8 w-8 items-center justify-center rounded-full transition ml-auto ${showRowActionMenu === activity.id
@@ -979,7 +1229,7 @@ export default function Dashboard({
 
                     {/* Table Footer Pagination */}
                     {recentActivities && recentActivities.total > 0 && (
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-gray-100 dark:border-[#1f1f23] text-xs">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-gray-100 dark:border-[#1f1f23] text-xs print:hidden">
                             <p className="text-gray-500 dark:text-gray-400 font-medium">
                                 Showing {recentActivities.from} to {recentActivities.to} of {recentActivities.total} results
                             </p>
@@ -1014,6 +1264,12 @@ export default function Dashboard({
                             </div>
                         </div>
                     )}
+                </div>
+
+                {/* ===== PRINT-ONLY REPORT FOOTER ===== */}
+                <div className="hidden print:flex items-center justify-between pt-4 mt-6 border-t border-gray-300 text-[10px] text-gray-500">
+                    <p>Creative Culture — UPTD Pengelolaan Kebudayaan Daerah Jawa Barat</p>
+                    <p>Laporan Resmi Dashboard Overview &amp; Monitoring Kinerja Platform</p>
                 </div>
             </div>
 

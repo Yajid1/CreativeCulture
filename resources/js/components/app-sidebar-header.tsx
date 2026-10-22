@@ -71,13 +71,6 @@ export function AppSidebarHeader({
                     {/* Search Command Palette */}
                     <SearchCommandPalette />
 
-                    {/* Language Selector */}
-                    <button className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#f1f4f9] dark:bg-[#1c1c21] px-2.5 py-1 text-xs font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-[#282830] transition">
-                        <span className="text-xs">🇮🇩</span>
-                        <span>ID</span>
-                        <ChevronDown className="h-3 w-3 text-gray-400" />
-                    </button>
-
                     {/* Dark / Light Mode Toggle */}
                     <button
                         onClick={() => updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark')}

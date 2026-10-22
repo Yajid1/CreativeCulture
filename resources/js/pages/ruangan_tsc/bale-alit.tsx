@@ -140,14 +140,10 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                     <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
                         {/* Text Left */}
                         <div className="lg:col-span-5">
-                            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
-                                Area Latihan Semi Terbuka
-                            </div>
-
                             <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.15]">
                                 Balé Alit
                             </h1>
-                            <p className="mt-2 text-sm font-semibold text-emerald-600">
+                            <p className="mt-2 text-sm font-semibold text-gray-900">
                                 Teras Sunda Cibiru
                             </p>
                             <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed">
@@ -157,7 +153,7 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                             {/* Capacity & Feature Badge */}
                             <div className="mt-6 flex flex-wrap items-center gap-3">
                                 <div className="inline-flex items-center gap-3 rounded-2xl bg-gray-50 border border-gray-100 px-5 py-3">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
                                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                             <circle cx="9" cy="7" r="4" />
@@ -169,8 +165,8 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                                     </div>
                                 </div>
 
-                                <div className="inline-flex items-center gap-3 rounded-2xl bg-emerald-50/60 border border-emerald-100 px-5 py-3">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-700 text-white">
+                                <div className="inline-flex items-center gap-3 rounded-2xl bg-blue-50/60 border border-blue-100 px-5 py-3">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-700 text-white">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
                                             <path d="M9 18V5l12-2v13" />
                                             <circle cx="6" cy="18" r="3" />
@@ -178,7 +174,7 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                                         </svg>
                                     </div>
                                     <div>
-                                        <p className="text-xs font-medium text-emerald-600 uppercase tracking-wider">Konsep Ruang</p>
+                                        <p className="text-xs font-medium text-blue-600 uppercase tracking-wider">Konsep Ruang</p>
                                         <p className="text-base font-extrabold text-gray-900">Semi Terbuka</p>
                                     </div>
                                 </div>
@@ -224,7 +220,7 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Daftar Fasilitas Balé Alit:</p>
                                 <div className="flex flex-wrap gap-2 text-xs">
                                     {facilitiesList.map((item, idx) => (
-                                        <span key={idx} className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-100/80 px-3.5 py-1.5 font-semibold text-emerald-900">
+                                        <span key={idx} className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-100/80 px-3.5 py-1.5 font-semibold text-blue-900">
                                             {item}
                                         </span>
                                     ))}
@@ -250,7 +246,7 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                             {/* Card 1: Dark Card */}
                             <div className="flex flex-col justify-between rounded-3xl bg-[#18181b] p-6 text-white min-h-[260px] shadow-sm">
                                 <div>
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-400 backdrop-blur-sm border border-emerald-500/30">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/20 text-blue-400 backdrop-blur-sm border border-blue-500/30">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
                                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                             <circle cx="9" cy="7" r="4" />
@@ -265,21 +261,21 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
 
                             {/* Card 2: Split Card */}
                             <div className="flex flex-col justify-between min-h-[260px]">
-                                <div className="flex flex-1 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-emerald-200 bg-emerald-50/40 p-5 text-center">
+                                <div className="flex flex-1 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/40 p-5 text-center">
                                     <h4 className="text-xl font-extrabold text-gray-900">Cocok Untuk</h4>
-                                    <p className="mt-1 text-xs font-semibold text-emerald-700">Latihan Tari, Suara, Teater</p>
+                                    <p className="mt-1 text-xs font-semibold text-blue-700">Latihan Tari, Suara, Teater</p>
                                 </div>
 
-                                <div className="mt-3 rounded-2xl bg-emerald-600 text-white p-4 flex items-center justify-between">
+                                <div className="mt-3 rounded-2xl bg-blue-600 text-white p-4 flex items-center justify-between">
                                     <h4 className="text-xs font-extrabold uppercase">BALÉ ALIT</h4>
-                                    <span className="text-[11px] font-semibold text-emerald-100">Belakang Balé Utama</span>
+                                    <span className="text-[11px] font-semibold text-blue-100">Belakang Balé Utama</span>
                                 </div>
                             </div>
 
                             {/* Card 3: Procedure Box */}
                             <div className="flex flex-col justify-between rounded-3xl bg-[#F4F4F5] p-6 min-h-[260px]">
                                 <div className="flex items-center justify-center py-2">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xs">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-xs">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
                                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                                         </svg>
@@ -298,8 +294,8 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                             <div className="flex flex-col justify-between rounded-3xl bg-white p-6 border border-gray-100 shadow-xs min-h-[260px]">
                                 <div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-3xl font-serif leading-none text-emerald-300">“</span>
-                                        <span className="text-[11px] font-extrabold tracking-wider text-emerald-600 uppercase">BALÉ ALIT</span>
+                                        <span className="text-3xl font-serif leading-none text-blue-300">“</span>
+                                        <span className="text-[11px] font-extrabold tracking-wider text-blue-600 uppercase">BALÉ ALIT</span>
                                     </div>
                                     <p className="mt-3 text-xs leading-relaxed text-gray-600 font-medium italic">
                                         "Suasana semi terbuka di Balé Alit sangat mendukung konsentrasi saat olah rasa dan latihan koreografi tari."
@@ -325,19 +321,19 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                             </p>
 
                             {/* Operational Sessions Box */}
-                            <div className="mt-8 rounded-2xl border border-emerald-100 bg-emerald-50/50 p-5 space-y-3">
-                                <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Jam Operasional & Sesi:</p>
+                            <div className="mt-8 rounded-2xl border border-blue-100 bg-blue-50/50 p-5 space-y-3">
+                                <p className="text-xs font-bold text-gray-900 uppercase tracking-wider">Jam Operasional & Sesi:</p>
                                 <div className="space-y-2 text-xs font-bold text-gray-800">
-                                    <div className="flex items-center justify-between rounded-xl bg-white px-4 py-2.5 border border-emerald-100">
+                                    <div className="flex items-center justify-between rounded-xl bg-white px-4 py-2.5 border border-blue-100">
                                         <span>Sesi 1</span>
-                                        <span className="text-emerald-700">08.00 – 13.00 WIB</span>
+                                        <span className="text-gray-900">08.00 – 13.00 WIB</span>
                                     </div>
-                                    <div className="flex items-center justify-between rounded-xl bg-white px-4 py-2.5 border border-emerald-100">
+                                    <div className="flex items-center justify-between rounded-xl bg-white px-4 py-2.5 border border-blue-100">
                                         <span>Sesi 2</span>
-                                        <span className="text-emerald-700">15.00 – 20.00 WIB</span>
+                                        <span className="text-gray-900">15.00 – 20.00 WIB</span>
                                     </div>
                                 </div>
-                                <p className="text-[11px] font-medium text-emerald-700 italic">
+                                <p className="text-[11px] font-medium text-gray-900 italic">
                                     * Hari libur nasional tutup.
                                 </p>
                             </div>
@@ -345,9 +341,9 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
 
                         {/* Rules List Right */}
                         <div className="lg:col-span-7 space-y-4">
-                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition hover:border-emerald-200">
+                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition hover:border-blue-200">
                                 <div className="flex items-start gap-4">
-                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">1</span>
+                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">1</span>
                                     <div>
                                         <h4 className="text-base font-bold text-gray-900">Cek Live Schedule</h4>
                                         <p className="mt-1 text-xs leading-relaxed text-gray-500">
@@ -357,9 +353,9 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                                 </div>
                             </div>
 
-                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition hover:border-emerald-200">
+                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition hover:border-blue-200">
                                 <div className="flex items-start gap-4">
-                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">2</span>
+                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">2</span>
                                     <div>
                                         <h4 className="text-base font-bold text-gray-900">Konfirmasi Hotline & KTP Bandung</h4>
                                         <p className="mt-1 text-xs leading-relaxed text-gray-500">
@@ -369,9 +365,9 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                                 </div>
                             </div>
 
-                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition hover:border-emerald-200">
+                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition hover:border-blue-200">
                                 <div className="flex items-start gap-4">
-                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">3</span>
+                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">3</span>
                                     <div>
                                         <h4 className="text-base font-bold text-gray-900">Surat Pengajuan & Deskripsi Kegiatan</h4>
                                         <p className="mt-1 text-xs leading-relaxed text-gray-500">
@@ -381,13 +377,13 @@ export default function BaleAlit({ room }: { room?: UserRoomData | null }) {
                                 </div>
                             </div>
 
-                            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-6 shadow-xs transition hover:bg-emerald-50/80">
+                            <div className="rounded-2xl border border-blue-200 bg-blue-50/50 p-6 shadow-xs transition hover:bg-blue-50/80">
                                 <div className="flex items-start gap-4">
-                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">4</span>
+                                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">4</span>
                                     <div>
                                         <h4 className="text-base font-bold text-gray-900">Penyimpanan KTP ke Sekuriti</h4>
                                         <p className="mt-1 text-xs leading-relaxed text-gray-600">
-                                            Selama sesi latihan berlangsung, penanggung jawab <strong className="text-emerald-800">wajib menyimpan KTP ke Operator / Sekuriti yang bertugas</strong>.
+                                            Selama sesi latihan berlangsung, penanggung jawab <strong className="text-blue-800">wajib menyimpan KTP ke Operator / Sekuriti yang bertugas</strong>.
                                         </p>
                                     </div>
                                 </div>

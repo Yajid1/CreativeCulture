@@ -1,8 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { useState } from 'react';
 import {
-    Bot,
-    Building2,
     CheckSquare,
     ChevronDown,
     DoorClosed,
@@ -25,13 +23,6 @@ import {
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { dashboard } from '@/routes';
-
-const fasilitasItems = [
-    { title: 'Bandung Creative HUB', href: '/admin/fasilitas/bch' },
-    { title: 'Padepokan Seni Mayang Sunda', href: '/admin/fasilitas/psms' },
-    { title: 'Teras Sunda Cibiru', href: '/admin/fasilitas/tsc' },
-    { title: 'Kampung Wisata Pasir Kunci', href: '/admin/fasilitas/kwpk' },
-];
 
 const ruanganItems = [
     { title: 'Ruangan BCH', href: '/admin/ruangan/bch' },
@@ -59,10 +50,8 @@ export function AppSidebar() {
     const { state } = useSidebar();
     const isCollapsed = state === 'collapsed';
 
-    const isAnyFasilitasActive = fasilitasItems.some((item) => isCurrentUrl(item.href));
     const isAnyRuanganActive = ruanganItems.some((item) => isCurrentUrl(item.href));
 
-    const [isFasilitasOpen, setIsFasilitasOpen] = useState(isAnyFasilitasActive);
     const [isRuanganOpen, setIsRuanganOpen] = useState(isAnyRuanganActive);
 
     return (
@@ -98,51 +87,7 @@ export function AppSidebar() {
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
-                            {/* 2. FASILITAS DROPDOWN */}
-                            <SidebarMenuItem className="space-y-1">
-                                <button
-                                    onClick={() => setIsFasilitasOpen(!isFasilitasOpen)}
-                                    title="Fasilitas"
-                                    className={`flex w-full items-center rounded-2xl bg-[#f4f5f8] dark:bg-[#1c1c21] px-4 py-2.5 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center text-xs sm:text-sm font-bold text-gray-900 dark:text-white shadow-2xs transition-all hover:bg-gray-200/70 dark:hover:bg-[#25252d] ${
-                                        isAnyFasilitasActive ? 'ring-1 ring-gray-300 dark:ring-gray-700' : ''
-                                    }`}
-                                >
-                                    <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
-                                        <Building2 className="h-4.5 w-4.5 shrink-0 text-gray-700 dark:text-gray-300" />
-                                        <span className="font-extrabold text-gray-900 dark:text-white group-data-[collapsible=icon]:hidden">Fasilitas</span>
-                                    </div>
-                                    <ChevronDown
-                                        className={`h-4 w-4 text-gray-500 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
-                                            isFasilitasOpen ? 'rotate-180' : ''
-                                        }`}
-                                    />
-                                </button>
-
-                                {/* Dropdown Sub-menu */}
-                                {!isCollapsed && isFasilitasOpen && (
-                                    <div className="mt-1.5 ml-4 pl-3 border-l-2 border-gray-200 dark:border-gray-800 space-y-1 py-1">
-                                        {fasilitasItems.map((sub) => {
-                                            const active = isCurrentUrl(sub.href);
-                                            return (
-                                                <Link
-                                                    key={sub.title}
-                                                    href={sub.href}
-                                                    prefetch
-                                                    className={`block text-xs sm:text-sm font-semibold transition-all leading-snug ${
-                                                        active
-                                                            ? 'text-gray-900 dark:text-white font-extrabold bg-gray-100 dark:bg-[#1c1c21] px-2.5 py-1.5 rounded-xl'
-                                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2.5 py-1.5 rounded-xl hover:bg-gray-100/60 dark:hover:bg-[#1a1a20]'
-                                                    }`}
-                                                >
-                                                    {sub.title}
-                                                </Link>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </SidebarMenuItem>
-
-                            {/* 3. RUANGAN DROPDOWN */}
+                            {/* 2. RUANGAN DROPDOWN */}
                             <SidebarMenuItem className="space-y-1">
                                 <button
                                     onClick={() => setIsRuanganOpen(!isRuanganOpen)}
@@ -222,25 +167,7 @@ export function AppSidebar() {
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
-                            {/* 6. AI ASSISTANT */}
-                            <SidebarMenuItem>
-                                <SidebarMenuButton
-                                    asChild
-                                    isActive={isCurrentUrl('/admin/ai-assistant')}
-                                    className={`w-full rounded-2xl px-3 py-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 text-xs sm:text-sm font-semibold transition-all ${
-                                        isCurrentUrl('/admin/ai-assistant')
-                                            ? 'bg-[#f2f4f7] dark:bg-[#1c1c21] text-gray-900 dark:text-white shadow-2xs font-bold'
-                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100/70 dark:hover:bg-[#1a1a20] hover:text-gray-900 dark:hover:text-white'
-                                    }`}
-                                >
-                                    <Link href="/admin/ai-assistant" prefetch className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
-                                        <Bot className="h-4 w-4 shrink-0 text-gray-500 dark:text-gray-400" />
-                                        <span className="group-data-[collapsible=icon]:hidden">AI Assistant</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-
-                            {/* 7. TASK */}
+                            {/* 5. TASK */}
                             <SidebarMenuItem>
                                 <SidebarMenuButton
                                     asChild

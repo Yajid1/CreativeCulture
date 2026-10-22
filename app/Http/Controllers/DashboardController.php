@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\Artikel;
+use App\Models\Berita;
 use App\Models\Room;
 use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,7 +17,39 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request): Response
     {
+        $selectedMonth = $request->input('month', 'this-month');
+        $now = Carbon::now();
+
+        if ($selectedMonth === 'all') {
+            $year = null;
+            $month = null;
+            $selectedMonthKey = 'all';
+            $selectedMonthLabel = 'Semua Waktu (All Time)';
+        } elseif ($selectedMonth === 'this-month') {
+            $year = (int) $now->year;
+            $month = (int) $now->month;
+            $selectedMonthKey = $now->format('Y-m');
+            $selectedMonthLabel = 'This Month ('.$now->format('M Y').')';
+        } else {
+            try {
+                $parsedDate = Carbon::createFromFormat('Y-m', $selectedMonth);
+                $year = (int) $parsedDate->year;
+                $month = (int) $parsedDate->month;
+                $selectedMonthKey = $parsedDate->format('Y-m');
+                $selectedMonthLabel = $parsedDate->format('F Y');
+            } catch (\Exception $e) {
+                $year = (int) $now->year;
+                $month = (int) $now->month;
+                $selectedMonthKey = $now->format('Y-m');
+                $selectedMonthLabel = 'This Month ('.$now->format('M Y').')';
+            }
+        }
+
+        // 1. Activities Query filtered by selected month
         $activitiesQuery = ActivityLog::latest();
+        if ($selectedMonthKey !== 'all') {
+            $activitiesQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
+        }
 
         $page = (int) $request->input('page', 1);
         $perPage = 4; // 4 items per page as shown in screenshot
@@ -36,7 +71,25 @@ class DashboardController extends Controller
             ];
         });
 
-        $quickTasks = Task::orderBy('created_at', 'desc')->get()->map(function (Task $task) {
+        // 2. Tasks Query filtered by selected month
+        $tasksQuery = Task::orderBy('task_date', 'asc')->orderBy('created_at', 'desc');
+        if ($selectedMonthKey !== 'all') {
+            $tasksQuery->where(function ($q) use ($year, $month) {
+                $q->where(function ($sub) use ($year, $month) {
+                    $sub->whereNotNull('task_date')
+                        ->whereYear('task_date', $year)
+                        ->whereMonth('task_date', $month);
+                })->orWhere(function ($sub) use ($year, $month) {
+                    $sub->whereNull('task_date')
+                        ->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                });
+            });
+        }
+
+        $monthlyTasks = $tasksQuery->get();
+
+        $quickTasks = $monthlyTasks->map(function (Task $task) {
             return [
                 'id' => $task->id,
                 'title' => $task->title,
@@ -50,14 +103,52 @@ class DashboardController extends Controller
             ];
         });
 
-        $totalTasks = Task::count();
-        $completedCount = Task::where('status', 'completed')->count();
+        $totalTasks = $monthlyTasks->count();
+        $completedCount = $monthlyTasks->where('status', 'completed')->count();
         $taskCompletionRate = $totalTasks > 0 ? (int) round(($completedCount / $totalTasks) * 100) : 0;
+
+        // 3. Articles & News count
+        $artikelsQuery = Artikel::query();
+        $beritasQuery = Berita::query();
+
+        if ($selectedMonthKey !== 'all') {
+            $artikelsQuery->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            $beritasQuery->where(function ($q) use ($year, $month) {
+                $q->where(function ($sub) use ($year, $month) {
+                    $sub->whereNotNull('published_at')
+                        ->whereYear('published_at', $year)
+                        ->whereMonth('published_at', $month);
+                })->orWhere(function ($sub) use ($year, $month) {
+                    $sub->whereNull('published_at')
+                        ->whereYear('created_at', $year)
+                        ->whereMonth('created_at', $month);
+                });
+            });
+        }
+
+        $totalArtikels = $artikelsQuery->count();
+        $totalBeritas = $beritasQuery->count();
+
+        // 4. Collect months with data
+        $activityMonths = ActivityLog::pluck('created_at')->map(fn ($d) => $d ? Carbon::parse($d)->format('Y-m') : null);
+        $taskMonths = Task::pluck('task_date')->map(fn ($d) => $d ? Carbon::parse($d)->format('Y-m') : null);
+        $availableMonths = $activityMonths->merge($taskMonths)
+            ->push($now->format('Y-m'))
+            ->filter()
+            ->unique()
+            ->sortDesc()
+            ->values()
+            ->toArray();
 
         return Inertia::render('admin/dashboard', [
             'totalRooms' => Room::count(),
+            'totalArtikels' => $totalArtikels,
+            'totalBeritas' => $totalBeritas,
             'quickTasks' => $quickTasks,
             'taskCompletionRate' => $taskCompletionRate,
+            'selectedMonth' => $selectedMonthKey,
+            'selectedMonthLabel' => $selectedMonthLabel,
+            'availableMonths' => $availableMonths,
             'recentActivities' => [
                 'data' => $activities,
                 'total' => $paginator->total(),

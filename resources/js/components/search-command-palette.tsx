@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { router } from '@inertiajs/react';
 import {
-    Building2,
     CheckSquare,
     DoorClosed,
     FileText,
     Home,
     Newspaper,
-    Bot,
     ShieldCheck,
     Search,
     ArrowRight,
@@ -31,12 +29,6 @@ const searchItems: SearchItem[] = [
     // Main
     { title: 'Overview (Dashboard)', href: '/dashboard', icon: Home, category: 'Main', keywords: ['home', 'beranda', 'overview', 'dashboard'] },
 
-    // Fasilitas
-    { title: 'Bandung Creative HUB', href: '/admin/fasilitas/bch', icon: Building2, category: 'Fasilitas', keywords: ['bch', 'fasilitas', 'bandung'] },
-    { title: 'Padepokan Seni Mayang Sunda', href: '/admin/fasilitas/psms', icon: Building2, category: 'Fasilitas', keywords: ['psms', 'padepokan', 'mayang', 'sunda'] },
-    { title: 'Teras Sunda Cibiru', href: '/admin/fasilitas/tsc', icon: Building2, category: 'Fasilitas', keywords: ['tsc', 'teras', 'cibiru'] },
-    { title: 'Kampung Wisata Pasir Kunci', href: '/admin/fasilitas/kwpk', icon: Building2, category: 'Fasilitas', keywords: ['kwpk', 'kampung', 'wisata', 'pasir', 'kunci'] },
-
     // Ruangan
     { title: 'Ruangan BCH', href: '/admin/ruangan/bch', icon: DoorClosed, category: 'Ruangan', keywords: ['ruangan', 'bch', 'bandung'] },
     { title: 'Ruangan PSMS', href: '/admin/ruangan/psms', icon: DoorClosed, category: 'Ruangan', keywords: ['ruangan', 'psms', 'padepokan'] },
@@ -48,7 +40,6 @@ const searchItems: SearchItem[] = [
     { title: 'Berita', href: '/admin/berita', icon: Newspaper, category: 'Content', keywords: ['berita', 'news', 'kabar'] },
 
     // Tools
-    { title: 'AI Assistant', href: '/admin/ai-assistant', icon: Bot, category: 'Tools', keywords: ['ai', 'assistant', 'chatbot', 'asisten'] },
     { title: 'Task', href: '/admin/task', icon: CheckSquare, category: 'Tools', keywords: ['task', 'tugas', 'todo'] },
 
     // Admin

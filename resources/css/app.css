@@ -141,3 +141,174 @@
         @apply bg-background text-foreground;
     }
 }
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 12mm 14mm;
+    }
+
+    *, *::before, *::after {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
+    body, html {
+        background: #ffffff !important;
+        color: #111827 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        font-size: 10pt !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        overflow: visible !important;
+    }
+
+    /* Hide non-print elements: sidebar, header, nav, modals */
+    header,
+    nav,
+    aside,
+    [data-sidebar="sidebar"],
+    [data-sidebar="trigger"],
+    .no-print {
+        display: none !important;
+    }
+
+    /* Force main content area to full width */
+    main,
+    [data-content] {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* ===== Dashboard Print Layout (using data attributes) ===== */
+
+    /* Main 3-col grid → single column stacked */
+    [data-print="main-grid"] {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    [data-print="main-grid"] > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 12pt !important;
+    }
+
+    /* Stat cards row → 4 columns */
+    [data-print="stat-cards"] {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8pt !important;
+        width: 100% !important;
+    }
+
+    [data-print="stat-cards"] > * {
+        width: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Quick Tasks + Calendar → 2 columns side by side */
+    [data-print="two-col"] {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8pt !important;
+        width: 100% !important;
+    }
+
+    [data-print="two-col"] > * {
+        width: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Calendar day grid → 7 columns */
+    [data-print="calendar-grid"] {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        width: 100% !important;
+    }
+
+    [data-print="calendar-grid"] > * {
+        width: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Insights + Analytics in right column → 2 columns side by side */
+    [data-print="insights-row"] {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8pt !important;
+        width: 100% !important;
+    }
+
+    [data-print="insights-row"] > * {
+        width: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Force cards to have clean borders and white bg */
+    [data-print="main-grid"] .rounded-2xl,
+    [data-print="main-grid"] .rounded-3xl,
+    [data-print="insights-row"] .rounded-2xl,
+    [data-print="insights-row"] .rounded-3xl {
+        background: #ffffff !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 8pt !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        overflow: visible !important;
+    }
+
+    /* Recent activities card */
+    [data-print="activities"] {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* SVG charts print properly */
+    svg {
+        overflow: visible !important;
+    }
+
+    /* Tables full width and readable */
+    table {
+        width: 100% !important;
+        font-size: 9pt !important;
+        border-collapse: collapse !important;
+    }
+
+    table th {
+        font-weight: 700 !important;
+        padding: 6pt 4pt !important;
+        border-bottom: 1.5pt solid #d1d5db !important;
+    }
+
+    table td {
+        padding: 6pt 4pt !important;
+        border-bottom: 0.5pt solid #e5e7eb !important;
+    }
+
+    tr {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    .overflow-x-auto {
+        overflow: visible !important;
+    }
+
+    /* Status badges print-friendly */
+    span[class*="rounded-full"][class*="bg-emerald"],
+    span[class*="rounded-full"][class*="bg-amber"],
+    span[class*="rounded-full"][class*="bg-rose"],
+    span[class*="rounded-full"][class*="bg-gray-100"] {
+        border: 0.5pt solid currentColor !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+}

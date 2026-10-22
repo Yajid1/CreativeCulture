@@ -49,7 +49,6 @@ export default function PadepokanSeniMayangSunda() {
     ];
 
     const [activeObject, setActiveObject] = useState<(typeof objects)[0] | null>(null);
-    const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
     const [clockTime, setClockTime] = useState('');
     const [clockDate, setClockDate] = useState('');
 
@@ -288,144 +287,32 @@ export default function PadepokanSeniMayangSunda() {
                     aria-hidden="true"
                 />
 
-                <div className="relative mx-auto max-w-7xl">
-                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
-                        {/* Kolom 1 (KIRI) — Label kecil tentang kami */}
-                        <div className="lg:col-span-2">
-                            <div className="flex items-center gap-2 text-sm text-gray-500 lg:pt-1.5 fac-scroll" data-scroll>
-                                <span className="h-2 w-2 rounded-full bg-blue-600" />
-                                Tentang Kami
-                            </div>
-                        </div>
+                <div className="relative mx-auto max-w-4xl">
+                    {/* Label kecil dengan dot */}
+                    <div className="flex items-center gap-2 text-sm text-gray-500 fac-scroll" data-scroll>
+                        <span className="h-2 w-2 rounded-full bg-blue-600" />
+                        Tentang Kami
+                    </div>
 
-                        {/* Kolom 2 (TENGAH) — Heading besar dan CTA */}
-                        <div className="lg:col-span-5 fac-scroll" data-scroll data-delay="100">
-                            <h2 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl">
-                                {facility.name} adalah ruang pelestarian dan pengembangan seni budaya Sunda yang menjadi wadah bagi seniman, komunitas, dan generasi muda untuk belajar, berkarya, dan merayakan kekayaan warisan budaya Jawa Barat.
-                            </h2>
+                    {/* Heading besar */}
+                    <h2 className="mt-6 max-w-2xl text-3xl font-bold leading-tight text-gray-900 sm:text-4xl fac-scroll" data-scroll data-delay="100">
+                        {facility.name} adalah ruang pelestarian dan pengembangan seni budaya Sunda yang menjadi wadah bagi seniman, komunitas, dan generasi muda untuk belajar, berkarya, dan merayakan kekayaan warisan budaya Jawa Barat.
+                    </h2>
 
-                            {/* Tombol CTA */}
-                            <div className="mt-8">
-                                <Link
-                                    href="/kontak"
-                                    className="inline-flex items-center gap-3 rounded-full bg-gray-100 py-2 pl-2 pr-5 text-sm font-medium text-gray-900 transition hover:bg-gray-200"
-                                >
-                                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                                            <path d="M5 12h14" />
-                                            <path d="M13 6l6 6-6 6" />
-                                        </svg>
-                                    </span>
-                                    Hubungi Kami
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Kolom 3 (KANAN) — Collage Gambar Bertumpuk & Garis Keterangan */}
-                        <div className="relative mt-8 lg:col-span-5 lg:mt-0">
-                            <div className="relative mx-auto h-[440px] w-full max-w-[420px]">
-                                {/* SVG Garis Pointers */}
-                                <svg
-                                    className="pointer-events-none absolute inset-0 z-30 h-full w-full"
-                                    viewBox="0 0 420 440"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    {/* E-Commerce pointer */}
-                                    <path d="M 140 32 C 120 50, 130 80, 165 85" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" />
-                                    {/* Branding pointer */}
-                                    <path d="M 360 40 C 375 65, 365 95, 340 105" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" />
-                                    {/* Web Designing pointer */}
-                                    <path d="M 85 270 C 45 250, 40 210, 70 200" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" />
-                                    {/* Digital Marketing pointer */}
-                                    <path d="M 145 425 C 130 395, 140 350, 175 355" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" />
-                                    {/* Influencer pointer */}
-                                    <path d="M 335 410 C 365 385, 360 330, 335 320" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" />
+                    {/* Tombol CTA */}
+                    <div className="mt-8 fac-scroll" data-scroll data-delay="200">
+                        <Link
+                            href="/kontak"
+                            className="inline-flex items-center gap-3 rounded-full bg-gray-100 py-2 pl-2 pr-5 text-sm font-medium text-gray-900 transition hover:bg-gray-200"
+                        >
+                            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                                    <path d="M5 12h14" />
+                                    <path d="M13 6l6 6-6 6" />
                                 </svg>
-
-                                {/* Text Labels */}
-                                <span className="absolute left-[90px] top-[14px] z-40 text-[11px] font-bold tracking-widest text-gray-800 uppercase">
-                                    E-Commerce
-                                </span>
-
-                                <span className="absolute right-[20px] top-[22px] z-40 text-[11px] font-bold tracking-widest text-gray-800 uppercase">
-                                    Branding
-                                </span>
-
-                                <span className="absolute left-0 top-[270px] z-40 text-[11px] font-bold tracking-widest text-gray-800 uppercase">
-                                    Web Designing
-                                </span>
-
-                                <span className="absolute left-[65px] bottom-[2px] z-40 text-[11px] font-bold tracking-widest text-gray-800 uppercase">
-                                    Digital Marketing
-                                </span>
-
-                                <span className="absolute right-[15px] bottom-[14px] z-40 text-[11px] font-bold tracking-widest text-gray-800 uppercase">
-                                    Influencer
-                                </span>
-
-                                {/* 5 Overlapping Images */}
-                                {/* 1. Top Center Image */}
-                                <div
-                                    onClick={() => setSelectedImage({ src: '/images/DSC01753.jpg', alt: 'E-Commerce' })}
-                                    className="absolute left-[38%] top-[50px] z-10 h-[155px] w-[35%] cursor-pointer overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:z-30 hover:scale-105"
-                                >
-                                    <img
-                                        src="/images/DSC01753.jpg"
-                                        alt="E-Commerce"
-                                        className="h-full w-full object-cover"
-                                    />
-                                </div>
-
-                                {/* 2. Top Right Image */}
-                                <div
-                                    onClick={() => setSelectedImage({ src: '/images/DSC01757.jpg', alt: 'Branding' })}
-                                    className="absolute right-[5%] top-[70px] z-10 h-[175px] w-[34%] cursor-pointer overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:z-30 hover:scale-105"
-                                >
-                                    <img
-                                        src="/images/DSC01757.jpg"
-                                        alt="Branding"
-                                        className="h-full w-full object-cover"
-                                    />
-                                </div>
-
-                                {/* 3. Left Middle Image */}
-                                <div
-                                    onClick={() => setSelectedImage({ src: '/images/DSC01758.jpg', alt: 'Web Designing' })}
-                                    className="absolute left-[5%] top-[160px] z-20 h-[125px] w-[45%] cursor-pointer overflow-hidden rounded-xl shadow-xl transition-transform duration-300 hover:z-30 hover:scale-105"
-                                >
-                                    <img
-                                        src="/images/DSC01758.jpg"
-                                        alt="Web Designing"
-                                        className="h-full w-full object-cover"
-                                    />
-                                </div>
-
-                                {/* 4. Bottom Center Image */}
-                                <div
-                                    onClick={() => setSelectedImage({ src: '/images/DSC01802.jpg', alt: 'Digital Marketing' })}
-                                    className="absolute left-[40%] bottom-[25px] z-20 h-[165px] w-[36%] cursor-pointer overflow-hidden rounded-xl shadow-xl transition-transform duration-300 hover:z-30 hover:scale-105"
-                                >
-                                    <img
-                                        src="/images/DSC01802.jpg"
-                                        alt="Digital Marketing"
-                                        className="h-full w-full object-cover"
-                                    />
-                                </div>
-
-                                {/* 5. Bottom Right Image */}
-                                <div
-                                    onClick={() => setSelectedImage({ src: '/images/DSC01753.jpg', alt: 'Influencer' })}
-                                    className="absolute right-[5%] bottom-[45px] z-15 h-[160px] w-[33%] cursor-pointer overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:z-30 hover:scale-105"
-                                >
-                                    <img
-                                        src="/images/DSC01753.jpg"
-                                        alt="Influencer"
-                                        className="h-full w-full object-cover"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                            </span>
+                            Hubungi Kami
+                        </Link>
                     </div>
 
                     {/* 2 Kolom info */}
@@ -862,43 +749,6 @@ export default function PadepokanSeniMayangSunda() {
                 </div>
             </footer>
 
-            {/* Modal Lightbox Preview Gambar Full */}
-            {selectedImage && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)' }}
-                    onClick={() => setSelectedImage(null)}
-                >
-                    <div
-                        className="relative max-h-[90vh] max-w-[90vw] overflow-hidden rounded-2xl bg-black p-2 shadow-2xl"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        {/* Tombol Tutup */}
-                        <button
-                            onClick={() => setSelectedImage(null)}
-                            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:scale-110 hover:bg-black/90"
-                            aria-label="Tutup preview"
-                        >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-                                <line x1="18" y1="6" x2="6" y2="18" />
-                                <line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                        </button>
-
-                        <img
-                            src={selectedImage.src}
-                            alt={selectedImage.alt}
-                            className="max-h-[82vh] max-w-[85vw] rounded-xl object-contain"
-                        />
-
-                        {selectedImage.alt && (
-                            <div className="mt-3 text-center text-sm font-medium text-white/90">
-                                {selectedImage.alt}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
